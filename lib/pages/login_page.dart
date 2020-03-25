@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:here/APIs/api_response.dart';
+import 'package:here/APIs/login_api.dart';
+import 'package:here/model/usuario.dart';
 import 'package:here/pages/home_page.dart';
+import 'package:here/utils/alert.dart';
 import 'package:here/utils/nav.dart';
 import 'package:here/widgets/AppButton.dart';
 import 'package:here/widgets/app_text.dart';
@@ -12,12 +16,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
   final _tLogin = TextEditingController(text: "ricardo");
-
   final _tSenha = TextEditingController(text: "123");
-
   final _focusSenha = FocusNode();
+  bool _showProgress = false;
 
   @override
   void initState() {
@@ -58,23 +60,36 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 20,
             ),
-            AppButton("Login", _onClickLogin),
+            AppButton("Login", onPressed: _onClickLogin, showProgress: _showProgress)
           ],
         ),
       ),
     );
   }
 
-  void _onClickLogin() {
+  Future<void> _onClickLogin() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
+    setState(() {
+      _showProgress = true;
+    });
 
     String login = _tLogin.text;
     String senha = _tSenha.text;
     print("Login: $login, Senha: $senha");
-    push(context, HomePage());
 
+    ApiResponse response = await LoginApi.login(login, senha);
+    if(response.ok) {
+      Usuario user = response.result;
+      push(context, HomePage());
+    }
+    else
+      alert(context, response.msg);
+
+    setState(() {
+      _showProgress = true;
+    });
   }
 
   String _validateLogin(String text) {
