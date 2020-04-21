@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:here/pages/dashboard_page.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../model/locations.dart' as locations;
 
 void main() => runApp(HomePage());
 
@@ -42,45 +43,66 @@ class HomePage extends StatefulWidget {
         Container(
             height: 100,
             //color: Colors.orange,
-            child: Center(child: RaisedButton(
-          child: Text('Ir para Dashboard'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DashboardPage()),
-            );
-          },
-        )))
+            child: Center(
+                child: RaisedButton(
+              child: Text('Ir para Dashboard'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardPage()),
+                );
+              },
+            )))
       ],
     );
   }
 }
 
 class _MyAppState extends State<HomePage> {
-  GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  final Map<String, Marker> _markers = {};
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    final googleOffices = await locations.getGoogleOffices();
+    setState(() {
+      _markers.clear();
+      for (final office in googleOffices.offices) {
+        final marker = Marker(
+          markerId: MarkerId(office.name),
+          position: LatLng(office.lat, office.lng),
+          infoWindow: InfoWindow(
+            title: office.name,
+            snippet: office.address,
+          ),
+        );
+        _markers[office.name] = marker;
+      }
+    });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
+ @override
+  Widget build(BuildContext context) => MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Maps'),
+            backgroundColor: Colors.blue[700],
+            actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.apps),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DashboardPage()),
+                );
+              },
+            ),
+            ]
+          ),
+          body: GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: const LatLng(0, 0),
+              zoom: 2,
+            ),
+            markers: _markers.values.toSet(),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

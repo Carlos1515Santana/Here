@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   google_maps_flutter: ^0.5.11
   http: ^0.12.0+4
+  json_serializable: ^2.0.2
 
 
 
@@ -35,6 +36,8 @@ dependencies:
 dev_dependencies:
   google_fonts: ^0.2.0
   fl_chart: ^0.1.2
+  pedantic: ^1.4.0
+  build_runner: ^1.2.7
   flutter_test:
     sdk: flutter
 
