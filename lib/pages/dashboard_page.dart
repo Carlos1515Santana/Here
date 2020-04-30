@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:here/pages/graficos_page.dart';
 import 'package:here/pages/graficosdash_page.dart';
 import 'package:here/utils/nav.dart';
-
+import 'package:here/pages/ocorrencia_page.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -90,6 +90,10 @@ Future<void> _onClickCard(context,title) async {
    else if(title == 'Perfil'){
    push(context, GraficosDashPage());
    }
+
+   else if(title == 'Documentos'){
+     push(context, OcorrenciaPage());
+  }
 }
 
 class MyMenu extends StatelessWidget {
