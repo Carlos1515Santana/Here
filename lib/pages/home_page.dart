@@ -6,188 +6,10 @@ import 'dart:convert';
 import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../model/locations.dart' as locations;
+import '../utils/mapsUtils.dart';
+import 'package:location/location.dart' as loca;
+import 'package:search_map_place/search_map_place.dart';
 
-const mapStyle = [
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#1d2c4d"}
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#8ec3b9"}
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {"color": "#1a3646"}
-    ]
-  },
-  {
-    "featureType": "administrative.country",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {"color": "#4b6878"}
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#64779e"}
-    ]
-  },
-  {
-    "featureType": "administrative.province",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {"color": "#4b6878"}
-    ]
-  },
-  {
-    "featureType": "landscape.man_made",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {"color": "#334e87"}
-    ]
-  },
-  {
-    "featureType": "landscape.natural",
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#023e58"}
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#283d6a"}
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#6f9ba5"}
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {"color": "#1d2c4d"}
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {"color": "#023e58"}
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#3C7680"}
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#304a7d"}
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#98a5be"}
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {"color": "#1d2c4d"}
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#2c6675"}
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {"color": "#255763"}
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#b0d5ce"}
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {"color": "#023e58"}
-    ]
-  },
-  {
-    "featureType": "transit",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#98a5be"}
-    ]
-  },
-  {
-    "featureType": "transit",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {"color": "#1d2c4d"}
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {"color": "#283d6a"}
-    ]
-  },
-  {
-    "featureType": "transit.station",
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#3a4762"}
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [
-      {"color": "#0e1626"}
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {"color": "#4e6d70"}
-    ]
-  }
-];
 void main() => runApp(HomePage());
 
 class HomePage extends StatefulWidget {
@@ -207,10 +29,11 @@ class HomePage extends StatefulWidget {
 class _MyAppState extends State<HomePage> {
   // final Map<String, Marker> _markers = {};
   Map<MarkerId, Marker> _markers = Map();
+  MapType _currentMapType = MapType.normal;
 
   Completer<GoogleMapController> _controller = Completer();
 
-  final CameraPosition _kGooglePlex = CameraPosition(
+  CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -237,6 +60,11 @@ class _MyAppState extends State<HomePage> {
     if (position != null) {
       print(
           "posição latitude: ${position.latitude}; longetude: ${position.longitude}");
+      //tentativa de alterar a posição inicial do maps
+      _kGooglePlex = CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 4.4746,
+      );
     }
   }
 
@@ -252,11 +80,14 @@ class _MyAppState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(appBar: _appBar(), body: _body()),
+        home: Scaffold(
+          // appBar: _appBar(), 
+        body: _body()),
       );
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    controller.setMapStyle(jsonEncode(mapStyle));
+    await controller.setMapStyle(jsonEncode(mapStyle));
+    _controller.complete(controller);
 
     // final googleOffices = await locations.getGoogleOffices();
     // setState(() {
@@ -275,20 +106,28 @@ class _MyAppState extends State<HomePage> {
     // });
   }
 
-  Container _body() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Stack(children: <Widget>[
-        _buildGoogleMaps(),
-      ]),
-    );
+  Stack _body() {
+    return Stack(children: <Widget>[
+      _buildGoogleMaps(),
+      // _searchMapPlaceWidget(),
+      Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Column(children: <Widget>[
+              SizedBox(height: 16.0),
+              _buttonFindMyLocal(),
+              // _buttonSetMap()
+            ]),
+          ))
+    ]);
   }
 
   Widget _buildGoogleMaps() {
     return GoogleMap(
       myLocationEnabled: true,
-      myLocationButtonEnabled: true,
+      myLocationButtonEnabled: false,
+      mapType: _currentMapType,
       onMapCreated: _onMapCreated,
       onTap: (LatLng p) {
         _onTap(p);
@@ -315,10 +154,57 @@ class _MyAppState extends State<HomePage> {
       markerId: markerId,
       position: p,
       infoWindow: infoWindow,
+      draggable: true,
     );
     setState(() {
       _markers[markerId] = marker;
     });
+  }
+
+  void _onMapTypeButtonPressed() {
+    setState(() {
+      _currentMapType = _currentMapType == MapType.normal
+          ? MapType.satellite
+          : MapType.normal;
+    });
+  }
+
+  FloatingActionButton _buttonSetMap() {
+    return FloatingActionButton(
+      onPressed: _onMapTypeButtonPressed,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      backgroundColor: Colors.green,
+      child: const Icon(Icons.map, size: 36.0),
+    );
+  }
+
+  // button find my local
+  FloatingActionButton _buttonFindMyLocal() {
+    return FloatingActionButton(
+      child: Icon(Icons.my_location, size: 25.0, color: Colors.blue),
+      onPressed: _currentLocation,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      backgroundColor: Colors.white,
+    );
+  }
+
+  Future<void> _currentLocation() async {
+    final GoogleMapController controller = await _controller.future;
+    loca.LocationData currentLocation;
+    var location = loca.Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+
+    await controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom: 17.0,
+      ),
+    ));
   }
 
   AppBar _appBar() {
@@ -336,5 +222,27 @@ class _MyAppState extends State<HomePage> {
             },
           ),
         ]);
+  }
+
+  SearchMapPlaceWidget _searchMapPlaceWidget() {
+    return SearchMapPlaceWidget(
+      apiKey: "AIzaSyBH9jPUi9Pez_HtbXkS1LANmZa-YFg5q6E",
+      // The language of the autocompletion
+      language: 'pt-BR',
+      // The position used to give better recomendations. In this case we are using the user position
+      location: LatLng(37.42796133580664, -122.085749655962),
+      radius: 30000,
+      onSelected: (Place place) async {
+        final geolocation = await place.geolocation;
+        print(geolocation);
+
+        // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
+        final GoogleMapController controller = await _controller.future;
+        controller
+            .animateCamera(CameraUpdate.newLatLng(geolocation.coordinates));
+        controller
+            .animateCamera(CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
+      },
+    );
   }
 }
