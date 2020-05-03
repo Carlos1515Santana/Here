@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
 import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:here/pages/ocorrencia_page.dart';
 import '../model/locations.dart' as locations;
 import '../utils/mapsUtils.dart';
 import 'package:location/location.dart' as loca;
@@ -27,15 +28,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyAppState extends State<HomePage> {
-  // final Map<String, Marker> _markers = {};
-  Map<MarkerId, Marker> _markers = Map();
+  final Map<String, Marker> _markers = {};
+  // Map<MarkerId, Marker> _markers = Map();
   MapType _currentMapType = MapType.normal;
+  BitmapDescriptor pinLocationIcon;
+  var interador = 0;
 
   Completer<GoogleMapController> _controller = Completer();
 
   CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(-23.5489, -46.638823),
+    zoom: 1.4746,
   );
 
   StreamSubscription<Position> _positionStream;
@@ -44,6 +47,24 @@ class _MyAppState extends State<HomePage> {
   void initState() {
     super.initState();
     _startTracking();
+    setCustomMapPin(2);
+  }
+
+  void setCustomMapPin(valueImg) async {
+    var img = '';
+    switch (valueImg) {
+      case 0:
+        img = 'blue';
+        break;
+      case 1:
+        img = 'thief-png sizeRed';
+        break;
+      case 2:
+        img = 'thief-png-2 sizeRe';
+        break;
+    }
+    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 0.5), 'assets/' + img + '.png');
   }
 
   void _startTracking() {
@@ -63,7 +84,7 @@ class _MyAppState extends State<HomePage> {
       //tentativa de alterar a posição inicial do maps
       _kGooglePlex = CameraPosition(
         target: LatLng(position.latitude, position.longitude),
-        zoom: 4.4746,
+        zoom: 1.4746,
       );
     }
   }
@@ -80,31 +101,32 @@ class _MyAppState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          // appBar: _appBar(), 
-        body: _body()),
+        home: Scaffold(appBar: _appBar(), body: _body()),
       );
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
 
-    // final googleOffices = await locations.getGoogleOffices();
-    // setState(() {
-    //   _markers.clear();
-    //   for (final office in googleOffices.offices) {
-    //     final marker = Marker(
-    //       markerId: MarkerId(office.name),
-    //       position: LatLng(office.lat, office.lng),
-    //       infoWindow: InfoWindow(
-    //         title: office.name,
-    //         snippet: office.address,
-    //       ),
-    //     );
-    //     _markers[office.name] = marker;
-    //   }
-    // });
+    final googleOffices = await locations.getGoogleOffices();
+    setState(() {
+
+      _markers.clear();
+      for (final office in googleOffices.offices) {
+        final marker = Marker(
+          markerId: MarkerId(office.name),
+          position: LatLng(office.lat, office.lng),
+          icon: pinLocationIcon,
+          infoWindow: InfoWindow(
+            title: office.name,
+            snippet: office.address,
+          ),
+        );
+        _markers[office.name] = marker;
+      }
+    });
   }
+
 
   Stack _body() {
     return Stack(children: <Widget>[
@@ -138,7 +160,19 @@ class _MyAppState extends State<HomePage> {
     );
   }
 
-  void _onTap(LatLng p) {
+  void _onTap(LatLng p) async {
+    var resposta = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => OcorrenciaPage()));
+
+    // setCustomMapPin(resposta.ocorrencia== 'Assalto'? 2 :1);
+    if (interador == 1) {
+      setCustomMapPin(1);
+      interador = interador + 1;
+    } else {
+      setCustomMapPin(2);
+      interador = 1;
+    }
+
     final markerId = MarkerId("${_markers.length}");
     final infoWindow = InfoWindow(
         title: "Ocorrencia Titulo",
@@ -147,36 +181,37 @@ class _MyAppState extends State<HomePage> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DashboardPage()),
+            MaterialPageRoute(builder: (context) => OcorrenciaPage()),
           );
         });
     final marker = Marker(
       markerId: markerId,
       position: p,
+      icon: pinLocationIcon,
       infoWindow: infoWindow,
       draggable: true,
     );
     setState(() {
-      _markers[markerId] = marker;
+      _markers["${_markers.length}"] = marker;
     });
   }
 
-  void _onMapTypeButtonPressed() {
-    setState(() {
-      _currentMapType = _currentMapType == MapType.normal
-          ? MapType.satellite
-          : MapType.normal;
-    });
-  }
+  // void _onMapTypeButtonPressed() {
+  //   setState(() {
+  //     _currentMapType = _currentMapType == MapType.normal
+  //         ? MapType.satellite
+  //         : MapType.normal;
+  //   });
+  // }
 
-  FloatingActionButton _buttonSetMap() {
-    return FloatingActionButton(
-      onPressed: _onMapTypeButtonPressed,
-      materialTapTargetSize: MaterialTapTargetSize.padded,
-      backgroundColor: Colors.green,
-      child: const Icon(Icons.map, size: 36.0),
-    );
-  }
+  // FloatingActionButton _buttonSetMap() {
+  //   return FloatingActionButton(
+  //     onPressed: _onMapTypeButtonPressed,
+  //     materialTapTargetSize: MaterialTapTargetSize.padded,
+  //     backgroundColor: Colors.green,
+  //     child: const Icon(Icons.map, size: 36.0),
+  //   );
+  // }
 
   // button find my local
   FloatingActionButton _buttonFindMyLocal() {
@@ -224,25 +259,25 @@ class _MyAppState extends State<HomePage> {
         ]);
   }
 
-  SearchMapPlaceWidget _searchMapPlaceWidget() {
-    return SearchMapPlaceWidget(
-      apiKey: "AIzaSyBH9jPUi9Pez_HtbXkS1LANmZa-YFg5q6E",
-      // The language of the autocompletion
-      language: 'pt-BR',
-      // The position used to give better recomendations. In this case we are using the user position
-      location: LatLng(37.42796133580664, -122.085749655962),
-      radius: 30000,
-      onSelected: (Place place) async {
-        final geolocation = await place.geolocation;
-        print(geolocation);
+  // SearchMapPlaceWidget _searchMapPlaceWidget() {
+  //   return SearchMapPlaceWidget(
+  //     apiKey: "AIzaSyBH9jPUi9Pez_HtbXkS1LANmZa-YFg5q6E",
+  //     // The language of the autocompletion
+  //     language: 'pt-BR',
+  //     // The position used to give better recomendations. In this case we are using the user position
+  //     location: LatLng(37.42796133580664, -122.085749655962),
+  //     radius: 30000,
+  //     onSelected: (Place place) async {
+  //       final geolocation = await place.geolocation;
+  //       print(geolocation);
 
-        // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
-        final GoogleMapController controller = await _controller.future;
-        controller
-            .animateCamera(CameraUpdate.newLatLng(geolocation.coordinates));
-        controller
-            .animateCamera(CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
-      },
-    );
-  }
+  //       // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
+  //       final GoogleMapController controller = await _controller.future;
+  //       controller
+  //           .animateCamera(CameraUpdate.newLatLng(geolocation.coordinates));
+  //       controller
+  //           .animateCamera(CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
+  //     },
+  //   );
+  // }
 }
