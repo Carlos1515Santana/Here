@@ -93,21 +93,3 @@ Future<Locations> getGoogleOffices() async {
         uri: Uri.parse(googleLocationsURL));
   }
 }
-
-// const localMakers = 
-
-Future<Locations> getOcorencia() async {
-  const urlAPI = 'https://github.com/shalomfernando/testAPI/blob/master/db.json';
-
-  // Retrieve the locations of Google offices
-  final response = await http.get(urlAPI);
-
-  if (response.statusCode == 200) {
-    return Locations.fromJson(json.decode(response.body));
-  } else {
-    throw HttpException(
-        'Unexpected status code ${response.statusCode}:'
-        ' ${response.reasonPhrase}',
-        uri: Uri.parse(urlAPI));
-  }
-}

@@ -92,7 +92,7 @@ Future<void> _onClickCard(context,title) async {
    }
 
    else if(title == 'Documentos'){
-     push(context, OcorrenciaPage());
+    //  push(context, OcorrenciaPage());
   }
 }
 

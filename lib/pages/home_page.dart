@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:here/APIs/ocorrenciaAPI.dart';
 import 'dart:convert';
 import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -109,24 +110,49 @@ class _MyAppState extends State<HomePage> {
     _controller.complete(controller);
 
     final googleOffices = await locations.getGoogleOffices();
-    setState(() {
+    final ocorrenciaList = await OcorrenciaAPI.getOcorencia();
 
+    setState(() {
       _markers.clear();
-      for (final office in googleOffices.offices) {
-        final marker = Marker(
-          markerId: MarkerId(office.name),
-          position: LatLng(office.lat, office.lng),
-          icon: pinLocationIcon,
-          infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
-          ),
-        );
-        _markers[office.name] = marker;
+      if (ocorrenciaList != null) {
+        _getOcorrrencia(ocorrenciaList);
+      }
+      if (googleOffices != null) {
+        _getMakerGeneric(googleOffices);
       }
     });
   }
 
+  void _getOcorrrencia(ocorrenciaList) {
+    for (final ocorencia in ocorrenciaList) {
+      setCustomMapPin(ocorrenciaList.ocorrencia == 'Assalto' ? 2 : 1);
+      final marker = Marker(
+        markerId: MarkerId(ocorencia.id),
+        position: LatLng(ocorencia.latitude, ocorencia.longetude),
+        icon: pinLocationIcon,
+        infoWindow: InfoWindow(
+          title: ocorencia.tipo_ocorrencia,
+          snippet: ocorencia.descricao,
+        ),
+      );
+      _markers[ocorencia.id] = marker;
+    }
+  }
+
+  void _getMakerGeneric(googleOffices) {
+    for (final office in googleOffices.offices) {
+      final marker = Marker(
+        markerId: MarkerId(office.name),
+        position: LatLng(office.lat, office.lng),
+        icon: pinLocationIcon,
+        infoWindow: InfoWindow(
+          title: office.name,
+          snippet: office.address,
+        ),
+      );
+      _markers[office.name] = marker;
+    }
+  }
 
   Stack _body() {
     return Stack(children: <Widget>[
@@ -162,38 +188,38 @@ class _MyAppState extends State<HomePage> {
 
   void _onTap(LatLng p) async {
     var resposta = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => OcorrenciaPage()));
+        context, MaterialPageRoute(builder: (context) => OcorrenciaPage(p)));
 
-    // setCustomMapPin(resposta.ocorrencia== 'Assalto'? 2 :1);
-    if (interador == 1) {
-      setCustomMapPin(1);
-      interador = interador + 1;
-    } else {
-      setCustomMapPin(2);
-      interador = 1;
-    }
+    print(
+        'Latitude: ${resposta.latitude}, tipo Ocorrencia: ${resposta.tipo_correncia}, data: ${resposta.data}, CEP: ${resposta.endereco.cep} DEscrição: ${resposta.descricao}');
 
-    final markerId = MarkerId("${_markers.length}");
-    final infoWindow = InfoWindow(
-        title: "Ocorrencia Titulo",
-        snippet: "Manoel ladrão de doce",
-        anchor: Offset(0.5, 0),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => OcorrenciaPage()),
-          );
+    if (false) {
+      if (resposta.tipo_correncia.isEmpty && resposta.descricao.isEmpty) {
+        // setCustomMapPin(resposta.ocorrencia == 'Assalto' ? 2 : 1);
+
+        final markerId = MarkerId("${_markers.length}");
+        final infoWindow = InfoWindow(
+            title: 'resposta.tipo_correncia',
+            snippet: 'resposta.descricao',
+            anchor: Offset(0.5, 0),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OcorrenciaPage(p)),
+              );
+            });
+        final marker = Marker(
+          markerId: markerId,
+          position: p,
+          icon: pinLocationIcon,
+          infoWindow: infoWindow,
+          draggable: true,
+        );
+        setState(() {
+          _markers["${_markers.length}"] = marker;
         });
-    final marker = Marker(
-      markerId: markerId,
-      position: p,
-      icon: pinLocationIcon,
-      infoWindow: infoWindow,
-      draggable: true,
-    );
-    setState(() {
-      _markers["${_markers.length}"] = marker;
-    });
+      }
+    }
   }
 
   // void _onMapTypeButtonPressed() {

@@ -3,24 +3,38 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:here/APIs/ocorrenciaAPI.dart';
 import 'package:here/model/ocorrencia.dart';
+import 'package:here/model/usuario.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class OcorrenciaPage extends StatefulWidget {
+  LatLng localizacao;
+
+  OcorrenciaPage(LatLng localizacao) {
+    this.localizacao = localizacao;
+  }
+
   @override
-  State<StatefulWidget> createState() => _OcorrenciaPageState();
+  State<StatefulWidget> createState() => _OcorrenciaPageState(localizacao);
 }
 
-Ocorrencia newOcorrencia = new Ocorrencia();
-
 class _OcorrenciaPageState extends State<OcorrenciaPage> {
-  final TextEditingController _controladorTipo = TextEditingController();
+  var _controladorTipo;
+  var latitude;
+  var longitude;
   final TextEditingController _controladorData = TextEditingController();
   final TextEditingController _controladorDescricao = TextEditingController();
-  var controllerMask = new MaskedTextController(mask: '00000-000');
+  var controllerMask = MaskedTextController(mask: '00000-000');
+
+  _OcorrenciaPageState(LatLng localizacao) {
+    latitude = localizacao.longitude;
+    longitude = localizacao.longitude;
+  }
 
   List<String> _ocrcs = <String>[
     '',
@@ -34,7 +48,8 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   File _imagem;
 
   Future getImagem() async {
-    var imagem = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 100, maxHeight: 150);
+    var imagem = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 100, maxHeight: 150);
 
     setState(() {
       _imagem = imagem;
@@ -60,10 +75,10 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
           padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 20.0),
           child: Column(
             children: <Widget>[
-
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Text('Nova Ocorrencia',
+                child: Text(
+                  'Nova Ocorrencia',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -71,8 +86,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   ),
                 ),
               ),
-
-              new FormField<String>(
+              FormField<String>(
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(
@@ -80,21 +94,21 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                       errorText: state.hasError ? state.errorText : null,
                     ),
                     isEmpty: _ocrc == '',
-                    child: new DropdownButtonHideUnderline(
-                      child: new DropdownButton<String>(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
                         value: _ocrc,
                         isDense: true,
                         onChanged: (String newValue) {
                           setState(() {
-                            newOcorrencia.Ocorrencias = newValue;
+                            _controladorTipo = newValue;
                             _ocrc = newValue;
                             state.didChange(newValue);
                           });
                         },
                         items: _ocrcs.map((String value) {
-                          return new DropdownMenuItem<String>(
+                          return DropdownMenuItem<String>(
                             value: value,
-                            child: new Text(value),
+                            child: Text(value),
                           );
                         }).toList(),
                       ),
@@ -102,7 +116,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   );
                 },
               ),
-
               TextFormField(
                 controller: _controladorData,
                 decoration: InputDecoration(
@@ -111,7 +124,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
                 onTap: () async {
                   DateTime dateT = DateTime(2010);
-                  FocusScope.of(context).requestFocus(new FocusNode());
+                  FocusScope.of(context).requestFocus(FocusNode());
 
                   dateT = await showDatePicker(
                     context: context,
@@ -124,18 +137,21 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                       DateFormat('dd/MM/yyyy').format(dateT);
                 },
               ),
-
               TextFormField(
                 controller: controllerMask,
                 decoration: InputDecoration(
                   labelText: 'CEP',
                   hintText: 'Insira o CEP onde ocorreu',
                 ),
+                onSaved: (String value) {
+                  // newOcorrencia.endereco.cep = value;
+                  print('CEP: ' + value);
+                },
                 keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter> [WhitelistingTextInputFormatter.digitsOnly],
+                inputFormatters: <TextInputFormatter>[
+                  WhitelistingTextInputFormatter.digitsOnly
+                ],
               ),
-
-
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: TextField(
@@ -145,11 +161,8 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                     hintText: 'Insira uma breve descrição',
                   ),
                   keyboardType: TextInputType.text,
-
                 ),
               ),
-
-
               Container(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: _imagem == null
@@ -158,29 +171,32 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
               ),
               Container(
                 child: RaisedButton(
-                  onPressed: (){
+                  onPressed: () {
                     getImagem();
                   },
-                  child: Text('Inserir uma imagem',
+                  child: Text(
+                    'Inserir uma imagem',
                     style: TextStyle(
                       fontSize: 15,
                     ),
                   ),
                 ),
               ),
-
               Container(
                 width: 280.0,
                 height: 67.0,
                 padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
                 child: RaisedButton(
-                  child: Text('Registrar',
+                  child: Text(
+                    'Registrar',
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
                   onPressed: () {
+                    _enviarOcorrencia();
                   },
+
                   //shape: RoundedRectangleBorder(
                   //    borderRadius: BorderRadius.all(Radius.circular(10.0))
                   //),
@@ -188,13 +204,30 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   color: Colors.blue,
                 ),
               ),
-
             ],
           ),
         ),
       ),
     );
   }
+
+  void _enviarOcorrencia() {
+    Endereco endereco =
+        Endereco(cep: controllerMask.text, nome_rua: '', id_endereco: 1);
+    Usuario user;
+    Ocorrencia newOcorrencia = Ocorrencia(1, _controladorTipo, longitude,
+        latitude, _controladorDescricao.text, endereco, user, DateTime(1));
+
+        _cadastrarOcorrencia(newOcorrencia);
+  }
+
+  void _cadastrarOcorrencia(Ocorrencia newOcorrencia) async {
+    final resposta = await OcorrenciaAPI.postOcorrencia(newOcorrencia);
+    if (resposta != null) {
+      Navigator.pop(context, newOcorrencia);
+    }
+    //imprimir os dados
+     print(
+        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.tipo_correncia}, data: ${newOcorrencia.data}, CEP: ${newOcorrencia.endereco.cep} DEscrição: ${newOcorrencia.descricao}');
+  }
 }
-
-
