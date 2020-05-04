@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:here/pages/graficos_page.dart';
 import 'package:here/pages/graficosdash_page.dart';
 import 'package:here/utils/nav.dart';
+import 'package:here/pages/Cadastro.dart';
 import 'package:here/pages/ocorrencia_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -93,6 +94,7 @@ Future<void> _onClickCard(context,title) async {
 
    else if(title == 'Documentos'){
     //  push(context, OcorrenciaPage());
+    push(context, Cadastro());
   }
 }
 
