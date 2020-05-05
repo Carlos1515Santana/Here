@@ -78,7 +78,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(
-                  'Nova Ocorrencia',
+                  'Cadastrar Ocorrência',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'Selecione uma ocorrencia',
+                      labelText: 'Selecione uma ocorrência',
                       errorText: state.hasError ? state.errorText : null,
                     ),
                     isEmpty: _ocrc == '',
@@ -132,9 +132,8 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                     firstDate: DateTime(2010),
                     lastDate: DateTime(2100),
                   );
-
                   _controladorData.text =
-                      DateFormat('dd/MM/yyyy').format(dateT);
+                      DateFormat('yyyy-MM-dd').format(dateT);
                 },
               ),
               TextFormField(
@@ -144,8 +143,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   hintText: 'Insira o CEP onde ocorreu',
                 ),
                 onSaved: (String value) {
-                  // newOcorrencia.endereco.cep = value;
-                  print('CEP: ' + value);
+                   print('CEP: ' + value);
                 },
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -212,12 +210,10 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   }
 
   void _enviarOcorrencia() {
-    Endereco endereco =
-        Endereco(cep: controllerMask.text, nome_rua: '', id_endereco: 1);
+    Endereco endereco = Endereco(cep: controllerMask.text, nome_rua: '');
     Usuario user;
-    Ocorrencia newOcorrencia = Ocorrencia(1, _controladorTipo, longitude,
-        latitude, _controladorDescricao.text, endereco, user, DateTime(1));
-
+    Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
+        latitude, _controladorDescricao.text, endereco, _controladorData.text );
         _cadastrarOcorrencia(newOcorrencia);
   }
 
