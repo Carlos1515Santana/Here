@@ -1,4 +1,18 @@
 class Usuario{
+//  int    id;
+//  int    idade;
+//  String usuario;
+//  String email;
+//  String senha;
+//
+//  Usuario.fromJson(Map<String, dynamic> json) {
+//    id      = json['id'     ];
+//    email   = json['email'  ];
+//    senha   = json['senha'  ];
+//    idade   = json['idade'  ];
+//    usuario = json['usuario'];
+//  }
+
   String login;
   String nome;
   String email;
@@ -12,6 +26,4 @@ class Usuario{
     token = json['token'];
     roles = json['roles'] != null ? json['roles'].cast<String>() : null;
   }
-
-
 }
