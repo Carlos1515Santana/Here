@@ -9,11 +9,13 @@ import 'package:http/http.dart' as http;
 import 'api_response.dart';
 
 class OcorrenciaAPI {
-  static Future<ApiResponse<Ocorrencia>> postOcorrencia(Ocorrencia ocorrencia) async {
+  static Future<ApiResponse<Ocorrencia>> postOcorrencia(Ocorrencia ocorrencia, File file) async {
     try {
       var url = 'http://192.168.0.20:8080/ocorrencia/cadastrar';
 
       ocorrencia.endereco.cep = ocorrencia.endereco.cep.replaceAll(new RegExp(r'-'), '');
+      List<int> imageBytes = file.readAsBytesSync();
+      String base64Image = convert.base64Encode(imageBytes);
 
       Map<String,String> headers = {"Content-Type": "application/json"};
 
@@ -26,7 +28,8 @@ class OcorrenciaAPI {
         "longitude":       ocorrencia.longitude,
         "latitude":        ocorrencia.latitude,
         "descricao":       ocorrencia.descricao,
-        "data":            ocorrencia.data
+        "data":            ocorrencia.data,
+        "pathFoto":        base64Image
       };
 
       String json = convert.jsonEncode(params);

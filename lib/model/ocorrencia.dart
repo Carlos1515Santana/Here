@@ -21,6 +21,7 @@ class Ocorrencia {
     longitude = json['longitude'];
     latitude = json['latitude'];
     descricao = json['descricao'];
+    data = json['data'];
     usuario = Usuario.fromJson(json['usuario']);
   }
 }

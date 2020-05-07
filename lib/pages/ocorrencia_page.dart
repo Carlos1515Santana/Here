@@ -214,11 +214,11 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     Usuario user;
     Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
         latitude, _controladorDescricao.text, endereco, _controladorData.text );
-        _cadastrarOcorrencia(newOcorrencia);
+    _cadastrarOcorrencia(newOcorrencia);
   }
 
   void _cadastrarOcorrencia(Ocorrencia newOcorrencia) async {
-    final resposta = await OcorrenciaAPI.postOcorrencia(newOcorrencia);
+    final resposta = await OcorrenciaAPI.postOcorrencia(newOcorrencia, _imagem);
     if (resposta != null) {
       Navigator.pop(context, newOcorrencia);
     }
