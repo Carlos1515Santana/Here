@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:here/utils/nav.dart';
+import 'graficosdash_page.dart';
 import 'myflexiableappbar.dart';
 import 'myappbar.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
@@ -38,24 +40,24 @@ class _GraficosPageState extends State<GraficosPage> {
               delegate: SliverChildListDelegate(
                 <Widget>[
                   myCardDetails(
-                      "", "São Paulo", data1, "4702", "3.0", "\u2191", 0xff07862b),
+                      "", "São Paulo", data1, "4702", "3.0", "\u2191", 0xff07862b,context),
                   myCardDetails(
-                      "", "Rio de Janeiro", data2, "3802", "4.0", "\u2193", 0xffff0000),
+                      "", "Rio de Janeiro", data2, "3802", "4.0", "\u2193", 0xffff0000,context),
                   myCardDetails(
-                      "", "Bahia", data3, "7702", "5.0", "\u2191", 0xff07862b),
+                      "", "Bahia", data3, "7702", "5.0", "\u2191", 0xff07862b,context),
                   myCardDetails(
-                      "", "Minas Gerais", data7, "4702", "3.0", "\u2193", 0xffff0000),
+                      "", "Minas Gerais", data7, "4702", "3.0", "\u2193", 0xffff0000,context),
 
                   myCardDetails(
-                      "", "Paraná", data5, "8600", "2.0", "\u2191", 0xff07862b),
+                      "", "Paraná", data5, "8600", "2.0", "\u2191", 0xff07862b,context),
                   myCardDetails(
-                      "", "Goias", data6, "4702", "2.5", "\u2191", 0xff07862b),
+                      "", "Goias", data6, "4702", "2.5", "\u2191", 0xff07862b,context),
                   myCardDetails(
-                      "", "Piaui", data4, "2345", "2.0", "\u2193", 0xffff0000),
+                      "", "Piaui", data4, "2345", "2.0", "\u2193", 0xffff0000,context),
                   myCardDetails(
-                      "", "Pará", data8, "3800", "2.5", "\u2191", 0xffff0000),
+                      "", "Pará", data8, "3800", "2.5", "\u2191", 0xffff0000,context),
                   myCardDetails(
-                      "", "Amazonas", data9, "2000", "3.0", "\u2193", 0xffff0000),
+                      "", "Amazonas", data9, "2000", "3.0", "\u2193", 0xffff0000,context),
 
                 ],
               ),
@@ -67,11 +69,22 @@ class _GraficosPageState extends State<GraficosPage> {
 
 }
 
+Future<void> _onClickGrafic(context) async {
+
+   await push(context, GraficosDashPage());
+     
+}
+
 Widget myCardDetails(String imageVal, String currencyName, List<double> data,
     String currencyVal, String currencyPercentage, String currencyStatus,
-    int colorVal) {
-  return Padding(
+    int colorVal,context) {
+  return InkWell(
+    onTap: () {
+          _onClickGrafic(context);
+        },
+  child: Padding(
     padding: const EdgeInsets.all(8.0),
+    
     child: Material(
       color: Colors.white,
       elevation: 14.0,
@@ -89,6 +102,7 @@ Widget myCardDetails(String imageVal, String currencyName, List<double> data,
             colorVal),
       ),
     ),
+  ),
   );
 }
 
