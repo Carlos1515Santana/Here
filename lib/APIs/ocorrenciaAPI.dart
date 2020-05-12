@@ -76,6 +76,12 @@ class OcorrenciaAPI {
           imageDecoder(ocorrencia)
       );
 
+//      João para usaar a imagem você deve fazer da seguinte forma:
+//      return new Scaffold(
+//          appBar: new AppBar(title: new Text('Example App')),
+//          body: new ListTile(
+//          leading: new Image.memory(bytes),
+//    title: new Text(_base64),
       return ocorrencias;
     }
 
