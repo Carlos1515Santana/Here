@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:here/APIs/ocorrenciaAPI.dart';
+import 'package:here/model/ocorrencia.dart';
 import 'dart:convert';
 import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -110,7 +111,7 @@ class _MyAppState extends State<HomePage> {
     _controller.complete(controller);
 
     final googleOffices = await locations.getGoogleOffices();
-    final ocorrenciaList = await OcorrenciaAPI.getOcorencia();
+    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorencia();
 
     setState(() {
       _markers.clear();

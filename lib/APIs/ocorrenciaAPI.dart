@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'dart:io' as Io;
 
 import 'package:here/model/ocorrencia.dart';
+import 'package:here/pages/login_page.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -58,30 +59,29 @@ class OcorrenciaAPI {
     }
   }
 
- static Future<Ocorrencia> getOcorencia() async {
-    const urlAPI = 'http://192.168.0.20:8080/ocorrencia/listar';
+  static Future<List<Ocorrencia>> getOcorencia() async {
+      const urlAPI = 'http://192.168.0.20:8080/ocorrencia/listar';
 
-    final response = await http.get(urlAPI);
+      print("GET > $urlAPI");
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+      var response = await http.get(urlAPI);
 
-    if (response.statusCode == 200) {
-      final ocorrencia = Ocorrencia.fromjson(json.decode(response.body));
+      String json = response.body;
+
+      List list = convert.json.decode(json);
+
+      List<Ocorrencia> ocorrencias = list.map<Ocorrencia>((map) => Ocorrencia.fromjson(map)).toList();
+
+      ocorrencias.forEach((ocorrencia) =>
+          imageDecoder(ocorrencia)
+      );
+
+      return ocorrencias;
+    }
+
+    static Ocorrencia imageDecoder(Ocorrencia ocorrencia){
       final _byteImage = Base64Decoder().convert(ocorrencia.image);
       ocorrencia.byteImage = _byteImage;
-//      João na hora de usar essa imagem na páginas de ocorrências, você deve usar da seguinte forma:
-
-//          appBar: new AppBar(title: new Text('Example App')),
-//          body: new ListTile(
-   //            leading: new Image.memory(ocorrencia.byteImage),
-//            title: new Text(_base64),
       return ocorrencia;
-    } else {
-      throw HttpException(
-          'Unexpected status code ${response.statusCode}:'
-          ' ${response.reasonPhrase}',
-          uri: Uri.parse(urlAPI));
     }
-  }
-  }
+}
