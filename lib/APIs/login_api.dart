@@ -6,7 +6,7 @@ import 'package:http/http.dart'as http;
 import 'api_response.dart';
 
 class LoginApi {
-  static Future<ApiResponse<Usuario>> login(String login, String senha) async {
+  static Future<ApiResponse<Customer>> login(String login, String senha) async {
     try {
 //      O que estiver comentado é algo relaciondo ao login oficial
 //    Isso é só um mero paliativo.
@@ -36,7 +36,7 @@ class LoginApi {
       Map mapResponse = json.decode(response.body);
 
       if(response.statusCode == 200) {
-        final user = Usuario.fromJson(mapResponse);
+        final user = Customer.fromJson(mapResponse);
         return ApiResponse.ok(result: user);
       }
       return ApiResponse.error(msg:mapResponse["error"]);

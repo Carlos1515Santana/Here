@@ -1,81 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:here/APIs/dados_api.dart';
+import 'package:here/model/ocorrenciaAgrupadoDTO.dart';
 
 class GraficosDashPage extends StatefulWidget {
   final Widget child;
 
   GraficosDashPage({Key key, this.child}) : super(key: key);
 
+  @override
   _GraficosDashPageState createState() => _GraficosDashPageState();
 }
+const String data_cel = 'listarOcorrenciaPorMarcaCelular';
 
 class _GraficosDashPageState extends State<GraficosDashPage> {
   List<charts.Series<Pollution, String>> _seriesData;
   List<charts.Series<Task, String>> _seriesPieData;
   List<charts.Series<Sales, int>> _seriesLineData;
 
-  _generateData() {
+  _generateData() async {
+    final List<OcorrenciaAgrupadoDTO> ocorrenciaList = await Dados_api.getOcorrenciaAgrupada(data_cel);
     var data1 = [
-      new Pollution(1980, 'USA', 30),
-      new Pollution(1980, 'Asia', 40),
-      new Pollution(1980, 'Europe', 10),
+       Pollution(1980, 'Março', 30),
+       Pollution(1980, 'Abril', 40),
+       Pollution(1980, 'Maio', 10),
     ];
     var data2 = [
-      new Pollution(1985, 'USA', 100),
-      new Pollution(1980, 'Asia', 150),
-      new Pollution(1985, 'Europe', 80),
+       Pollution(1985, 'Março', 100),
+       Pollution(1980, 'Abril', 150),
+       Pollution(1985, 'Maio', 80),
     ];
     var data3 = [
-      new Pollution(1985, 'USA', 200),
-      new Pollution(1980, 'Asia', 300),
-      new Pollution(1985, 'Europe', 180),
+       Pollution(1985, 'Março', 200),
+       Pollution(1980, 'Abril', 300),
+       Pollution(1985, 'Maio', 180),
     ];
 
     var piedata = [
-      new Task('Work', 35.8, Color(0xff3366cc)),
-      new Task('Eat', 8.3, Color(0xff990099)),
-      new Task('Commute', 10.8, Color(0xff109618)),
-      new Task('TV', 15.6, Color(0xfffdbe19)),
-      new Task('Sleep', 19.2, Color(0xffff9900)),
-      new Task('Other', 10.3, Color(0xffdc3912)),
+//      Olha, se não for inserido um objeto Task antes de começar a adicionar
+//      na lista com os objetos da requisição, dá um erro muito estranho, que eu imagino o que seja, mas não quis me aprofundar nisso.
+//      Só cooloquei esses valores staticos, pois não via outra forma, mas de qualquer modo seus dados estão corretos.
+      Task('APPLE',  49250,  Color(0xff3366cc)),
+      Task('Outros', 21745,  Color(0xff302010)),
     ];
 
+    for (final ocorrencia in ocorrenciaList) {
+      if(ocorrencia.descricao == 'Samsung')
+        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xff990099)));
+      if(ocorrencia.descricao == 'Motorola')
+        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xff109618)));
+      if(ocorrencia.descricao == 'LG')
+        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xfffdbe19)));
+    }
+
     var linesalesdata = [
-      new Sales(0, 45),
-      new Sales(1, 56),
-      new Sales(2, 55),
-      new Sales(3, 60),
-      new Sales(4, 61),
-      new Sales(5, 70),
+       Sales(0, 45),
+       Sales(1, 56),
+       Sales(2, 55),
+       Sales(3, 60),
+       Sales(4, 61),
+       Sales(5, 70),
     ];
     var linesalesdata1 = [
-      new Sales(0, 35),
-      new Sales(1, 46),
-      new Sales(2, 45),
-      new Sales(3, 50),
-      new Sales(4, 51),
-      new Sales(5, 60),
+       Sales(0, 35),
+       Sales(1, 46),
+       Sales(2, 45),
+       Sales(3, 50),
+       Sales(4, 51),
+       Sales(5, 60),
     ];
 
     var linesalesdata2 = [
-      new Sales(0, 20),
-      new Sales(1, 24),
-      new Sales(2, 25),
-      new Sales(3, 40),
-      new Sales(4, 45),
-      new Sales(5, 60),
+       Sales(0, 20),
+       Sales(1, 24),
+       Sales(2, 25),
+       Sales(3, 40),
+       Sales(4, 45),
+       Sales(5, 60),
     ];
 
     _seriesData.add(
       charts.Series(
         domainFn: (Pollution pollution, _) => pollution.place,
         measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '2017',
+        id: 'Estupro',
         data: data1,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
-            charts.ColorUtil.fromDartColor(Color(0xff990099)),
+       colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
       ), 
     );
 
@@ -83,11 +95,10 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
       charts.Series(
         domainFn: (Pollution pollution, _) => pollution.place,
         measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '2018',
+        id: 'Furto',
         data: data2,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
-           charts.ColorUtil.fromDartColor(Color(0xff109618)),
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
       ),
     );
 
@@ -95,11 +106,10 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
       charts.Series(
         domainFn: (Pollution pollution, _) => pollution.place,
         measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '2019',
+        id: 'Assalto',
         data: data3,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
-       fillColorFn: (Pollution pollution, _) =>
-          charts.ColorUtil.fromDartColor(Color(0xffff9900)),
+       colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),
       ),
     );
 
@@ -118,7 +128,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
-        id: 'Air Pollution',
+        id: 'Estupro',
         data: linesalesdata,
         domainFn: (Sales sales, _) => sales.yearval,
         measureFn: (Sales sales, _) => sales.salesval,
@@ -127,7 +137,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
-        id: 'Air Pollution',
+        id: 'Furto',
         data: linesalesdata1,
         domainFn: (Sales sales, _) => sales.yearval,
         measureFn: (Sales sales, _) => sales.salesval,
@@ -136,7 +146,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),
-        id: 'Air Pollution',
+        id: 'Assalto',
         data: linesalesdata2,
         domainFn: (Sales sales, _) => sales.yearval,
         measureFn: (Sales sales, _) => sales.salesval,
@@ -146,7 +156,6 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _seriesData = List<charts.Series<Pollution, String>>();
     _seriesPieData = List<charts.Series<Task, String>>();
@@ -184,13 +193,13 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'SO₂ emissions, by world region (in million tonnes)',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                            'Nº de Ocorrencias nos ultimos 3 meses',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),),
                         Expanded(
                           child: charts.BarChart(
                             _seriesData,
                             animate: true,
                             barGroupingType: charts.BarGroupingType.grouped,
-                            //behaviors: [new charts.SeriesLegend()],
+                            behaviors: [charts.SeriesLegend()],
                             animationDuration: Duration(seconds: 2),
                           ),
                         ),
@@ -206,7 +215,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Time spent on daily tasks',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                            'Marcas de celulares mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
                             SizedBox(height: 10.0,),
                         Expanded(
                           child: charts.PieChart(
@@ -214,21 +223,21 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                             animate: true,
                             animationDuration: Duration(seconds: 2),
                              behaviors: [
-                            new charts.DatumLegend(
+                             charts.DatumLegend(
                               outsideJustification: charts.OutsideJustification.endDrawArea,
                               horizontalFirst: false,
                               desiredMaxRows: 2,
-                              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                              cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
                               entryTextStyle: charts.TextStyleSpec(
                                   color: charts.MaterialPalette.purple.shadeDefault,
                                   fontFamily: 'Georgia',
                                   fontSize: 11),
                             )
                           ],
-                           defaultRenderer: new charts.ArcRendererConfig(
+                           defaultRenderer: charts.ArcRendererConfig(
                               arcWidth: 100,
                              arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
+         charts.ArcLabelDecorator(
               labelPosition: charts.ArcLabelPosition.inside)
         ])),
                         ),
@@ -244,22 +253,22 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Sales for the first 5 years',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                            'Nº Ocorrencias cometidas durante 5 anos',style: TextStyle(fontSize: 21.0,fontWeight: FontWeight.bold),),
                         Expanded(
                           child: charts.LineChart(
                             _seriesLineData,
-                            defaultRenderer: new charts.LineRendererConfig(
+                            defaultRenderer:  charts.LineRendererConfig(
                                 includeArea: true, stacked: true),
                             animate: true,
                             animationDuration: Duration(seconds: 2),
-                            behaviors: [
-        new charts.ChartTitle('Years',
+                            behaviors: [charts.SeriesLegend(),
+         charts.ChartTitle('Anos',
             behaviorPosition: charts.BehaviorPosition.bottom,
             titleOutsideJustification:charts.OutsideJustification.middleDrawArea),
-        new charts.ChartTitle('Sales',
+         charts.ChartTitle('Nº ocorrencias',
             behaviorPosition: charts.BehaviorPosition.start,
             titleOutsideJustification: charts.OutsideJustification.middleDrawArea),
-        new charts.ChartTitle('Departments',
+        charts.ChartTitle('',
             behaviorPosition: charts.BehaviorPosition.end,
             titleOutsideJustification:charts.OutsideJustification.middleDrawArea,
             )   
@@ -289,7 +298,7 @@ class Pollution {
 
 class Task {
   String task;
-  double taskvalue;
+  int taskvalue;
   Color colorval;
 
   Task(this.task, this.taskvalue, this.colorval);

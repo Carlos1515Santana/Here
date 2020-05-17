@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:here/APIs/ocorrenciaAPI.dart';
+import 'package:here/model/ocorrencia.dart';
 import 'dart:convert';
 import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,20 +19,10 @@ void main() => runApp(HomePage());
 class HomePage extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Center(child: Text("Here!")),
-  //     ),
-  //     body: _body(context),
-  //   );
-  // }
 }
 
 class _MyAppState extends State<HomePage> {
   final Map<String, Marker> _markers = {};
-  // Map<MarkerId, Marker> _markers = Map();
   MapType _currentMapType = MapType.normal;
   BitmapDescriptor pinLocationIcon;
   var interador = 0;
@@ -109,58 +100,31 @@ class _MyAppState extends State<HomePage> {
   Future<void> _onMapCreated(GoogleMapController controller) async {
     await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
-
-//    final googleOffices = await locations.getGoogleOffices();
-    final ocorrenciaList = await OcorrenciaAPI.getOcorencia();
+    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorencia();
 
     setState(() {
       _markers.clear();
       if (ocorrenciaList != null) {
-        _getOcorrrencia(Post.toList(ocorrenciaList));
+        _getOcorrrencia(ocorrenciaList);
       }
-//      if (googleOffices != null) {
-//        _getMakerGeneric(googleOffices);
-//      }
     });
 }
-  Future<void> _findOcorrencia() async {
-    final ocorrenciaList = await OcorrenciaAPI.getOcorencia();
-    if (ocorrenciaList != null) {
-      _getOcorrrencia(Post.toList(ocorrenciaList));
-    }
-  }
 
-
-  Future<void> _getOcorrrencia(List<Post> ocorrenciaList) async {
+  Future<void> _getOcorrrencia( List<Ocorrencia> ocorrenciaList) async {
     for (final ocorencia in ocorrenciaList) {
 
-       await setCustomMapPin(ocorencia.tipo_ocorrencia == 'ROU'? 2 : 1 );
+       await setCustomMapPin(ocorencia.occurrence_type == 'ROU'? 2 : 1 );
 
       final marker = Marker(
-        markerId: MarkerId(ocorencia.descricao),
+        markerId: MarkerId(ocorencia.description),
         position: LatLng(ocorencia.latitude, ocorencia.longitude),
         icon: pinLocationIcon,
         infoWindow: InfoWindow(
-          title: ocorencia.tipo_ocorrencia,
-          snippet: ocorencia.descricao,
+          title: ocorencia.occurrence_type,
+          snippet: ocorencia.description,
         ),
       );
-      _markers[ocorencia.descricao] = marker;
-    }
-  }
-
-  void _getMakerGeneric(googleOffices) {
-    for (final office in googleOffices.offices) {
-      final marker = Marker(
-        markerId: MarkerId(office.name),
-        position: LatLng(office.lat, office.lng),
-        icon: pinLocationIcon,
-        infoWindow: InfoWindow(
-          title: office.name,
-          snippet: office.address,
-        ),
-      );
-      _markers[office.name] = marker;
+      _markers[ocorencia.description] = marker;
     }
   }
 

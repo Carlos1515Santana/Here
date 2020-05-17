@@ -77,7 +77,7 @@ class MyFlexiableAppBar extends StatelessWidget {
                   children: <Widget>[
                     Container(child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0,left:8.0),
-                      child: new Text(
+                      child: Text(
                           "",
                           style: const TextStyle(
                               color: Colors.white70,
@@ -96,7 +96,7 @@ class MyFlexiableAppBar extends StatelessWidget {
                             ),),
                             SizedBox(width: 10,),
                             Container(child: Text(
-                              'Abril 2020', style: const TextStyle(
+                              'Maio 2020', style: const TextStyle(
                                 color: Colors.white70,
                                 fontFamily: 'Poppins',
                                 fontSize: 16.0

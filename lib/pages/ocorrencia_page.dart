@@ -210,8 +210,8 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   }
 
   void _enviarOcorrencia() {
-    Endereco endereco = Endereco(cep: controllerMask.text, nome_rua: 'noo');
-    Usuario user;
+    Address endereco = Address(cep: controllerMask.text, name_street: 'noo');
+    Customer user;
     Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
         latitude, _controladorDescricao.text, endereco, _controladorData.text );
     _cadastrarOcorrencia(newOcorrencia);
@@ -224,6 +224,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     }
     //imprimir os dados
      print(
-        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.tipo_correncia}, data: ${newOcorrencia.data}, CEP: ${newOcorrencia.endereco.cep} DEscrição: ${newOcorrencia.descricao}');
+        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, data: ${newOcorrencia.date}, CEP: ${newOcorrencia.address.cep} DEscrição: ${newOcorrencia.description}');
   }
 }

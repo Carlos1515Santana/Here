@@ -1,4 +1,4 @@
-class Usuario{
+class Customer{
 //  int    id;
 //  int    idade;
 //  String usuario;
@@ -19,7 +19,7 @@ class Usuario{
   String token;
   List<String> roles;
 
-  Usuario.fromJson(Map<String, dynamic> json) {
+  Customer.fromJson(Map<String, dynamic> json) {
     login = json['login'];
     nome = json['nome'];
     email = json['email'];
