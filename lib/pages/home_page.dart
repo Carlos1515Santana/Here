@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here/pages/ocorrencia_page.dart';
+import 'package:here/utils/nav.dart';
 import '../model/locations.dart' as locations;
 import '../utils/mapsUtils.dart';
 import 'package:location/location.dart' as loca;
@@ -48,7 +49,7 @@ class _MyAppState extends State<HomePage> {
   void initState() {
     super.initState();
     _startTracking();
-    setCustomMapPin(2);
+//    setCustomMapPin(2);
   }
 
   void setCustomMapPin(valueImg) async {
@@ -58,10 +59,10 @@ class _MyAppState extends State<HomePage> {
         img = 'blue';
         break;
       case 1:
-        img = 'thief-png sizeRed';
+        img = 'furto';
         break;
       case 2:
-        img = 'thief-png-2 sizeRe';
+        img = 'roubo';
         break;
     }
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
@@ -109,33 +110,42 @@ class _MyAppState extends State<HomePage> {
     await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
 
-    final googleOffices = await locations.getGoogleOffices();
+//    final googleOffices = await locations.getGoogleOffices();
     final ocorrenciaList = await OcorrenciaAPI.getOcorencia();
 
     setState(() {
       _markers.clear();
       if (ocorrenciaList != null) {
-        _getOcorrrencia(ocorrenciaList);
+        _getOcorrrencia(Post.toList(ocorrenciaList));
       }
-      if (googleOffices != null) {
-        _getMakerGeneric(googleOffices);
-      }
+//      if (googleOffices != null) {
+//        _getMakerGeneric(googleOffices);
+//      }
     });
+}
+  Future<void> _findOcorrencia() async {
+    final ocorrenciaList = await OcorrenciaAPI.getOcorencia();
+    if (ocorrenciaList != null) {
+      _getOcorrrencia(Post.toList(ocorrenciaList));
+    }
   }
 
-  void _getOcorrrencia(ocorrenciaList) {
+
+  Future<void> _getOcorrrencia(List<Post> ocorrenciaList) async {
     for (final ocorencia in ocorrenciaList) {
-      setCustomMapPin(ocorrenciaList.ocorrencia == 'Assalto' ? 2 : 1);
+
+       await setCustomMapPin(ocorencia.tipo_ocorrencia == 'ROU'? 2 : 1 );
+
       final marker = Marker(
-        markerId: MarkerId(ocorencia.id),
-        position: LatLng(ocorencia.latitude, ocorencia.longetude),
+        markerId: MarkerId(ocorencia.descricao),
+        position: LatLng(ocorencia.latitude, ocorencia.longitude),
         icon: pinLocationIcon,
         infoWindow: InfoWindow(
           title: ocorencia.tipo_ocorrencia,
           snippet: ocorencia.descricao,
         ),
       );
-      _markers[ocorencia.id] = marker;
+      _markers[ocorencia.descricao] = marker;
     }
   }
 
@@ -189,55 +199,9 @@ class _MyAppState extends State<HomePage> {
   void _onTap(LatLng p) async {
     var resposta = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => OcorrenciaPage(p)));
+    push(context, HomePage());
 
-    print(
-        'Latitude: ${resposta.latitude}, tipo Ocorrencia: ${resposta.tipo_correncia}, data: ${resposta.data}, CEP: ${resposta.endereco.cep} DEscrição: ${resposta.descricao}');
-
-    if (false) {
-      if (resposta.tipo_correncia.isEmpty && resposta.descricao.isEmpty) {
-        // setCustomMapPin(resposta.ocorrencia == 'Assalto' ? 2 : 1);
-
-        final markerId = MarkerId("${_markers.length}");
-        final infoWindow = InfoWindow(
-            title: 'resposta.tipo_correncia',
-            snippet: 'resposta.descricao',
-            anchor: Offset(0.5, 0),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OcorrenciaPage(p)),
-              );
-            });
-        final marker = Marker(
-          markerId: markerId,
-          position: p,
-          icon: pinLocationIcon,
-          infoWindow: infoWindow,
-          draggable: true,
-        );
-        setState(() {
-          _markers["${_markers.length}"] = marker;
-        });
-      }
-    }
   }
-
-  // void _onMapTypeButtonPressed() {
-  //   setState(() {
-  //     _currentMapType = _currentMapType == MapType.normal
-  //         ? MapType.satellite
-  //         : MapType.normal;
-  //   });
-  // }
-
-  // FloatingActionButton _buttonSetMap() {
-  //   return FloatingActionButton(
-  //     onPressed: _onMapTypeButtonPressed,
-  //     materialTapTargetSize: MaterialTapTargetSize.padded,
-  //     backgroundColor: Colors.green,
-  //     child: const Icon(Icons.map, size: 36.0),
-  //   );
-  // }
 
   // button find my local
   FloatingActionButton _buttonFindMyLocal() {
@@ -285,25 +249,5 @@ class _MyAppState extends State<HomePage> {
         ]);
   }
 
-  // SearchMapPlaceWidget _searchMapPlaceWidget() {
-  //   return SearchMapPlaceWidget(
-  //     apiKey: "AIzaSyBH9jPUi9Pez_HtbXkS1LANmZa-YFg5q6E",
-  //     // The language of the autocompletion
-  //     language: 'pt-BR',
-  //     // The position used to give better recomendations. In this case we are using the user position
-  //     location: LatLng(37.42796133580664, -122.085749655962),
-  //     radius: 30000,
-  //     onSelected: (Place place) async {
-  //       final geolocation = await place.geolocation;
-  //       print(geolocation);
 
-  //       // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
-  //       final GoogleMapController controller = await _controller.future;
-  //       controller
-  //           .animateCamera(CameraUpdate.newLatLng(geolocation.coordinates));
-  //       controller
-  //           .animateCamera(CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
-  //     },
-  //   );
-  // }
 }

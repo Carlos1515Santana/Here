@@ -9,27 +9,29 @@ import 'package:http/http.dart' as http;
 import 'api_response.dart';
 
 class OcorrenciaAPI {
-  static Future<ApiResponse<Ocorrencia>> postOcorrencia(Ocorrencia ocorrencia, File file) async {
+  static Future<ApiResponse<Ocorrencia>> postOcorrencia(
+      Ocorrencia ocorrencia, File file) async {
     try {
-      var url = 'http://192.168.0.20:8080/ocorrencia/cadastrar';
+      var url = 'https://help-api.herokuapp.com/api/Occurrence/PostOccurrence';
 
-      ocorrencia.endereco.cep = ocorrencia.endereco.cep.replaceAll(new RegExp(r'-'), '');
+      ocorrencia.endereco.cep =
+          ocorrencia.endereco.cep.replaceAll(new RegExp(r'-'), '');
       List<int> imageBytes = file.readAsBytesSync();
       String base64Image = convert.base64Encode(imageBytes);
 
-      Map<String,String> headers = {"Content-Type": "application/json"};
+      Map<String, String> headers = {"Content-Type": "application/json"};
 
       var params = {
-        "tipo_ocorrencia": ocorrencia.tipo_correncia,
-        "endereco":        {
-          "nome_rua" : ocorrencia.endereco.nome_rua,
-          "cep"      : ocorrencia.endereco.cep
+        "occurrence_type": ocorrencia.tipo_correncia,
+        "address": {
+          "name_street": ocorrencia.endereco.nome_rua,
+          "cep": ocorrencia.endereco.cep
         },
-        "longitude":       ocorrencia.longitude,
-        "latitude":        ocorrencia.latitude,
-        "descricao":       ocorrencia.descricao,
-        "data":            ocorrencia.data,
-        "pathFoto":        base64Image
+        "longitude": ocorrencia.longitude,
+        "latitude": ocorrencia.latitude,
+        "description": ocorrencia.descricao,
+        "date": ocorrencia.data,
+        "pathFoto": base64Image
       };
 
       String json = convert.jsonEncode(params);
@@ -44,11 +46,10 @@ class OcorrenciaAPI {
       Map<String, dynamic> map = convert.json.decode(response.body);
 
       if (response.statusCode == 200) {
-        final OcorrenciaTest =  Ocorrencia.fromjson(map);
-        return ApiResponse.ok(result: OcorrenciaTest);
+//        final OcorrenciaTest = Ocorrencia.fromjson(map);
+        return ApiResponse.ok(msg: "Cadastro realizado!!");
       }
       return ApiResponse.error(msg: map["error"]);
-
     } catch (error, exception) {
       print("Erro no login $error > $exception");
 
@@ -56,20 +57,61 @@ class OcorrenciaAPI {
     }
   }
 
- static Future<Ocorrencia> getOcorencia() async {
-    const urlAPI =
-        'https://github.com/shalomfernando/testAPI/blob/master/db.json';
+  static Future<dynamic> getOcorencia() async {
+    const urlAPI = 'https://help-api.herokuapp.com/api/Occurrence/GetOccurrenceMaps';
 
     // Retrieve the locations of Google offices
     final response = await http.get(urlAPI);
 
     if (response.statusCode == 200) {
-      return Ocorrencia.fromjson(json.decode(response.body));
+      return jsonDecode(response.body);
     } else {
       throw HttpException(
           'Unexpected status code ${response.statusCode}:'
           ' ${response.reasonPhrase}',
           uri: Uri.parse(urlAPI));
     }
+  }
+}
+
+class Post {
+  final int id;
+  final String tipo_ocorrencia;
+  final String endereco;
+  final double longitude;
+  final double latitude;
+  final String descricao;
+  final String data;
+  final String usuario;
+  final String image;
+
+  Post(
+      {this.id,
+      this.tipo_ocorrencia,
+      this.endereco,
+      this.longitude,
+      this.latitude,
+      this.descricao,
+      this.data,
+      this.usuario,
+      this.image});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+        id: json['id'],
+        tipo_ocorrencia: json['tipo_ocorrencia'],
+        endereco: json['endereco'],
+        longitude: json['longitude'],
+        latitude: json['latitude'],
+        descricao: json['descricao'],
+        data: json['data'],
+        usuario: json['usuario'],
+        image: json['image']);
+  }
+  static List<Post> toList(dynamic json){
+    List<Post> list = List<Post>();
+
+    list = (json as List).map((item) => Post.fromJson(item)).toList();
+    return list;
   }
 }

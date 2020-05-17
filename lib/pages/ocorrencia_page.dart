@@ -32,7 +32,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   var controllerMask = MaskedTextController(mask: '00000-000');
 
   _OcorrenciaPageState(LatLng localizacao) {
-    latitude = localizacao.longitude;
+    latitude = localizacao.latitude;
     longitude = localizacao.longitude;
   }
 
@@ -210,7 +210,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   }
 
   void _enviarOcorrencia() {
-    Endereco endereco = Endereco(cep: controllerMask.text, nome_rua: '');
+    Endereco endereco = Endereco(cep: controllerMask.text, nome_rua: 'noo');
     Usuario user;
     Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
         latitude, _controladorDescricao.text, endereco, _controladorData.text );

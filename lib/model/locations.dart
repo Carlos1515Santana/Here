@@ -71,8 +71,9 @@ class Locations {
     this.regions,
   });
 
-  factory Locations.fromJson(Map<String, dynamic> json) =>
+factory Locations.fromJson(Map<String, dynamic> json) =>
       _$LocationsFromJson(json);
+
   Map<String, dynamic> toJson() => _$LocationsToJson(this);
 
   final List<Office> offices;
