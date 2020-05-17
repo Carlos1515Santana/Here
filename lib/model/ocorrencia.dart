@@ -6,8 +6,8 @@ class Ocorrencia {
   double   longitude;
   double   latitude;
   String   description;
-  Address address;
-  Customer  customer;
+  Address  address;
+  Customer customer;
   String   date;
   String   pathFoto;
   String   image;
