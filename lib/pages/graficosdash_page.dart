@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:here/APIs/dados_api.dart';
+import 'package:here/model/ocorrenciaAgrupadoDTO.dart';
 
 class GraficosDashPage extends StatefulWidget {
   final Widget child;
@@ -10,6 +12,7 @@ class GraficosDashPage extends StatefulWidget {
   @override
   _GraficosDashPageState createState() => _GraficosDashPageState();
 }
+const String data_cel = 'listarOcorrenciaPorMarcaCelular';
 
 class _GraficosDashPageState extends State<GraficosDashPage> {
   List<charts.Series<Pollution, String>> _seriesData;
@@ -17,6 +20,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
   List<charts.Series<Sales, int>> _seriesLineData;
 
   _generateData() async {
+    final List<OcorrenciaAgrupadoDTO> ocorrenciaList = await Dados_api.getOcorrenciaAgrupada(data_cel);
     var data1 = [
        Pollution(1980, 'Março', 30),
        Pollution(1980, 'Abril', 40),
@@ -34,13 +38,21 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
     ];
 
     var piedata = [
-       Task('Assalto', 35.8, Color(0xff3366cc)),
-       Task('Furto', 8.3, Color(0xff990099)),
-       Task('Estupro', 10.8, Color(0xff109618)),
-       Task('Latrocinio', 15.6, Color(0xfffdbe19)),
-      //new Task('Sleep', 19.2, Color(0xffff9900)),
-      //new Task('Other', 10.3, Color(0xffdc3912)),
+//      Olha, se não for inserido um objeto Task antes de começar a adicionar
+//      na lista com os objetos da requisição, dá um erro muito estranho, que eu imagino o que seja, mas não quis me aprofundar nisso.
+//      Só cooloquei esses valores staticos, pois não via outra forma, mas de qualquer modo seus dados estão corretos.
+      Task('APPLE',  49250,  Color(0xff3366cc)),
+      Task('Outros', 21745,  Color(0xff302010)),
     ];
+
+    for (final ocorrencia in ocorrenciaList) {
+      if(ocorrencia.descricao == 'Samsung')
+        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xff990099)));
+      if(ocorrencia.descricao == 'Motorola')
+        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xff109618)));
+      if(ocorrencia.descricao == 'LG')
+        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xfffdbe19)));
+    }
 
     var linesalesdata = [
        Sales(0, 45),
@@ -203,7 +215,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Ocorrencias mais cometidos',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                            'Marcas de celulares mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
                             SizedBox(height: 10.0,),
                         Expanded(
                           child: charts.PieChart(
@@ -286,7 +298,7 @@ class Pollution {
 
 class Task {
   String task;
-  double taskvalue;
+  int taskvalue;
   Color colorval;
 
   Task(this.task, this.taskvalue, this.colorval);

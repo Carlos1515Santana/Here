@@ -1,11 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:convert';
-import 'dart:ui';
-import 'dart:io' as Io;
 
 import 'package:here/model/ocorrencia.dart';
-import 'package:here/pages/login_page.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
