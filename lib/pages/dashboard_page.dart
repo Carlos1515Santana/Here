@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:here/main.dart';
+import 'package:here/pages/ListOcorrencia_page.dart';
 import 'package:here/pages/graficos_page.dart';
 import 'package:here/pages/graficosdash_page.dart';
 import 'package:here/utils/nav.dart';
@@ -34,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage>
         backgroundColor: Colors.blue[700],
       ),
       backgroundColor: Colors.blue[100],
-
+ 
 drawer: Drawer(
   child: ListView(
     children: <Widget>[
@@ -86,7 +88,7 @@ drawer: Drawer(
 
 Future<void> _onClickCard(context,title) async {
   if(title == 'Ocorrencias'){
-   //await push(context, GraficosPage());
+   await push(context, ListOcorrencia());
    }
    else if(title == 'Graficos'){
    //await push(context, GraficosDashPage());
