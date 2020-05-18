@@ -23,7 +23,7 @@ class MyAppBar extends StatelessWidget {
           Container(child: Padding(
             padding: const EdgeInsets.all(60.0),
             child: Text(
-              'Graficos',
+              'Gráficos',
               style: TextStyle(
                 color: Colors.white,
                   fontFamily: 'Poppins',

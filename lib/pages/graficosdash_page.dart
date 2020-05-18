@@ -14,13 +14,34 @@ class GraficosDashPage extends StatefulWidget {
 }
 const String data_cel = 'listarOcorrenciaPorMarcaCelular';
 const String data_mes = 'listarOcorrenciaPorMes';
+const String data_vei = 'listarOcorrenciaPorMarcaCelular';
+
 
 class _GraficosDashPageState extends State<GraficosDashPage> {
   List<charts.Series<Pollution, String>> _seriesData;
+  List<charts.Series<Pollution, String>> _seriesData02;
   List<charts.Series<Task, String>> _seriesPieData;
+  List<charts.Series<Task, String>> _seriesPieData02;
   List<charts.Series<Sales, int>> _seriesLineData;
 
   _generateData() async {
+
+    var dataBairro01 = [
+      Pollution('REPUBLICA', 7159),
+    ];
+    var dataBairro02 = [
+      Pollution('BELA VISTA', 6675),
+    ];
+    var dataBairro03 = [
+      Pollution('CONSOLAÇÃO', 5017),
+    ];
+    var dataBairro04 = [
+      Pollution('SE', 4108),
+    ];
+    var dataBairro05 = [
+      Pollution('BOM RETIRO', 3569),
+    ];
+
 
     var data1 = [
        Pollution('Jan', 24948),
@@ -65,12 +86,13 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
 //      Olha, se não for inserido um objeto Task antes de começar a adicionar
 //      na lista com os objetos da requisição, dá um erro muito estranho, que eu imagino o que seja, mas não quis me aprofundar nisso.
 //      Só cooloquei esses valores staticos, pois não via outra forma, mas de qualquer modo seus dados estão corretos.
-      Task('APPLE',    49250,   Color(0xff3366cc)),
+      Task('Apple',    49250,   Color(0xff3366cc)),
       Task('Outros',   21745,   Color(0xff302010)),
       Task('Samsung',  100533,  Color(0xff990099)),
       Task('Motorola', 61090,  Color(0xff109618)),
       Task('LG',       11738,  Color(0xfffdbe19)),
     ];
+
 
 //    for (final ocorrencia in ocorrenciaList) {
 //      if(ocorrencia.descricao == 'Samsung')
@@ -80,6 +102,14 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
 //      if(ocorrencia.descricao == 'LG')
 //        piedata.add(Task(ocorrencia.descricao, ocorrencia.valor_agrupado, Color(0xfffdbe19)));
 //    }
+
+    var piedata02 = [
+      Task('Ford',       12966,   Color(0xff3366cc)),
+      Task('Fiat',       29835,   Color(0xff302010)),
+      Task('Chevrolet',  27149,   Color(0xff990099)),
+      Task('volkswagen', 30597,   Color(0xff109618)),
+      Task('Honda',      37900,   Color(0xfffdbe19)),
+    ];
 
     var linesalesdata = [
        Sales(0, 45),
@@ -235,6 +265,62 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
           colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff775498)),
         )
     );
+////////////////////////Gráfico de Bairros//////////////////////////////////////
+
+    _seriesData02.add(
+        charts.Series(
+          domainFn: (Pollution pollution, _) => pollution.place,
+          measureFn: (Pollution pollution, _) => pollution.quantity,
+          id: 'REP',
+          data: dataBairro01,
+          fillPatternFn: (_, __) => charts.FillPatternType.solid,
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff212121)),
+        )
+    );
+
+    _seriesData02.add(
+        charts.Series(
+          domainFn: (Pollution pollution, _) => pollution.place,
+          measureFn: (Pollution pollution, _) => pollution.quantity,
+          id: 'BEL',
+          data: dataBairro02,
+          fillPatternFn: (_, __) => charts.FillPatternType.solid,
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xfff55999)),
+        )
+    );
+
+    _seriesData02.add(
+        charts.Series(
+          domainFn: (Pollution pollution, _) => pollution.place,
+          measureFn: (Pollution pollution, _) => pollution.quantity,
+          id: 'CON',
+          data: dataBairro03,
+          fillPatternFn: (_, __) => charts.FillPatternType.solid,
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xfffff900)),
+        )
+    );
+
+    _seriesData02.add(
+        charts.Series(
+          domainFn: (Pollution pollution, _) => pollution.place,
+          measureFn: (Pollution pollution, _) => pollution.quantity,
+          id: 'SE',
+          data: dataBairro04,
+          fillPatternFn: (_, __) => charts.FillPatternType.solid,
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff775498)),
+        )
+    );
+
+    _seriesData02.add(
+        charts.Series(
+          domainFn: (Pollution pollution, _) => pollution.place,
+          measureFn: (Pollution pollution, _) => pollution.quantity,
+          id: 'BOM',
+          data: dataBairro05,
+          fillPatternFn: (_, __) => charts.FillPatternType.solid,
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff00e5ff)),
+        )
+    );
 
 ////////////////////////Gráficos de pizza///////////////////////////////////////
 
@@ -250,33 +336,15 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
       ),
     );
 
-//////////////////////Gráficos de linhas////////////////////////////////////////
-
-    _seriesLineData.add(
+    _seriesPieData02.add(
       charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
-        id: 'Estupro',
-        data: linesalesdata,
-        domainFn: (Sales sales, _) => sales.yearval,
-        measureFn: (Sales sales, _) => sales.salesval,
-      ),
-    );
-    _seriesLineData.add(
-      charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
-        id: 'Furto',
-        data: linesalesdata1,
-        domainFn: (Sales sales, _) => sales.yearval,
-        measureFn: (Sales sales, _) => sales.salesval,
-      ),
-    );
-    _seriesLineData.add(
-      charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),
-        id: 'Assalto',
-        data: linesalesdata2,
-        domainFn: (Sales sales, _) => sales.yearval,
-        measureFn: (Sales sales, _) => sales.salesval,
+        domainFn: (Task task, _) => task.task,
+        measureFn: (Task task, _) => task.taskvalue,
+        colorFn: (Task task, _) =>
+            charts.ColorUtil.fromDartColor(task.colorval),
+        id: 'Air Pollution',
+        data: piedata02,
+        labelAccessorFn: (Task row, _) => '${row.taskvalue}',
       ),
     );
   }
@@ -285,7 +353,9 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
   void initState() {
     super.initState();
     _seriesData = List<charts.Series<Pollution, String>>();
+    _seriesData02 = List<charts.Series<Pollution, String>>();
     _seriesPieData = List<charts.Series<Task, String>>();
+    _seriesPieData02 = List<charts.Series<Task, String>>();
     _seriesLineData = List<charts.Series<Sales, int>>();
     _generateData();
   }
@@ -294,7 +364,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.blue[700],
@@ -302,11 +372,10 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
             bottom: TabBar(
               indicatorColor: Color(0xff9962D0),
               tabs: [
-                Tab(
-                  icon: Icon(FontAwesomeIcons.solidChartBar),
-                ),
+                Tab(icon: Icon(FontAwesomeIcons.solidChartBar),),
                 Tab(icon: Icon(FontAwesomeIcons.chartPie)),
-                Tab(icon: Icon(FontAwesomeIcons.chartLine)),
+                Tab(icon: Icon(FontAwesomeIcons.solidChartBar)),
+                Tab(icon: Icon(FontAwesomeIcons.chartPie)),
               ],
             ),
             title: Text('São Paulo'),
@@ -320,7 +389,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Nº de Roubos no último ano',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),),
+                            'Nº de Roubos do ano 2019',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),),
                         Expanded(
                           child: charts.BarChart(
                             _seriesData,
@@ -328,6 +397,9 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                             barGroupingType: charts.BarGroupingType.grouped,
                             behaviors: [charts.SeriesLegend()],
                             animationDuration: Duration(seconds: 2),
+                            domainAxis: charts.OrdinalAxisSpec(
+                              renderSpec: charts.SmallTickRendererSpec(labelRotation: 60),
+                            ),
                           ),
                         ),
                       ],
@@ -352,7 +424,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                              behaviors: [
                              charts.DatumLegend(
                               outsideJustification: charts.OutsideJustification.endDrawArea,
-                              horizontalFirst: false,
+                              horizontalFirst: true,
                               desiredMaxRows: 2,
                               cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
                               entryTextStyle: charts.TextStyleSpec(
@@ -374,33 +446,62 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                 ),
               ),
               Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Container(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Bairros com maior Nº de Roubos no ano 2019',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),),
+                        Expanded(
+                          child: charts.BarChart(
+                            _seriesData02,
+                            animate: true,
+                            barGroupingType: charts.BarGroupingType.grouped,
+                            behaviors: [charts.SeriesLegend()],
+                            animationDuration: Duration(seconds: 2),
+                            domainAxis: charts.OrdinalAxisSpec(
+                              renderSpec: charts.SmallTickRendererSpec(labelRotation: 60),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Container(
                   child: Center(
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Nº Ocorrencias cometidas durante 5 anos',style: TextStyle(fontSize: 21.0,fontWeight: FontWeight.bold),),
+                          'Marcas de carros mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                        SizedBox(height: 10.0,),
                         Expanded(
-                          child: charts.LineChart(
-                            _seriesLineData,
-                            defaultRenderer:  charts.LineRendererConfig(
-                                includeArea: true, stacked: true),
-                            animate: true,
-                            animationDuration: Duration(seconds: 2),
-                            behaviors: [charts.SeriesLegend(),
-         charts.ChartTitle('Anos',
-            behaviorPosition: charts.BehaviorPosition.bottom,
-            titleOutsideJustification:charts.OutsideJustification.middleDrawArea),
-         charts.ChartTitle('Nº ocorrencias',
-            behaviorPosition: charts.BehaviorPosition.start,
-            titleOutsideJustification: charts.OutsideJustification.middleDrawArea),
-        charts.ChartTitle('',
-            behaviorPosition: charts.BehaviorPosition.end,
-            titleOutsideJustification:charts.OutsideJustification.middleDrawArea,
-            )   
-      ]
-                          ),
+                          child: charts.PieChart(
+                              _seriesPieData02,
+                              animate: true,
+                              animationDuration: Duration(seconds: 2),
+                              behaviors: [
+                                charts.DatumLegend(
+                                  outsideJustification: charts.OutsideJustification.endDrawArea,
+                                  horizontalFirst: true,
+                                  desiredMaxRows: 2,
+                                  cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
+                                  entryTextStyle: charts.TextStyleSpec(
+                                      color: charts.MaterialPalette.purple.shadeDefault,
+                                      fontFamily: 'Georgia',
+                                      fontSize: 11),
+                                )
+                              ],
+                              defaultRenderer: charts.ArcRendererConfig(
+                                  arcWidth: 100,
+                                  arcRendererDecorators: [
+                                    charts.ArcLabelDecorator(
+                                        labelPosition: charts.ArcLabelPosition.inside)
+                                  ])),
                         ),
                       ],
                     ),

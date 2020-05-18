@@ -13,8 +13,7 @@ class ListOcorrencia extends StatefulWidget {
 }
 
 class _ListOcorrenciaState extends State<ListOcorrencia> {
-  final String url =
-      "https://help-api.herokuapp.com/api/Occurrence/GetAllOccurrence";
+  final String url = "https://help-api.herokuapp.com/api/Occurrence/GetAllOccurrence";
 
   List<OcorrenciaList> myAllData = [];
 
@@ -31,11 +30,10 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
       String responeBody = response.body;
       var jsonBody = json.decode(responeBody);
       for (var data in jsonBody) {
-         
-                myAllData.add(OcorrenciaList(
-                    data['occurrence_type'],data['customer']['name'],data['longitude'],data['latitude'],data['description'],data['address']['name_street'],data['date'],data['image'] ));
-            //print(data['customer']['name']);
-            //data['location']['street']['name'], data['email'], data['registered']['date'],data["picture"]["thumbnail"]));
+        myAllData.add(OcorrenciaList(
+            data['occurrence_type'],data['customer']['name'],data['longitude'],
+            data['latitude'],data['description'],data['address']['name_street'],
+            data['date'],data['image'] ));
       }
       setState(() {});
       myAllData.forEach((someData) => print("Name : ${someData.usuario}"));
@@ -53,12 +51,12 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
           appBar: new AppBar(
         bottom: TabBar(
               tabs: [
-                Tab(text: "Todas Ocorrencias",icon: Icon(Icons.directions_car)),
-                Tab(text: "Minhas Ocorrencias",icon: Icon(Icons.directions_transit)),
+                Tab(text: "Todas Ocorrências",icon: Icon(Icons.format_list_bulleted)),
+                Tab(text: "Minhas Ocorrências",icon: Icon(Icons.format_list_bulleted)),
                 //Tab(icon: Icon(Icons.directions_bike)),
               ],
             ),
-        title: new Text('Ocorrencias'),
+        title: new Text('Ocorrências'),
         centerTitle: true,
         backgroundColor:  Colors.blue[700],
       ),
@@ -112,7 +110,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text("Ocorrencia",
+                      child: Text("Ocorrência",
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w700,
@@ -122,9 +120,9 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
                     ),
                   ),
                     new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Ocorrencia : ${myAllData[index].tipo_correncia}'),
+                    new Text('Ocorrência : ${myAllData[index].tipo_correncia}'),
                     new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Usuario : ${myAllData[index].usuario}'),
+                    new Text('Usuário : ${myAllData[index].usuario}'),
                     //new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
                     //new Text('Tipo : ${myAllData[index].longitude}'),
                     //new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
@@ -153,7 +151,7 @@ class SecondPage extends StatelessWidget {
   final data;
   @override
   Widget build(BuildContext context) => new Scaffold(
-      appBar: new AppBar(title: new Text('Detalhes da Ocorrencia')),
+      appBar: new AppBar(title: new Text('Detalhes da Ocorrência')),
       body: new ListView.builder(
         itemCount: 1,
         itemBuilder: (_, index) {

@@ -41,24 +41,6 @@ class _GraficosPageState extends State<GraficosPage> {
                 <Widget>[
                   myCardDetails(
                       "", "São Paulo", data1, "4702", "3.0", "\u2191", 0xff07862b,context),
-                  myCardDetails(
-                      "", "Rio de Janeiro", data2, "3802", "4.0", "\u2193", 0xffff0000,context),
-                  myCardDetails(
-                      "", "Bahia", data3, "7702", "5.0", "\u2191", 0xff07862b,context),
-                  myCardDetails(
-                      "", "Minas Gerais", data7, "4702", "3.0", "\u2193", 0xffff0000,context),
-
-                  myCardDetails(
-                      "", "Paraná", data5, "8600", "2.0", "\u2191", 0xff07862b,context),
-                  myCardDetails(
-                      "", "Goias", data6, "4702", "2.5", "\u2191", 0xff07862b,context),
-                  myCardDetails(
-                      "", "Piaui", data4, "2345", "2.0", "\u2193", 0xffff0000,context),
-                  myCardDetails(
-                      "", "Pará", data8, "3800", "2.5", "\u2191", 0xffff0000,context),
-                  myCardDetails(
-                      "", "Amazonas", data9, "2000", "3.0", "\u2193", 0xffff0000,context),
-
                 ],
               ),
             ),

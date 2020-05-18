@@ -13,20 +13,25 @@ class OcorrenciaAPI {
       var url = 'https://help-api.herokuapp.com/api/Occurrence/PostOccurrence';
 
       ocorrencia.address.cep = ocorrencia.address.cep.replaceAll(new RegExp(r'-'), '');
-      List<int> imageBytes = file.readAsBytesSync();
-      String base64Image = convert.base64Encode(imageBytes);
+
+      String base64Image;
+      if(file != null) {
+        List<int> imageBytes = file.readAsBytesSync();
+        base64Image = convert.base64Encode(imageBytes);
+      }else
+        base64Image = null;
 
       Map<String,String> headers = {"Content-Type": "application/json"};
 
       var params = {
         "occurrence_type": ocorrencia.occurrence_type,
         "address":        {
-          "name_street" : ocorrencia.address.name_street,
-          "cep"      : ocorrencia.address.cep
+          "name_street" :  ocorrencia.address.name_street,
+          "cep"         :  ocorrencia.address.cep
         },
         "longitude":       ocorrencia.longitude,
         "latitude":        ocorrencia.latitude,
-        "description":       ocorrencia.description,
+        "description":     ocorrencia.description,
         "date":            ocorrencia.date,
         "pathFoto":        base64Image
       };
