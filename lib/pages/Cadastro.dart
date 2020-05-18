@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:here/APIs/cadastroCustomer.dart';
+import 'package:here/model/usuario.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(new Cadastro());
 
@@ -10,7 +13,8 @@ class Cadastro extends StatefulWidget {
 class _MyAppState extends State<Cadastro> {
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
-  String nome, email, celular, senha;
+  String nome, email, Data, senha;
+  final TextEditingController _controladorData = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class _MyAppState extends State<Cadastro> {
   Widget _formUI() {
     return new Column(
       children: <Widget>[
-        new TextFormField(
+      TextFormField(
           decoration: new InputDecoration(hintText: 'Nome Completo'),
           maxLength: 40,
           validator: _validarNome,
@@ -44,15 +48,27 @@ class _MyAppState extends State<Cadastro> {
             nome = val;
           },
         ),
-        new TextFormField(
-            decoration: new InputDecoration(hintText: 'Celular'),
-            keyboardType: TextInputType.phone,
-            maxLength: 10,
-            validator: _validarCelular,
-            onSaved: (String val) {
-              celular = val;
-            }),
-        new TextFormField(
+        TextFormField(
+          controller: _controladorData,
+          decoration: InputDecoration(
+            labelText: 'Data de nascimento',
+            hintText: 'Insira a data',
+          ),
+          onTap: () async {
+            DateTime dateT = DateTime(2010);
+            FocusScope.of(context).requestFocus(FocusNode());
+
+            dateT = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1500),
+              lastDate: DateTime(2021),
+            );
+            _controladorData.text =
+                DateFormat('yyyy-MM-dd').format(dateT);
+          }
+        ),
+         TextFormField(
             decoration: new InputDecoration(hintText: 'Email'),
             keyboardType: TextInputType.emailAddress,
             maxLength: 40,
@@ -60,7 +76,7 @@ class _MyAppState extends State<Cadastro> {
             onSaved: (String val) {
               email = val;
             }),
-        new TextFormField(
+         TextFormField(
             decoration: new InputDecoration(hintText: 'Senha'),
             keyboardType: TextInputType.text,
             obscureText: true,
@@ -69,8 +85,8 @@ class _MyAppState extends State<Cadastro> {
             onSaved: (String val) {
               senha = val;
             }),
-        new SizedBox(height: 15.0),
-        new RaisedButton(
+         SizedBox(height: 15.0),
+         RaisedButton(
           onPressed: _sendForm,
           child: new Text('Enviar'),
         )
@@ -90,14 +106,14 @@ class _MyAppState extends State<Cadastro> {
   }
 
   String _validarCelular(String value) {
-    String patttern = r'(^[0-9]*$)';
+    String patttern = r'^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$';
     RegExp regExp = new RegExp(patttern);
     if (value.length == 0) {
-      return "Informe o celular";
-    } else if(value.length != 10){
-      return "O celular deve ter 10 dígitos";
+      return "Informe o ano";
+    } else if(value.length != 8){
+      return "informe 8 digitos";
     }else if (!regExp.hasMatch(value)) {
-      return "O número do celular so deve conter dígitos";
+      return "Verifique a idade";
     }
     return null;
   }
@@ -127,10 +143,17 @@ class _MyAppState extends State<Cadastro> {
     }
   }
 
-  _sendForm() {
+  _sendForm() async {
     if (_key.currentState.validate()) {
       // Sem erros na validação
       _key.currentState.save();
+      Data = _controladorData.text;
+      ;
+      Customer customer = new Customer(nome, email, senha, Data);
+      final resposta = await CadastroCustomer.postCustomer(customer);
+      if (resposta.msg != 'error') {
+        Navigator.pop(context);
+      }
 
     } else {
       // erro de validação print("Nome $nome");

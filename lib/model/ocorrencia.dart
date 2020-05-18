@@ -44,8 +44,8 @@ class Address {
 
   factory Address.fromjson(Map<String, dynamic> json) {
     return Address(
-        id_addres: json['id_enreco'],
-        name_street: json['nome_rua'],
+        id_addres: json['id_addres'],
+        name_street: json['name_street'],
         cep: json['cep'].toString());
   }
 }

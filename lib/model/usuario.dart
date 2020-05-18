@@ -13,17 +13,28 @@ class Customer{
 //    usuario = json['usuario'];
 //  }
 
-  String login;
-  String nome;
+  String name;
+  String cpf;
   String email;
-  String token;
+  String password;
+  String birthday;
   List<String> roles;
 
+  Customer(String name, String email, String password, String birthday){
+    this.name = name;
+//    this.cpf = cpf;
+    this.email = email;
+    this.password = password;
+    this.birthday = birthday;
+  }
+
+
   Customer.fromJson(Map<String, dynamic> json) {
-    login = json['login'];
-    nome = json['nome'];
-    email = json['email'];
-    token = json['token'];
-    roles = json['roles'] != null ? json['roles'].cast<String>() : null;
+    name =     json['name'];
+    cpf =      json['cpf'];
+    email =    json['email'];
+    password = json['password'];
+    birthday = json['Birthday'];
+//    roles = json['roles'] != null ? json['roles'].cast<String>() : null;
   }
 }
