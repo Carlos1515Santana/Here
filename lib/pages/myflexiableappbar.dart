@@ -27,7 +27,7 @@ class MyFlexiableAppBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(child: new Text(
-                        "Ocorrencias",
+                        "Ocorrências",
                         style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Poppins',

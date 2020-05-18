@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:here/APIs/ocorrenciaAPI.dart';
 import 'package:here/main.dart';
+import 'package:here/model/ocorrencia.dart';
 import 'package:here/pages/ListOcorrencia_page.dart';
 import 'package:here/pages/graficos_page.dart';
 import 'package:here/pages/graficosdash_page.dart';
@@ -74,10 +76,10 @@ drawer: Drawer(
           crossAxisCount: 2,
           children: <Widget>[
             MyMenu(title: 'Documentos', icon: Icons.create, warna: Colors.teal,),
-            MyMenu(title: 'Ocorrencias', icon: Icons.insert_drive_file, warna: Colors.blueGrey,),
+            MyMenu(title: 'Ocorrências', icon: Icons.insert_drive_file, warna: Colors.blueGrey,),
             //MyMenu(title: 'Informação', icon: Icons.info_outline, warna: Colors.green,),
             //MyMenu(title: 'Educação', icon: Icons.school, warna: Colors.orange,),
-            MyMenu(title: 'Graficos', icon: Icons.insert_chart, warna: Colors.orange,),
+            MyMenu(title: 'Gráficos', icon: Icons.insert_chart, warna: Colors.orange,),
             //MyMenu(title: 'Livro', icon: Icons.local_library, warna: Colors.red,),
           ],
         ),
@@ -87,10 +89,10 @@ drawer: Drawer(
 }
 
 Future<void> _onClickCard(context,title) async {
-  if(title == 'Ocorrencias'){
+  if(title == 'Ocorrências'){
    await push(context, ListOcorrencia());
    }
-   else if(title == 'Graficos'){
+   else if(title == 'Gráficos'){
    //await push(context, GraficosDashPage());
    await push(context, GraficosPage());
    }
