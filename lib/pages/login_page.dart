@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
 
-            AppButton("Fazer Cadastro", onPressed: _onClickCadastro)
+            AppButton("Fazer Cadastro", onPressed: _onClickCadastro),
 
           ],
         ),
