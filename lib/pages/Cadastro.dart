@@ -10,14 +10,14 @@ class Cadastro extends StatefulWidget {
 class _MyAppState extends State<Cadastro> {
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
-  String nome, email, celular;
+  String nome, email, celular, senha;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          title: new Text('Formulário com Validação'),
+          title: new Text('Cadastrar'),
         ),
         body: new SingleChildScrollView(
           child: new Container(
@@ -59,6 +59,15 @@ class _MyAppState extends State<Cadastro> {
             validator: _validarEmail,
             onSaved: (String val) {
               email = val;
+            }),
+        new TextFormField(
+            decoration: new InputDecoration(hintText: 'Senha'),
+            keyboardType: TextInputType.text,
+            obscureText: true,
+            maxLength: 20,
+            validator: _validarSenha,
+            onSaved: (String val) {
+              senha = val;
             }),
         new SizedBox(height: 15.0),
         new RaisedButton(
@@ -105,15 +114,28 @@ class _MyAppState extends State<Cadastro> {
     }
   }
 
+  String _validarSenha(String value) {
+    //String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    //RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return "Informe uma senha";
+    } //else if(!regExp.hasMatch(value)){
+      //return "Senha inválida";
+    //}
+    else {
+      return null;
+    }
+  }
+
   _sendForm() {
     if (_key.currentState.validate()) {
       // Sem erros na validação
       _key.currentState.save();
-      print("Nome $nome");
-      print("Ceclular $celular");
-      print("Email $email");
+
     } else {
-      // erro de validação
+      // erro de validação print("Nome $nome");
+      //      print("Ceclular $celular");
+      //      print("Email $email");
       setState(() {
         _validate = true;
       });

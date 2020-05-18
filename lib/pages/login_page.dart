@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:here/APIs/api_response.dart';
 import 'package:here/APIs/login_api.dart';
 import 'package:here/model/usuario.dart';
+import 'package:here/pages/Cadastro.dart';
 import 'package:here/pages/home_page.dart';
 import 'package:here/utils/alert.dart';
 import 'package:here/utils/nav.dart';
@@ -60,11 +61,22 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 20,
             ),
-            AppButton("Login", onPressed: _onClickLogin, showProgress: _showProgress)
+            AppButton("Login", onPressed: _onClickLogin, showProgress: _showProgress),
+
+            Container(
+              height: 20,
+            ),
+
+            AppButton("Fazer Cadastro", onPressed: _onClickCadastro)
+
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _onClickCadastro() async {
+      await push(context, Cadastro());
   }
 
   Future<void> _onClickLogin() async {
