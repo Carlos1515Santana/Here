@@ -40,8 +40,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     '',
     'Assalto',
     'Furto',
-    'Estupro',
-    'Latrocinio'
+    'Roubo'
   ];
   String _ocrc = '';
 

@@ -477,7 +477,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          'Marcas de carros mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                          'Marcas de veículos mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
                         SizedBox(height: 10.0,),
                         Expanded(
                           child: charts.PieChart(

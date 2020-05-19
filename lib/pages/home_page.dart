@@ -113,7 +113,7 @@ class _MyAppState extends State<HomePage> {
   Future<void> _getOcorrrencia( List<Ocorrencia> ocorrenciaList) async {
     for (final ocorencia in ocorrenciaList) {
 
-       await setCustomMapPin(ocorencia.occurrence_type == 'ROU'? 2 : 1 );
+       await setCustomMapPin(ocorencia.occurrence_type == 'Roubo'? 2 : 1 );
 
       final marker = Marker(
         markerId: MarkerId(ocorencia.description),
