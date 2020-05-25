@@ -395,7 +395,17 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                             _seriesData,
                             animate: true,
                             barGroupingType: charts.BarGroupingType.grouped,
-                            behaviors: [charts.SeriesLegend()],
+                            behaviors: [charts.SeriesLegend(
+                               position: charts.BehaviorPosition.top,
+                               outsideJustification: charts.OutsideJustification.endDrawArea,
+                               horizontalFirst: false,
+                               desiredMaxRows: 2,
+                               cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
+                               entryTextStyle: charts.TextStyleSpec(
+              //color: charts.Color(r: 127, g: 63, b: 191),
+              fontFamily: 'Georgia',
+              fontSize: 14),
+                            )],
                             animationDuration: Duration(seconds: 2),
                             domainAxis: charts.OrdinalAxisSpec(
                               renderSpec: charts.SmallTickRendererSpec(labelRotation: 60),
