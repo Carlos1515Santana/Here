@@ -28,6 +28,7 @@ class _MyAppState extends State<HomePage> {
   var interador = 0;
 
   Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController controller;
 
   CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-23.5489, -46.638823),
@@ -50,14 +51,14 @@ class _MyAppState extends State<HomePage> {
         img = 'blue';
         break;
       case 1:
-        img = 'furto';
+        img = 'thief-old';
         break;
       case 2:
         img = 'roubo';
         break;
     }
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 0.5), 'assets/' + img + '.png');
+        ImageConfiguration(devicePixelRatio: 101.1), 'assets/' + img + '.png');
   }
 
   void _startTracking() {
@@ -98,8 +99,21 @@ class _MyAppState extends State<HomePage> {
       );
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
+    this.controller = controller;
     await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
+    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorencia();
+
+    setState(() {
+      _markers.clear();
+      if (ocorrenciaList != null) {
+        _getOcorrrencia(ocorrenciaList);
+      }
+    });
+}
+
+Future<void> _onMapUpdate() async{
+//    _controller.complete(controller);
     final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorencia();
 
     setState(() {
@@ -160,12 +174,16 @@ class _MyAppState extends State<HomePage> {
     );
   }
 
+
   void _onTap(LatLng p) async {
     var resposta = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => OcorrenciaPage(p)));
-    push(context, HomePage());
+//    push(context, HomePage());
+    this._onMapUpdate();
+    print(resposta);
 
   }
+
 
   // button find my local
   FloatingActionButton _buttonFindMyLocal() {
@@ -199,7 +217,8 @@ class _MyAppState extends State<HomePage> {
   AppBar _appBar() {
     return AppBar(
         title: const Text('Maps'),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.blueGrey,
+
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.apps),

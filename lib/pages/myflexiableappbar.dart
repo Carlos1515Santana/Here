@@ -112,7 +112,7 @@ class MyFlexiableAppBar extends StatelessWidget {
             ],)
       ),
       decoration: new BoxDecoration(
-        color: Colors.blue[700],
+        color: Colors.black12,
       ),
     );
   }

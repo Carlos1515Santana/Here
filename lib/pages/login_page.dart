@@ -32,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("HERE!")),
+        backgroundColor: Colors.blueGrey,
       ),
       body: _body(),
     );
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
 
-            AppButton("Fazer Cadastro", onPressed: _onClickCadastro),
+            AppButton("Fazer Cadastro", onPressed: _onClickCadastro,),
 
           ],
         ),

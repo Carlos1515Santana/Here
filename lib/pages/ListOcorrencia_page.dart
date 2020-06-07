@@ -44,11 +44,12 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return  MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: new AppBar(
+          appBar:  AppBar(
         bottom: TabBar(
               tabs: [
                 Tab(text: "Todas Ocorrências",icon: Icon(Icons.format_list_bulleted)),
@@ -56,14 +57,14 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
                 //Tab(icon: Icon(Icons.directions_bike)),
               ],
             ),
-        title: new Text('Ocorrências'),
+        title:  Text('Ocorrências'),
         centerTitle: true,
-        backgroundColor:  Colors.blue[700],
+        backgroundColor:  Colors.blueGrey,
       ),
       backgroundColor: Colors.blue[100],
       body: TabBarView(
             children: [ myAllData.length == 0 ? new Center(
-              child: new CircularProgressIndicator(),
+              child:  CircularProgressIndicator(),
             )
           : showMyUI(),
 
@@ -79,30 +80,30 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
   }
 
   Widget showMyUI() {
-    return new ListView.builder(
+    return  ListView.builder(
         itemCount: myAllData.length,
         itemBuilder: (_, index) {
-          return new Container(
+          return  Container(
             
-            margin: new EdgeInsets.symmetric(vertical: 2.0,horizontal: 8.0),
-            child: new Card(
+            margin: EdgeInsets.symmetric(vertical: 2.0,horizontal: 8.0),
+            child:  Card(
               elevation: 10.0,
-              child: new InkWell(
+              child:  InkWell(
                 onTap: () {
                   Navigator.push(
                       context,
-                      new MaterialPageRoute(
+                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              new SecondPage(myAllData[index])));
+                               SecondPage(myAllData[index])));
                 },
               child: Container(
-                padding: new EdgeInsets.all(12.0),
-                child: new Column(
+                padding:  EdgeInsets.all(12.0),
+                child:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                      Container(
-                       decoration: new BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.all(8.0),
+                       decoration:  BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(12)),
+                    padding:  EdgeInsets.all(8.0),
                     child: Row(
                       children: <Widget>[
                     CircleAvatar(
@@ -119,23 +120,23 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
                   ],
                     ),
                   ),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Ocorrência : ${myAllData[index].tipo_correncia}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Usuário : ${myAllData[index].usuario}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Ocorrência : ${myAllData[index].tipo_correncia}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Usuário : ${myAllData[index].usuario}'),
                     //new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
                     //new Text('Tipo : ${myAllData[index].longitude}'),
                     //new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
                     //new Text('Endereço : ${myAllData[index].latitude}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Descrição : ${myAllData[index].descricao}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Endereço : ${myAllData[index].endereco}'),
-                    new Text('Data : ${myAllData[index].data}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Descrição : ${myAllData[index].descricao}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Endereço : ${myAllData[index].endereco}'),
+                     Text('Data : ${myAllData[index].data}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                     Image.network('${myAllData[index].image}', fit: BoxFit.cover, width: 300),
                     //new Image.memory('${myAllData[index].image}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                   ],
                 ),
               ),
@@ -150,43 +151,43 @@ class SecondPage extends StatelessWidget {
   SecondPage(this.data);
   final data;
   @override
-  Widget build(BuildContext context) => new Scaffold(
-      appBar: new AppBar(title: new Text('Detalhes da Ocorrência')),
-      body: new ListView.builder(
+  Widget build(BuildContext context) =>  Scaffold(
+      appBar:  AppBar(title:  Text('Detalhes da Ocorrência')),
+      body:  ListView.builder(
         itemCount: 1,
         itemBuilder: (_, index) {
-          return new Container(
+          return  Container(
             
-            margin: new EdgeInsets.symmetric(vertical: 2.0,horizontal: 8.0),
-            child: new Card(
+            margin:  EdgeInsets.symmetric(vertical: 2.0,horizontal: 8.0),
+            child:  Card(
               elevation: 10.0,
-              child: new InkWell(
+              child:  InkWell(
                 
               child: Container(
-                padding: new EdgeInsets.all(12.0),
-                child: new Column(
+                padding:  EdgeInsets.all(12.0),
+                child:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                   new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('BO : ${data.tipo_correncia}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Usuario : ${data.usuario}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Longitude : ${data.longitude}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Latitude : ${data.latitude}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Descrição : ${data.descricao}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Endereço : ${data.endereco}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
-                    new Text('Data : ${data.data}'),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
+                    Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('BO : ${data.tipo_correncia}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Usuario : ${data.usuario}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Longitude : ${data.longitude}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Latitude : ${data.latitude}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Descrição : ${data.descricao}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Endereço : ${data.endereco}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Data : ${data.data}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                     Image.network('${data.image}', fit: BoxFit.cover, width: 300),
-                    new Padding(padding: new EdgeInsets.symmetric(vertical: 1.0)),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 1.0)),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: Text("Agravantes:",
+                      child: Text('Agravantes:',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w700,

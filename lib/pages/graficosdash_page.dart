@@ -363,11 +363,12 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 4,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blue[700],
+            backgroundColor: Colors.blueGrey,
             //backgroundColor: Color(0xff308e1c),
             bottom: TabBar(
               indicatorColor: Color(0xff9962D0),

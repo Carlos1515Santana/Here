@@ -11,7 +11,7 @@ class Cadastro extends StatefulWidget {
 }
 
 class _MyAppState extends State<Cadastro> {
-  GlobalKey<FormState> _key = new GlobalKey();
+  GlobalKey<FormState> _key =  GlobalKey();
   bool _validate = false;
   String nome, email, Data, senha;
   final TextEditingController _controladorData = TextEditingController();
@@ -19,14 +19,16 @@ class _MyAppState extends State<Cadastro> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Cadastrar'),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar:  AppBar(
+          title:  Text('Cadastrar'),
+          backgroundColor: Colors.blueGrey,
         ),
-        body: new SingleChildScrollView(
-          child: new Container(
-            margin: new EdgeInsets.all(15.0),
-            child: new Form(
+        body:  SingleChildScrollView(
+          child:  Container(
+            margin:  EdgeInsets.all(15.0),
+            child:  Form(
               key: _key,
               autovalidate: _validate,
               child: _formUI(),
@@ -38,10 +40,10 @@ class _MyAppState extends State<Cadastro> {
   }
 
   Widget _formUI() {
-    return new Column(
+    return Column(
       children: <Widget>[
       TextFormField(
-          decoration: new InputDecoration(hintText: 'Nome Completo'),
+          decoration:  InputDecoration(hintText: 'Nome Completo'),
           maxLength: 40,
           validator: _validarNome,
           onSaved: (String val) {
@@ -62,14 +64,14 @@ class _MyAppState extends State<Cadastro> {
               context: context,
               initialDate: DateTime.now(),
               firstDate: DateTime(1500),
-              lastDate: DateTime(2021),
+              lastDate: DateTime.now(),
             );
             _controladorData.text =
                 DateFormat('yyyy-MM-dd').format(dateT);
           }
         ),
          TextFormField(
-            decoration: new InputDecoration(hintText: 'Email'),
+            decoration:  InputDecoration(hintText: 'Email'),
             keyboardType: TextInputType.emailAddress,
             maxLength: 40,
             validator: _validarEmail,
@@ -77,7 +79,7 @@ class _MyAppState extends State<Cadastro> {
               email = val;
             }),
          TextFormField(
-            decoration: new InputDecoration(hintText: 'Senha'),
+            decoration:  InputDecoration(hintText: 'Senha'),
             keyboardType: TextInputType.text,
             obscureText: true,
             maxLength: 20,
@@ -88,53 +90,38 @@ class _MyAppState extends State<Cadastro> {
          SizedBox(height: 15.0),
          RaisedButton(
           onPressed: _sendForm,
-          child: new Text('Enviar'),
+          child:  Text('Enviar'),
         )
       ],
     );
   }
 
   String _validarNome(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Informe o nome";
+    var patttern = r'(^[a-zA-Z ]*$)';
+    var regExp =  RegExp(patttern);
+    if (value.isEmpty) {
+      return 'Informe o nome';
     } else if (!regExp.hasMatch(value)) {
-      return "O nome deve conter caracteres de a-z ou A-Z";
-    }
-    return null;
-  }
-
-  String _validarCelular(String value) {
-    String patttern = r'^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Informe o ano";
-    } else if(value.length != 8){
-      return "informe 8 digitos";
-    }else if (!regExp.hasMatch(value)) {
-      return "Verifique a idade";
+      return 'O nome deve conter caracteres de a-z ou A-Z';
     }
     return null;
   }
 
   String _validarEmail(String value) {
-    String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return "Informe o Email";
+    var pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    var regExp = RegExp(pattern);
+    if (value.isEmpty) {
+      return 'Informe o Email';
     } else if(!regExp.hasMatch(value)){
-      return "Email inválido";
+      return 'Email inválido';
     }else {
       return null;
     }
   }
 
   String _validarSenha(String value) {
-    //String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    //RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return "Informe uma senha";
+    if (value.isEmpty) {
+      return 'Informe uma senha';
     } //else if(!regExp.hasMatch(value)){
       //return "Senha inválida";
     //}
@@ -149,7 +136,7 @@ class _MyAppState extends State<Cadastro> {
       _key.currentState.save();
       Data = _controladorData.text;
       ;
-      Customer customer = new Customer(nome, email, senha, Data);
+      var customer =  Customer(nome, email, senha, Data);
       final resposta = await CadastroCustomer.postCustomer(customer);
       if (resposta.msg != 'error') {
         Navigator.pop(context);

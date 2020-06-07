@@ -58,6 +58,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -69,6 +70,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Ocorrencias'),
+          backgroundColor: Colors.black12,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 20.0),
@@ -122,14 +124,14 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   hintText: 'Insira a data que ocorreu',
                 ),
                 onTap: () async {
-                  DateTime dateT = DateTime(2010);
+                  var dateT = DateTime(2015);
                   FocusScope.of(context).requestFocus(FocusNode());
 
                   dateT = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2010),
-                    lastDate: DateTime(2100),
+                    firstDate: DateTime(2015),
+                    lastDate: DateTime.now()
                   );
                   _controladorData.text =
                       DateFormat('yyyy-MM-dd').format(dateT);
@@ -198,7 +200,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   //    borderRadius: BorderRadius.all(Radius.circular(10.0))
                   //),
                   textColor: Colors.white,
-                  color: Colors.blue,
+                  color:Color(0XFF28b1b3),
                 ),
               ),
             ],
@@ -219,7 +221,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   void _cadastrarOcorrencia(Ocorrencia newOcorrencia) async {
     final resposta = await OcorrenciaAPI.postOcorrencia(newOcorrencia, _imagem);
     if (resposta != null) {
-      Navigator.pop(context, newOcorrencia);
+      Navigator.pop(context, 'Ocorrencia cadastrada');
     }
     //imprimir os dados
      print(

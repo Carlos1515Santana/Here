@@ -35,7 +35,7 @@ class _DashboardPageState extends State<DashboardPage>
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu'),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.blue[100],
  
@@ -48,7 +48,7 @@ drawer: Drawer(
         currentAccountPicture: CircleAvatar(
           backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRe-E4rqR6LMzLi2KSkXRGZOUUGhwaY0gXoa_5OibXvVrDvG5C&usqp=CAU'),
         ),
-        decoration: BoxDecoration(color: Colors.blue[700]),
+        decoration: BoxDecoration(color: Colors.black12),
       ),
       ListTile(
         leading: Icon(Icons.person),
