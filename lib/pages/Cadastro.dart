@@ -42,56 +42,121 @@ class _MyAppState extends State<Cadastro> {
   Widget _formUI() {
     return Column(
       children: <Widget>[
-      TextFormField(
-          decoration:  InputDecoration(hintText: 'Nome Completo'),
-          maxLength: 40,
-          validator: _validarNome,
-          onSaved: (String val) {
-            nome = val;
-          },
-        ),
-        TextFormField(
-          controller: _controladorData,
-          decoration: InputDecoration(
-            labelText: 'Data de nascimento',
-            hintText: 'Insira a data',
-          ),
-          onTap: () async {
-            DateTime dateT = DateTime(2010);
-            FocusScope.of(context).requestFocus(FocusNode());
-
-            dateT = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1500),
-              lastDate: DateTime.now(),
-            );
-            _controladorData.text =
-                DateFormat('yyyy-MM-dd').format(dateT);
-          }
-        ),
-         TextFormField(
-            decoration:  InputDecoration(hintText: 'Email'),
-            keyboardType: TextInputType.emailAddress,
+        Padding(
+          padding: EdgeInsets.only(top: 10.0),
+          child: TextFormField(
+            decoration: new InputDecoration(
+              labelText: 'Nome',
+              hintText: 'Digite seu nome',
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey, width: 2.0),
+              ),
+            ),
             maxLength: 40,
-            validator: _validarEmail,
+            validator: _validarNome,
             onSaved: (String val) {
-              email = val;
-            }),
-         TextFormField(
-            decoration:  InputDecoration(hintText: 'Senha'),
-            keyboardType: TextInputType.text,
-            obscureText: true,
-            maxLength: 20,
-            validator: _validarSenha,
-            onSaved: (String val) {
-              senha = val;
-            }),
-         SizedBox(height: 15.0),
-         RaisedButton(
-          onPressed: _sendForm,
-          child:  Text('Enviar'),
-        )
+              nome = val;
+            },
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(top: 5.0),
+          child: TextFormField(
+              controller: _controladorData,
+              decoration: InputDecoration(
+                labelText: 'Data de nascimento',
+                hintText: 'Insira a data',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                ),
+              ),
+              maxLength: 10,
+              //validator: _validarData,
+              onTap: () async {
+                DateTime dateT = DateTime(2010);
+                FocusScope.of(context).requestFocus(FocusNode());
+                dateT = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2019),
+                  lastDate: DateTime.now(),
+                );
+                _controladorData.text =
+                    DateFormat.yMd('pt').format(dateT);
+              }
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(top: 5.0),
+          child: TextFormField(
+              decoration: new InputDecoration(
+                labelText: 'E-mail',
+                hintText: 'Digite seu e-mail',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                ),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              maxLength: 40,
+              validator: _validarEmail,
+              onSaved: (String val) {
+                email = val;
+              }
+          ),
+        ),
+
+        Padding(
+          padding: EdgeInsets.only(top: 5.0),
+          child: TextFormField(
+              decoration: new InputDecoration(
+                labelText: 'Senha',
+                hintText: 'Digite sua senha',
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                ),
+              ),
+              keyboardType: TextInputType.text,
+              obscureText: true,
+              maxLength: 20,
+              validator: _validarSenha,
+              onSaved: (String val) {
+                senha = val;
+              }
+          ),
+        ),
+
+        Container(
+          width: 320.0,
+          height: 67.0,
+          padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
+          child: RaisedButton(
+            child: Text(
+              'Registrar-se',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            onPressed: () {
+              _sendForm();
+            },
+            textColor: Colors.white,
+            color: Color(0XFF28b1b3),
+          ),
+        ),
       ],
     );
   }
@@ -116,6 +181,12 @@ class _MyAppState extends State<Cadastro> {
       return 'Email inválido';
     }else {
       return null;
+    }
+  }
+
+  String _validarData(String value) {
+    if(value.length == 0){
+      return 'Insira uma data';
     }
   }
 

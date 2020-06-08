@@ -390,7 +390,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Nº de Roubos do ano 2019',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),),
+                            'Quantidade de roubos em 2019\n',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                         Expanded(
                           child: charts.BarChart(
                             _seriesData,
@@ -425,7 +425,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                            'Marcas de celulares mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                            'Marcas de celulares mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                             SizedBox(height: 10.0,),
                         Expanded(
                           child: charts.PieChart(
@@ -463,7 +463,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          'Bairros com maior Nº de Roubos no ano 2019',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),),
+                          'Bairros com maior Nº de roubos no ano 2019',style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                         Expanded(
                           child: charts.BarChart(
                             _seriesData02,
@@ -488,7 +488,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          'Marcas de veículos mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),),
+                          'Marcas de veículos mais roubadas',style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                         SizedBox(height: 10.0,),
                         Expanded(
                           child: charts.PieChart(

@@ -22,6 +22,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_rounded_date_picker: 1.0.4
+  brasil_fields: ^0.2.0
   google_maps_flutter: ^0.5.11
   http: ^0.12.0+4
   json_serializable: ^2.0.2
@@ -32,12 +33,8 @@ dependencies:
   shared_preferences:
   provider:
   fl_chart: ^0.9.4
- 
-
   intl: ^0.16.0
   image_picker: ^0.6.1+4
-  flutter_masked_text: ^0.8.0
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -10,7 +10,7 @@ import 'package:here/model/usuario.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 
 class OcorrenciaPage extends StatefulWidget {
   LatLng localizacao;
@@ -29,7 +29,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   var longitude;
   final TextEditingController _controladorData = TextEditingController();
   final TextEditingController _controladorDescricao = TextEditingController();
-  var controllerMask = MaskedTextController(mask: '00000-000');
+  final TextEditingController _cepController = TextEditingController();
 
   _OcorrenciaPageState(LatLng localizacao) {
     latitude = localizacao.latitude;
@@ -38,18 +38,18 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
 
   List<String> _ocrcs = <String>[
     '',
-    'Assalto',
     'Furto',
     'Roubo'
   ];
-  String _ocrc = '';
 
+  String _ocrc = '';
   File _imagem;
 
   Future getImagem() async {
     var imagem = await ImagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 100, maxHeight: 150);
-
+        source: ImageSource.gallery,
+        imageQuality: 100,
+        maxHeight: 150);
     setState(() {
       _imagem = imagem;
     });
@@ -69,105 +69,137 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
       home: Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('Ocorrencias'),
+          title: Text('Cadastrar Ocorrências'),
           backgroundColor: Colors.black12,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 20.0),
+          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 5.0),
-                child: Text(
-                  'Cadastrar Ocorrência',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Schyler',
-                  ),
-                ),
-              ),
-              FormField<String>(
-                builder: (FormFieldState<String> state) {
-                  return InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Selecione uma ocorrência',
-                      errorText: state.hasError ? state.errorText : null,
-                    ),
-                    isEmpty: _ocrc == '',
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: _ocrc,
-                        isDense: true,
-                        onChanged: (String newValue) {
-                          setState(() {
-                            _controladorTipo = newValue;
-                            _ocrc = newValue;
-                            state.didChange(newValue);
-                          });
-                        },
-                        items: _ocrcs.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              TextFormField(
-                controller: _controladorData,
-                decoration: InputDecoration(
-                  labelText: 'Data do crime',
-                  hintText: 'Insira a data que ocorreu',
-                ),
-                onTap: () async {
-                  var dateT = DateTime(2015);
-                  FocusScope.of(context).requestFocus(FocusNode());
 
-                  dateT = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2015),
-                    lastDate: DateTime.now()
-                  );
-                  _controladorData.text =
-                      DateFormat('yyyy-MM-dd').format(dateT);
-                },
-              ),
-              TextFormField(
-                controller: controllerMask,
-                decoration: InputDecoration(
-                  labelText: 'CEP',
-                  hintText: 'Insira o CEP onde ocorreu',
-                ),
-                onSaved: (String value) {
-                   print('CEP: ' + value);
-                },
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly
-                ],
-              ),
               Padding(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 15.0),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Selecione uma ocorrência',
+                        errorText: state.hasError ? state.errorText : null,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                        ),
+                      ),
+                      isEmpty: _ocrc == '',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _ocrc,
+                          isDense: true,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              _controladorTipo = newValue;
+                              _ocrc = newValue;
+                              state.didChange(newValue);
+                              if(_ocrc != ''){
+                                _showDialog();
+                              }
+                            });
+                          },
+                          items: _ocrcs.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: TextFormField(
+                  controller: _controladorData,
+                  decoration: InputDecoration(
+                    labelText: 'Data do crime',
+                    hintText: 'Data que ocorreu',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    ),
+                  ),
+                  validator: _validarData,
+                  onTap: () async {
+                    DateTime dateT = DateTime(2019);
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    dateT = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2019),
+                      lastDate: DateTime.now(),
+                    );
+                    _controladorData.text = DateFormat.yMd('pt').format(dateT);
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: TextFormField(
+                  inputFormatters: [
+                    WhitelistingTextInputFormatter.digitsOnly,
+                    CepInputFormatter(),
+                  ],
+                  controller: _cepController,
+                  decoration: InputDecoration(
+                    labelText: 'CEP',
+                    hintText: 'Insira o CEP onde ocorreu',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    ),
+                  ),
+                  onSaved: (String value) {
+                    print('CEP: ' + value);
+                  },
+                  keyboardType: TextInputType.number,
+                  validator: _validarEndereco,
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
                 child: TextField(
                   controller: _controladorDescricao,
                   decoration: InputDecoration(
                     labelText: 'Descrição do crime',
                     hintText: 'Insira uma breve descrição',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    ),
                   ),
                   keyboardType: TextInputType.text,
                 ),
               ),
+
               Container(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: _imagem == null
                     ? Text('Nenhuma imagem selecionada')
                     : Image.file(_imagem),
               ),
+
               Container(
                 child: RaisedButton(
                   onPressed: () {
@@ -181,8 +213,9 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   ),
                 ),
               ),
+
               Container(
-                width: 280.0,
+                width: 320.0,
                 height: 67.0,
                 padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
                 child: RaisedButton(
@@ -196,11 +229,8 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                     _enviarOcorrencia();
                   },
 
-                  //shape: RoundedRectangleBorder(
-                  //    borderRadius: BorderRadius.all(Radius.circular(10.0))
-                  //),
                   textColor: Colors.white,
-                  color:Color(0XFF28b1b3),
+                  color: Color(0XFF28b1b3),
                 ),
               ),
             ],
@@ -210,8 +240,58 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     );
   }
 
+  String _validarEndereco(String value) {
+    String pattern = r'^\\d{5}-\\d{3}';
+    RegExp regExp = new RegExp(pattern);
+    if(value.length == 0) {
+      return 'Informe um CEP';
+    } else if(!regExp.hasMatch(value)) {
+      return 'CEP inválido';
+    }
+  }
+
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          /*Widget NaoMostrarMaisButton = FlatButton(
+            child: Text('Não mostrar novamente'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ); */
+          Widget EntendiButton = FlatButton(
+            child: Text('Entendi'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+          return AlertDialog(
+            title: Text('Diferença entre furto e roubo'),
+            content: Text('Quando alguém entra numa casa vazia sem que os donos estejam lá dentro e leva bens de valor, configura-se um furto. O roubo, por sua vez, aconteceria se o ladrão invadisse a casa, encontrasse os moradores e os ameaçasse para levar seus bens.'),
+            actions: [
+              //NaoMostrarMaisButton,
+              EntendiButton,
+            ],
+          );
+        }
+    );
+  }
+
+  String _validarData(String value) {
+    if(value.length == 0){
+      return 'Insira uma data';
+    }
+  }
+
+  String _validarCEP(String value) {
+    if(value.length == 0) {
+      return 'Insira o CEP';
+    }
+  }
+
   void _enviarOcorrencia() {
-    Address endereco = Address(cep: controllerMask.text, name_street: 'noo');
+    Address endereco = Address(cep: _cepController.text, name_street: 'noo');
     Customer user;
     Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
         latitude, _controladorDescricao.text, endereco, _controladorData.text );
@@ -225,6 +305,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     }
     //imprimir os dados
      print(
-        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, data: ${newOcorrencia.date}, CEP: ${newOcorrencia.address.cep} DEscrição: ${newOcorrencia.description}');
+        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, data: ${newOcorrencia.date}, CEP: ${newOcorrencia.address.cep} Descrição: ${newOcorrencia.description}');
   }
 }

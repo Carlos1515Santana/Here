@@ -7,6 +7,7 @@ import 'package:here/pages/graficos_page.dart';
 import 'package:here/pages/graficosdash_page.dart';
 import 'package:here/utils/nav.dart';
 import 'package:here/pages/Cadastro.dart';
+import 'package:here/pages/login_page.dart';
 import 'package:here/pages/ocorrencia_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -65,6 +66,12 @@ drawer: Drawer(
       ListTile(
         leading: Icon(Icons.exit_to_app),
         title: Text('Sair'),
+        onTap: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage())
+          );
+        },
       ),
     ],
   ),
