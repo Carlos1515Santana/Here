@@ -38,7 +38,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
       setState(() {});
       myAllData.forEach((someData) => print("Name : ${someData.usuario}"));
     } else {
-      print('Something went wrong');
+      print('Algo deu errado');
     }
   }
 
@@ -52,7 +52,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
           appBar:  AppBar(
         bottom: TabBar(
               tabs: [
-                Tab(text: "Todas Ocorrências",icon: Icon(Icons.format_list_bulleted)),
+                Tab(text: "Todas as Ocorrências",icon: Icon(Icons.format_list_bulleted)),
                 Tab(text: "Minhas Ocorrências",icon: Icon(Icons.format_list_bulleted)),
                 //Tab(icon: Icon(Icons.directions_bike)),
               ],
@@ -121,18 +121,18 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
                     ),
                   ),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Ocorrência : ${myAllData[index].tipo_correncia}'),
+                     Text('Ocorrência: ${myAllData[index].tipo_correncia}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Usuário : ${myAllData[index].usuario}'),
+                     Text('Usuário: ${myAllData[index].usuario}'),
                     //new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
                     //new Text('Tipo : ${myAllData[index].longitude}'),
                     //new Padding(padding: new EdgeInsets.symmetric(vertical: 3.0)),
                     //new Text('Endereço : ${myAllData[index].latitude}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Descrição : ${myAllData[index].descricao}'),
+                     Text('Descrição: ${myAllData[index].descricao}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Endereço : ${myAllData[index].endereco}'),
-                     Text('Data : ${myAllData[index].data}'),
+                     Text('Endereço: ${myAllData[index].endereco}'),
+                     Text('Data: ${myAllData[index].data}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                     Image.network('${myAllData[index].image}', fit: BoxFit.cover, width: 300),
                     //new Image.memory('${myAllData[index].image}'),
@@ -169,19 +169,19 @@ class SecondPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('BO : ${data.tipo_correncia}'),
+                     Text('BO: ${data.tipo_correncia}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Usuario : ${data.usuario}'),
+                     Text('Usuario: ${data.usuario}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Longitude : ${data.longitude}'),
+                     Text('Longitude: ${data.longitude}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Latitude : ${data.latitude}'),
+                     Text('Latitude: ${data.latitude}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Descrição : ${data.descricao}'),
+                     Text('Descrição: ${data.descricao}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Endereço : ${data.endereco}'),
+                     Text('Endereço: ${data.endereco}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Data : ${data.data}'),
+                     Text('Data: ${data.data}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                     Image.network('${data.image}', fit: BoxFit.cover, width: 300),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 1.0)),
