@@ -82,7 +82,7 @@ drawer: Drawer(
         child: GridView.count(
           crossAxisCount: 2,
           children: <Widget>[
-            MyMenu(title: 'Documentos', icon: Icons.create, warna: Colors.teal,),
+            //MyMenu(title: 'Documentos', icon: Icons.create, warna: Colors.teal,),
             MyMenu(title: 'Ocorrências', icon: Icons.insert_drive_file, warna: Colors.blueGrey,),
             //MyMenu(title: 'Informação', icon: Icons.info_outline, warna: Colors.green,),
             //MyMenu(title: 'Educação', icon: Icons.school, warna: Colors.orange,),
