@@ -12,7 +12,8 @@ class OcorrenciaAPI {
     try {
       var url = 'https://help-api.herokuapp.com/api/Occurrence/PostOccurrence';
 
-      ocorrencia.address.cep = ocorrencia.address.cep.replaceAll(new RegExp(r'-'), '');
+      ocorrencia.address.cep = ocorrencia.address.cep.replaceAll( RegExp(r'-'), '');
+      ocorrencia.address.cep = ocorrencia.address.cep.replaceAll( RegExp(r'.'), '');
 
       String base64Image;
       if(file != null) {

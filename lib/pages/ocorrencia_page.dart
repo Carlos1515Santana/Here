@@ -291,10 +291,14 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   }
 
   void _enviarOcorrencia() {
-    Address endereco = Address(cep: _cepController.text, name_street: 'noo');
+    Address endereco = Address(cep: _cepController.text, name_street: 'N/A');
     Customer user;
+
+    var data = _controladorData.text.replaceAll( RegExp(r'/'), '-');
+    var l =  data.split('-');
+    data = l[2] +'-' + l[1] + '-'+ l[0];
     Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
-        latitude, _controladorDescricao.text, endereco, _controladorData.text );
+        latitude, _controladorDescricao.text, endereco,  data );
     _cadastrarOcorrencia(newOcorrencia);
   }
 
