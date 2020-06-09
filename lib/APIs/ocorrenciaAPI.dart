@@ -62,7 +62,7 @@ class OcorrenciaAPI {
   }
 
   static Future<List<Ocorrencia>> getOcorencia() async {
-    const urlAPI = 'https://help-api.herokuapp.com/api/Occurrence/GetAllOccurrence';
+    const urlAPI = 'https://help-api.herokuapp.com/api/OccurrencePolice/GetAllOccurrence';
 
     print("GET > $urlAPI");
 
@@ -77,6 +77,31 @@ class OcorrenciaAPI {
     ocorrencias.forEach((ocorrencia) =>
         imageDecoder(ocorrencia)
     );
+
+//      João para usaar a imagem você deve fazer da seguinte forma:
+//      return new Scaffold(
+//          appBar: new AppBar(title: new Text('Example App')),
+//          body: new ListTile(
+//          leading: new Image.memory(bytes),
+//    title: new Text(_base64),
+    return ocorrencias;
+  }
+  static Future<List<Ocorrencia>> getOcorenciaMaps() async {
+    const urlAPI = 'https://help-api.herokuapp.com/api/OccurrencePolice/GetAllOccurrence';
+
+    print("GET > $urlAPI");
+
+    var response = await http.get(urlAPI);
+
+    String json = response.body;
+
+    List list = convert.json.decode(json);
+
+    List<Ocorrencia> ocorrencias = list.map<Ocorrencia>((map) => Ocorrencia.fromjson2(map)).toList();
+
+//    ocorrencias.forEach((ocorrencia) =>
+//        imageDecoder(ocorrencia)
+//    );
 
 //      João para usaar a imagem você deve fazer da seguinte forma:
 //      return new Scaffold(

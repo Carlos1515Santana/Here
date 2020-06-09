@@ -29,7 +29,22 @@ class Ocorrencia {
       customer        = Customer.fromJson(json['customer']);
       image          = json['image'];
   }
+
+  Ocorrencia.fromjson2(Map<String, dynamic> json) {
+    id             = json['id'];
+    occurrence_type = json['tipo_ocorrencia'];
+//    address       = Address.fromjson(json['address']);
+    longitude      = json['longitude'];
+    latitude       = json['latitude'];
+    description      = json['descricao'];
+    date           = json['data'];
+//    pathFoto       = json['pathFoto'];
+//    customer        = Customer.fromJson(json['customer']);
+    image          = json['image'];
+  }
 }
+
+
 
 class Address {
   final int id_addres;

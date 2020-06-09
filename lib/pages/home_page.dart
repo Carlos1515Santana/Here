@@ -100,9 +100,9 @@ class _MyAppState extends State<HomePage> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     this.controller = controller;
-//    await controller.setMapStyle(jsonEncode(mapStyle));   temaDark
+    await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
-    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorencia();
+    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorenciaMaps();
 
     setState(() {
       _markers.clear();
@@ -114,7 +114,7 @@ class _MyAppState extends State<HomePage> {
 
 Future<void> _onMapUpdate() async{
 //    _controller.complete(controller);
-    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorencia();
+    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorenciaMaps();
 
     setState(() {
       _markers.clear();
