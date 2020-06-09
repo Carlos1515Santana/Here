@@ -4,6 +4,7 @@ import 'package:here/model/oco.dart';
 import 'package:here/model/ocorrencia.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 void main() => runApp(new ListOcorrencia());
 
@@ -80,6 +81,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
   }
 
   Widget showMyUI() {
+    var formatter = new DateFormat('yyyy-MM-dd');
     return  ListView.builder(
         itemCount: myAllData.length,
         itemBuilder: (_, index) {
@@ -132,7 +134,8 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
                      Text('Descrição: ${myAllData[index].descricao}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                      Text('Endereço: ${myAllData[index].endereco}'),
-                     Text('Data: ${myAllData[index].data}'),
+                     Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
+                     Text('Data:'+ DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_Br').format(DateTime.parse(myAllData[index].data).toUtc())),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                     Image.network('${myAllData[index].image}', fit: BoxFit.cover, width: 300),
                     //new Image.memory('${myAllData[index].image}'),
@@ -149,6 +152,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
 
 class SecondPage extends StatelessWidget {
   SecondPage(this.data);
+  var formatter = new DateFormat('yyyy-MM-dd');
   final data;
   @override
   Widget build(BuildContext context) =>  Scaffold(
@@ -181,7 +185,7 @@ class SecondPage extends StatelessWidget {
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                      Text('Endereço: ${data.endereco}'),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
-                     Text('Data: ${data.data}'),
+                     Text('Data:'+ DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_Br').format(DateTime.parse(data.data).toUtc())),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 3.0)),
                     Image.network('${data.image}', fit: BoxFit.cover, width: 300),
                      Padding(padding:  EdgeInsets.symmetric(vertical: 1.0)),
