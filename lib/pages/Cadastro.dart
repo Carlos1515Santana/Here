@@ -85,7 +85,7 @@ class _MyAppState extends State<Cadastro> {
                 dateT = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime(2019),
+                  firstDate: DateTime(1800),
                   lastDate: DateTime.now(),
                 );
                 _controladorData.text =
@@ -205,9 +205,11 @@ class _MyAppState extends State<Cadastro> {
     if (_key.currentState.validate()) {
       // Sem erros na validação
       _key.currentState.save();
-      Data = _controladorData.text;
-      ;
-      var customer =  Customer(nome, email, senha, Data);
+      var data = _controladorData.text.replaceAll( RegExp(r'/'), '-');
+      var l =  data.split('-');
+      data = l[2] +'-' + l[1] + '-'+ l[0];
+
+      var customer =  Customer(nome, email, senha, data);
       final resposta = await CadastroCustomer.postCustomer(customer);
       if (resposta.msg != 'error') {
         Navigator.pop(context);
