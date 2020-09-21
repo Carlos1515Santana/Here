@@ -97,11 +97,12 @@ class _LoginPageState extends State<LoginPage> {
       Customer user = response.result;
       push(context, HomePage());
     }
-    else
-      alert(context, response.msg);
+    else{
+      alert(context, "Login ou senha inválida!");
+    }
 
     setState(() {
-      _showProgress = true;
+      _showProgress = false;
     });
   }
 

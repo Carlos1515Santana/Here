@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:here/APIs/cadastroCustomer.dart';
 import 'package:here/model/usuario.dart';
+import 'package:here/utils/alert.dart';
 import 'package:intl/intl.dart';
 
 void main() => runApp(new Cadastro());
@@ -213,8 +214,10 @@ class _MyAppState extends State<Cadastro> {
       final resposta = await CadastroCustomer.postCustomer(customer);
       if (resposta.msg != 'error') {
         Navigator.pop(context);
+        alert(context, "Cadastro realizado com successo!");
+      }else{
+        alert(context, "Não foi possivel cadastrar usuario");
       }
-
     } else {
       // erro de validação print("Nome $nome");
       //      print("Ceclular $celular");
