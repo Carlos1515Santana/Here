@@ -42,7 +42,17 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     'Roubo'
   ];
 
+  List<String> _objetos = <String>[
+    '',
+    'Celular',
+    'Carro',
+    'Bicicleta',
+    'Documentos pessoais',
+    'Moto'
+  ];
+
   String _ocrc = '';
+  String _objeto = '';
   File _imagem;
 
   Future getImagem() async {
@@ -122,6 +132,46 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
 
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
+                child: FormField<String>(
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Selecione o objeto roubado',
+                        errorText: state.hasError ? state.errorText : null,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                        ),
+                      ),
+                      isEmpty: _objeto == '',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: _objeto,
+                          isDense: true,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              _controladorTipo = newValue;
+                              _objeto = newValue;
+                              state.didChange(newValue);
+                            });
+                          },
+                          items: _objetos.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0, right: 200.0),
                 child: TextFormField(
                   controller: _controladorData,
                   decoration: InputDecoration(
@@ -145,6 +195,33 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                       lastDate: DateTime.now(),
                     );
                     _controladorData.text = DateFormat.yMd('pt').format(dateT);
+                    
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0, right: 200.0),
+                child: TextFormField(
+                  //controller: _controladorData,
+                  decoration: InputDecoration(
+                    labelText: 'Hora do crime',
+                    hintText: 'Hora que ocorreu',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    ),
+                  ),
+                  validator: _validarData,
+                  onTap: () async {
+                    TimeOfDay time = TimeOfDay();
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
                   },
                 ),
               ),
@@ -172,6 +249,24 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   },
                   keyboardType: TextInputType.number,
                   validator: _validarEndereco,
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: TextField(
+                  controller: _controladorDescricao,
+                  decoration: InputDecoration(
+                    labelText: 'Local do crime',
+                    hintText: 'Insira o local que acocnteceu',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
                 ),
               ),
 
@@ -228,7 +323,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   onPressed: () {
                     _enviarOcorrencia();
                   },
-
                   textColor: Colors.white,
                   color: Color(0XFF28b1b3),
                 ),
@@ -298,7 +392,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     var l =  data.split('-');
     data = l[2] +'-' + l[1] + '-'+ l[0];
     Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
-        latitude, _controladorDescricao.text, endereco,  data );
+        latitude, _controladorDescricao.text, endereco,  data);
     _cadastrarOcorrencia(newOcorrencia);
   }
 
