@@ -28,7 +28,9 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   var latitude;
   var longitude;
   final TextEditingController _controladorData = TextEditingController();
+  final TextEditingController _controladorHora = TextEditingController();
   final TextEditingController _controladorDescricao = TextEditingController();
+  final TextEditingController _controladorLocal = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
 
   _OcorrenciaPageState(LatLng localizacao) {
@@ -83,7 +85,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
           backgroundColor: Colors.black12,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
           child: Column(
             children: <Widget>[
 
@@ -130,7 +132,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: FormField<String>(
                   builder: (FormFieldState<String> state) {
@@ -170,59 +172,71 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0, right: 200.0),
-                child: TextFormField(
-                  controller: _controladorData,
-                  decoration: InputDecoration(
-                    labelText: 'Data do crime',
-                    hintText: 'Data que ocorreu',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  validator: _validarData,
-                  onTap: () async {
-                    DateTime dateT = DateTime(2019);
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    dateT = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2019),
-                      lastDate: DateTime.now(),
-                    );
-                    _controladorData.text = DateFormat.yMd('pt').format(dateT);
-                    
-                  },
-                ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0, right: 200.0),
-                child: TextFormField(
-                  //controller: _controladorData,
-                  decoration: InputDecoration(
-                    labelText: 'Hora do crime',
-                    hintText: 'Hora que ocorreu',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _controladorData,
+                        decoration: InputDecoration(
+                          labelText: 'Data do crime',
+                          hintText: 'Data que ocorreu',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                          ),
+                        ),
+                        validator: _validarData,
+                        onTap: () async {
+                          DateTime dateT = DateTime(2019);
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          dateT = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2019),
+                            lastDate: DateTime.now(),
+                          );
+                          _controladorData.text = DateFormat.yMd('pt').format(dateT);
+                        },
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    SizedBox(
+                      width: 40,
                     ),
-                  ),
-                  validator: _validarData,
-                  onTap: () async {
-                    TimeOfDay time = TimeOfDay();
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                  },
+                    Expanded(
+                      child: TextFormField(
+                        controller: _controladorHora,
+                        decoration: InputDecoration(
+                          labelText: 'Hora do crime',
+                          hintText: 'Hora que ocorreu',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                          ),
+                        ),
+                        validator: _validarHora,
+                        onTap: () async {
+                          TimeOfDay hora = TimeOfDay();
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          hora = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          _controladorHora.text = hora.format(context);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -252,13 +266,13 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: TextField(
-                  controller: _controladorDescricao,
+                  controller: _controladorLocal,
                   decoration: InputDecoration(
                     labelText: 'Local do crime',
-                    hintText: 'Insira o local que acocnteceu',
+                    hintText: 'Insira o local que aconteceu',
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
                     ),
@@ -375,6 +389,12 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   String _validarData(String value) {
     if(value.length == 0){
       return 'Insira uma data';
+    }
+  }
+
+  String _validarHora(String value) {
+    if(value.length == 0){
+      return 'Insira um hórario';
     }
   }
 
