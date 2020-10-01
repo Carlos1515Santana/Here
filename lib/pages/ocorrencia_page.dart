@@ -24,7 +24,8 @@ class OcorrenciaPage extends StatefulWidget {
 }
 
 class _OcorrenciaPageState extends State<OcorrenciaPage> {
-  var _controladorTipo;
+  var _controladorOcr;
+  var _controladorObj;
   var latitude;
   var longitude;
   final TextEditingController _controladorData = TextEditingController();
@@ -111,7 +112,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              _controladorTipo = newValue;
+                              _controladorOcr = newValue;
                               _ocrc = newValue;
                               state.didChange(newValue);
                               if(_ocrc != ''){
@@ -154,7 +155,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              _controladorTipo = newValue;
+                              _controladorObj = newValue;
                               _objeto = newValue;
                               state.didChange(newValue);
                             });
@@ -348,16 +349,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     );
   }
 
-  String _validarEndereco(String value) {
-    String pattern = r'^\\d{5}-\\d{3}';
-    RegExp regExp = new RegExp(pattern);
-    if(value.length == 0) {
-      return 'Informe um CEP';
-    } else if(!regExp.hasMatch(value)) {
-      return 'CEP inválido';
-    }
-  }
-
   void _showDialog() {
     showDialog(
         context: context,
@@ -386,6 +377,16 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     );
   }
 
+  String _validarEndereco(String value) {
+    String pattern = r'^\\d{5}-\\d{3}';
+    RegExp regExp = new RegExp(pattern);
+    if(value.length == 0) {
+      return 'Informe um CEP';
+    } else if(!regExp.hasMatch(value)) {
+      return 'CEP inválido';
+    }
+  }
+
   String _validarData(String value) {
     if(value.length == 0){
       return 'Insira uma data';
@@ -408,11 +409,11 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     Address endereco = Address(cep: _cepController.text, name_street: 'N/A');
     Customer user;
 
-    var data = _controladorData.text.replaceAll( RegExp(r'/'), '-');
+    var data = _controladorData.text.replaceAll(RegExp(r'/'), '-');
     var l =  data.split('-');
     data = l[2] +'-' + l[1] + '-'+ l[0];
-    Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
-        latitude, _controladorDescricao.text, endereco,  data);
+    Ocorrencia newOcorrencia = Ocorrencia( _controladorOcr, longitude,
+        latitude, _controladorDescricao.text, endereco,  data, _controladorObj, _controladorLocal.text, _controladorHora.text);
     _cadastrarOcorrencia(newOcorrencia);
   }
 
@@ -423,6 +424,9 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     }
     //imprimir os dados
      print(
-        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, data: ${newOcorrencia.date}, CEP: ${newOcorrencia.address.cep} Descrição: ${newOcorrencia.description}');
+        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, Objeto roubado: ${newOcorrencia.stolen_object}, '
+            'data: ${newOcorrencia.date}, hora: ${newOcorrencia.crime_time}, CEP: ${newOcorrencia.address.cep}, '
+            'Local do crime: ${newOcorrencia.crime_scene}, Descrição: ${newOcorrencia.description}'
+     );
   }
 }

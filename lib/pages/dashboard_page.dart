@@ -40,42 +40,42 @@ class _DashboardPageState extends State<DashboardPage>
       ),
       backgroundColor: Colors.blue[100],
  
-drawer: Drawer(
-  child: ListView(
-    children: <Widget>[
-      UserAccountsDrawerHeader(
-        accountName: Text('Usuario', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
-        accountEmail: Text('admin@admin.com'),
-        currentAccountPicture: CircleAvatar(
-          backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRe-E4rqR6LMzLi2KSkXRGZOUUGhwaY0gXoa_5OibXvVrDvG5C&usqp=CAU'),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text('Usuario', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
+              accountEmail: Text('admin@admin.com'),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRe-E4rqR6LMzLi2KSkXRGZOUUGhwaY0gXoa_5OibXvVrDvG5C&usqp=CAU'),
+              ),
+              decoration: BoxDecoration(color: Colors.black12),
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Perfil'),
+            ),
+            ListTile(
+              leading: Icon(Icons.vpn_key),
+              title: Text('Senha'),
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('Informação'),
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Sair'),
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage())
+                );
+              },
+            ),
+          ],
         ),
-        decoration: BoxDecoration(color: Colors.black12),
       ),
-      ListTile(
-        leading: Icon(Icons.person),
-        title: Text('Perfil'),
-      ),
-      ListTile(
-        leading: Icon(Icons.vpn_key),
-        title: Text('Senha'),
-      ),
-      ListTile(
-        leading: Icon(Icons.info),
-        title: Text('Informação'),
-      ),
-      ListTile(
-        leading: Icon(Icons.exit_to_app),
-        title: Text('Sair'),
-        onTap: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage())
-          );
-        },
-      ),
-    ],
-  ),
-),
 
       body: Container(
         padding: EdgeInsets.all(30.0),
@@ -98,14 +98,13 @@ drawer: Drawer(
 Future<void> _onClickCard(context,title) async {
   if(title == 'Ocorrências'){
    await push(context, ListOcorrencia());
-   }
-   else if(title == 'Gráficos'){
-   //await push(context, GraficosDashPage());
-   await push(context, GraficosPage());
-   }
+  }
+  else if(title == 'Gráficos'){
+    await push(context, GraficosDashPage());
+  }
 
-   else if(title == 'Documentos'){
-     //await push(context, OcorrenciaPage());
+  else if(title == 'Documentos'){
+    //await push(context, OcorrenciaPage());
     await push(context, Cadastro());
   }
 }

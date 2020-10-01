@@ -34,7 +34,10 @@ class OcorrenciaAPI {
         "latitude":        ocorrencia.latitude,
         "description":     ocorrencia.description,
         "date":            ocorrencia.date,
-        "pathFoto":        base64Image
+        "pathFoto":        base64Image,
+        "stolen_object":   ocorrencia.stolen_object,
+        "crime_scene":     ocorrencia.crime_scene,
+        "crime_time":      ocorrencia.crime_time
       };
 
       String json = convert.jsonEncode(params);

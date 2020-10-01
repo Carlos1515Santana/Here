@@ -11,11 +11,14 @@ class Ocorrencia {
   String   date;
   String   pathFoto;
   String   image;
+  String   stolen_object;
+  String   crime_scene;
+  String   crime_time;
   List<int> byteImage;
 
 //  Construtor para post
   Ocorrencia(this.occurrence_type, this.longitude, this.latitude,
-      this.description, this.address, this.date);
+      this.description, this.address, this.date, this.stolen_object, this.crime_scene, this.crime_time);
 
   Ocorrencia.fromjson(Map<String, dynamic> json) {
       id             = json['id'];
@@ -28,6 +31,9 @@ class Ocorrencia {
       pathFoto       = json['pathFoto'];
       customer        = Customer.fromJson(json['customer']);
       image          = json['image'];
+      stolen_object  = json['stolen_object'];
+      crime_scene    = json['crime_scene'];
+      crime_time     = json['crime_time'];
   }
 
   Ocorrencia.fromjson2(Map<String, dynamic> json) {
@@ -41,10 +47,11 @@ class Ocorrencia {
 //    pathFoto       = json['pathFoto'];
 //    customer        = Customer.fromJson(json['customer']);
     image          = json['image'];
+    stolen_object  = json['stolen_object'];
+    crime_scene    = json['crime_scene'];
+    crime_time     = json['crime_time'];
   }
 }
-
-
 
 class Address {
   final int id_addres;
