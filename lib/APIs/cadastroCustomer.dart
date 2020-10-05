@@ -12,6 +12,7 @@ class CadastroCustomer{
       var params = {
         "name": customer.name,
         "cpf": "12345678910",
+        "userName": customer.userName,
         "email": customer.email,
         "password": customer.password,
         "birthday": customer.birthday
@@ -22,18 +23,16 @@ class CadastroCustomer{
       print(url);
       print("params: " + json);
 
-      final response = await http.post(url, body: json, headers: headers);
+      var  response = await http.post(url, body: json, headers: headers);
 
       print("http.cadastro << " + response.body);
 
       Map<String, dynamic> map = convert.json.decode(response.body);
 
       if (response.statusCode == 200) {
-//        final customerReturn =  Customer.fromjson(map);
-//        return ApiResponse.ok(result: customerReturn);
-        return ApiResponse.ok(msg: "okay -- --  Usuario Criado");
+        return ApiResponse.ok(msg: map["message"]);
       }
-      return ApiResponse.error(msg: map["error"]);
+      return ApiResponse.error(msg: map["message"]);
     } catch (error, exception) {
       print("Erro no login $error > $exception");
 

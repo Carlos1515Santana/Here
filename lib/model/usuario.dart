@@ -18,12 +18,14 @@ class Customer{
   String email;
   String password;
   String birthday;
+  String userName;
   List<String> roles;
 
-  Customer(String name, String email, String password, String birthday){
+  Customer(String name, String email, String password, String birthday, String userName){
     this.name = name;
 //    this.cpf = cpf;
     this.email = email;
+    this.userName = userName;
     this.password = password;
     this.birthday = birthday;
   }
@@ -34,6 +36,7 @@ class Customer{
     cpf =      json['cpf'];
     email =    json['email'];
     password = json['password'];
+    userName = json['userName'];
     birthday = json['Birthday'];
 //    roles = json['roles'] != null ? json['roles'].cast<String>() : null;
   }

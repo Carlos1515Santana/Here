@@ -14,7 +14,7 @@ class Cadastro extends StatefulWidget {
 class _MyAppState extends State<Cadastro> {
   GlobalKey<FormState> _key =  GlobalKey();
   bool _validate = false;
-  String nome, email, Data, senha;
+  String nome, userName, email, Data, senha;
   final TextEditingController _controladorData = TextEditingController();
 
   @override
@@ -118,6 +118,27 @@ class _MyAppState extends State<Cadastro> {
         ),
 
         Padding(
+          padding: EdgeInsets.only(top: 10.0),
+          child: TextFormField(
+            decoration: new InputDecoration(
+              labelText: 'UserName',
+              hintText: 'Digite o userName',
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey, width: 2.0),
+              ),
+            ),
+            maxLength: 40,
+            validator: _validarNome,
+            onSaved: (String val) {
+              userName = val;
+            },
+          ),
+        ),
+
+        Padding(
           padding: EdgeInsets.only(top: 5.0),
           child: TextFormField(
               decoration: new InputDecoration(
@@ -210,11 +231,11 @@ class _MyAppState extends State<Cadastro> {
       var l =  data.split('-');
       data = l[2] +'-' + l[1] + '-'+ l[0];
 
-      var customer =  Customer(nome, email, senha, data);
+      var customer =  Customer(nome, email, senha, data, userName);
       final resposta = await CadastroCustomer.postCustomer(customer);
       if (resposta.msg != 'error') {
         Navigator.pop(context);
-        alert(context, "Cadastro realizado com successo!");
+        alert(context, resposta.msg);
       }else{
         alert(context, "Não foi possivel cadastrar usuario");
       }
