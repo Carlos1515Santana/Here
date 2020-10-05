@@ -24,11 +24,14 @@ class OcorrenciaPage extends StatefulWidget {
 }
 
 class _OcorrenciaPageState extends State<OcorrenciaPage> {
-  var _controladorTipo;
+  var _controladorOcr;
+  var _controladorObj;
   var latitude;
   var longitude;
   final TextEditingController _controladorData = TextEditingController();
+  final TextEditingController _controladorHora = TextEditingController();
   final TextEditingController _controladorDescricao = TextEditingController();
+  final TextEditingController _controladorLocal = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
 
   _OcorrenciaPageState(LatLng localizacao) {
@@ -83,7 +86,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
           backgroundColor: Colors.black12,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
           child: Column(
             children: <Widget>[
 
@@ -109,7 +112,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              _controladorTipo = newValue;
+                              _controladorOcr = newValue;
                               _ocrc = newValue;
                               state.didChange(newValue);
                               if(_ocrc != ''){
@@ -130,7 +133,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: FormField<String>(
                   builder: (FormFieldState<String> state) {
@@ -152,7 +155,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              _controladorTipo = newValue;
+                              _controladorObj = newValue;
                               _objeto = newValue;
                               state.didChange(newValue);
                             });
@@ -170,59 +173,71 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0, right: 200.0),
-                child: TextFormField(
-                  controller: _controladorData,
-                  decoration: InputDecoration(
-                    labelText: 'Data do crime',
-                    hintText: 'Data que ocorreu',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  validator: _validarData,
-                  onTap: () async {
-                    DateTime dateT = DateTime(2019);
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    dateT = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2019),
-                      lastDate: DateTime.now(),
-                    );
-                    _controladorData.text = DateFormat.yMd('pt').format(dateT);
-                    
-                  },
-                ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0, right: 200.0),
-                child: TextFormField(
-                  //controller: _controladorData,
-                  decoration: InputDecoration(
-                    labelText: 'Hora do crime',
-                    hintText: 'Hora que ocorreu',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _controladorData,
+                        decoration: InputDecoration(
+                          labelText: 'Data do crime',
+                          hintText: 'Data que ocorreu',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                          ),
+                        ),
+                        validator: _validarData,
+                        onTap: () async {
+                          DateTime dateT = DateTime(2019);
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          dateT = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2019),
+                            lastDate: DateTime.now(),
+                          );
+                          _controladorData.text = DateFormat.yMd('pt').format(dateT);
+                        },
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    SizedBox(
+                      width: 40,
                     ),
-                  ),
-                  validator: _validarData,
-                  onTap: () async {
-                    TimeOfDay time = TimeOfDay();
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                  },
+                    Expanded(
+                      child: TextFormField(
+                        controller: _controladorHora,
+                        decoration: InputDecoration(
+                          labelText: 'Hora do crime',
+                          hintText: 'Hora que ocorreu',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                          ),
+                        ),
+                        validator: _validarHora,
+                        onTap: () async {
+                          TimeOfDay hora = TimeOfDay();
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          hora = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          _controladorHora.text = hora.format(context);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -252,13 +267,13 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: TextField(
-                  controller: _controladorDescricao,
+                  controller: _controladorLocal,
                   decoration: InputDecoration(
                     labelText: 'Local do crime',
-                    hintText: 'Insira o local que acocnteceu',
+                    hintText: 'Insira o local que aconteceu',
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
                     ),
@@ -334,16 +349,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     );
   }
 
-  String _validarEndereco(String value) {
-    String pattern = r'^\\d{5}-\\d{3}';
-    RegExp regExp = new RegExp(pattern);
-    if(value.length == 0) {
-      return 'Informe um CEP';
-    } else if(!regExp.hasMatch(value)) {
-      return 'CEP inválido';
-    }
-  }
-
   void _showDialog() {
     showDialog(
         context: context,
@@ -372,9 +377,25 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     );
   }
 
+  String _validarEndereco(String value) {
+    String pattern = r'^\\d{5}-\\d{3}';
+    RegExp regExp = new RegExp(pattern);
+    if(value.length == 0) {
+      return 'Informe um CEP';
+    } else if(!regExp.hasMatch(value)) {
+      return 'CEP inválido';
+    }
+  }
+
   String _validarData(String value) {
     if(value.length == 0){
       return 'Insira uma data';
+    }
+  }
+
+  String _validarHora(String value) {
+    if(value.length == 0){
+      return 'Insira um hórario';
     }
   }
 
@@ -388,11 +409,11 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     Address endereco = Address(cep: _cepController.text, name_street: 'N/A');
     Customer user;
 
-    var data = _controladorData.text.replaceAll( RegExp(r'/'), '-');
+    var data = _controladorData.text.replaceAll(RegExp(r'/'), '-');
     var l =  data.split('-');
     data = l[2] +'-' + l[1] + '-'+ l[0];
-    Ocorrencia newOcorrencia = Ocorrencia( _controladorTipo, longitude,
-        latitude, _controladorDescricao.text, endereco,  data);
+    Ocorrencia newOcorrencia = Ocorrencia( _controladorOcr, longitude,
+        latitude, _controladorDescricao.text, endereco,  data, _controladorObj, _controladorLocal.text, _controladorHora.text);
     _cadastrarOcorrencia(newOcorrencia);
   }
 
@@ -403,6 +424,9 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     }
     //imprimir os dados
      print(
-        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, data: ${newOcorrencia.date}, CEP: ${newOcorrencia.address.cep} Descrição: ${newOcorrencia.description}');
+        'Latitude: ${newOcorrencia.latitude}, tipo Ocorrencia: ${newOcorrencia.occurrence_type}, Objeto roubado: ${newOcorrencia.stolen_object}, '
+            'data: ${newOcorrencia.date}, hora: ${newOcorrencia.crime_time}, CEP: ${newOcorrencia.address.cep}, '
+            'Local do crime: ${newOcorrencia.crime_scene}, Descrição: ${newOcorrencia.description}'
+     );
   }
 }

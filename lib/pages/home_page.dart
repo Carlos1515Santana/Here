@@ -112,17 +112,17 @@ class _MyAppState extends State<HomePage> {
     });
 }
 
-Future<void> _onMapUpdate() async{
-//    _controller.complete(controller);
-    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorenciaMaps();
+  Future<void> _onMapUpdate() async{
+  //    _controller.complete(controller);
+      final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorenciaMaps();
 
-    setState(() {
-      _markers.clear();
-      if (ocorrenciaList != null) {
-        _getOcorrrencia(ocorrenciaList);
-      }
-    });
-}
+      setState(() {
+        _markers.clear();
+        if (ocorrenciaList != null) {
+          _getOcorrrencia(ocorrenciaList);
+        }
+      });
+  }
 
   Future<void> _getOcorrrencia( List<Ocorrencia> ocorrenciaList) async {
     for (final ocorencia in ocorrenciaList) {
@@ -229,8 +229,7 @@ Future<void> _onMapUpdate() async{
               );
             },
           ),
-        ]);
+        ]
+    );
   }
-
-
 }
