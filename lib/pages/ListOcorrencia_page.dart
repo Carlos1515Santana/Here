@@ -22,7 +22,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
       "https://help-api.herokuapp.com/api/Occurrence/GetAllOccurrence";
 
   final String urlMinhaOc =
-      "https://help-api.herokuapp.com/api/Occurrence/OcurrenceByIdUser/1";
+      "https://help-api.herokuapp.com/api/Occurrence/OcurrenceByIdUser";
 
   List<OcorrenciaList> myAllData = [];
   List<OcorrenciaList> myAllDataOC = [];

@@ -13,6 +13,8 @@ import '../model/locations.dart' as locations;
 import '../utils/mapsUtils.dart';
 import 'package:location/location.dart' as loca;
 import 'package:search_map_place/search_map_place.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 
 void main() => runApp(HomePage());
 
@@ -29,6 +31,8 @@ class _MyAppState extends State<HomePage> {
 
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController controller;
+
+  String searchAddr;
 
   CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-23.5489, -46.638823),
@@ -58,13 +62,13 @@ class _MyAppState extends State<HomePage> {
         break;
     }
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 101.1), 'assets/' + img + '.png');
+        ImageConfiguration(devicePixelRatio: 10.1), 'assets/' + img + '.png');
   }
 
   void _startTracking() {
     final geolocator = Geolocator();
     final locationOptions =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 5);
+        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 2);
 
     _positionStream = geolocator
         .getPositionStream(locationOptions)
@@ -95,7 +99,8 @@ class _MyAppState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(appBar: _appBar(), body: _body()),
+        home: Scaffold(appBar: _appBar(), body: Container(child:_body())),
+//        home: Scaffold(body: Container(child:_body())),
       );
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
@@ -111,6 +116,8 @@ class _MyAppState extends State<HomePage> {
       }
     });
 }
+
+
 
   Future<void> _onMapUpdate() async{
   //    _controller.complete(controller);
@@ -145,9 +152,10 @@ class _MyAppState extends State<HomePage> {
   Stack _body() {
     return Stack(children: <Widget>[
       _buildGoogleMaps(),
-      // _searchMapPlaceWidget(),
-      Padding(
-          padding: const EdgeInsets.all(16.0),
+//       _searchMapPlaceWidget(),
+      Positioned(
+          top: 80.0 ,
+          right: 15.0,
           child: Align(
             alignment: Alignment.bottomRight,
             child: Column(children: <Widget>[
@@ -172,6 +180,33 @@ class _MyAppState extends State<HomePage> {
       initialCameraPosition: _kGooglePlex,
       // markers: _markers.values.toSet(),
     );
+  }
+
+  void _getLatLng(Prediction prediction) async {
+    GoogleMapsPlaces _places = new
+    GoogleMapsPlaces(apiKey:"AIzaSyBEe-EjMOAIqv28XeyVpzdybTBnNMxvWY4" );  //Same API_KEY as above
+    PlacesDetailsResponse detail =
+    await _places.getDetailsByPlaceId(prediction.placeId);
+    double latitude = detail.result.geometry.location.lat;
+    double longitude = detail.result.geometry.location.lng;
+    String address = prediction.description;
+
+    var camera = CameraPosition(
+      target: LatLng(latitude, longitude),
+      zoom: 16.0,
+    );
+    controller.animateCamera(CameraUpdate.newCameraPosition(camera));
+  }
+
+  searchandNavigate() async {
+    print(searchAddr);
+    Prediction prediction = await PlacesAutocomplete.show(
+        context: context,
+        apiKey: "AIzaSyBEe-EjMOAIqv28XeyVpzdybTBnNMxvWY4",
+        mode: Mode.overlay, // Mode.overlay
+        language: "br",
+        components: [Component(Component.country, "br")]);
+    this._getLatLng(prediction);
   }
 
 
@@ -218,7 +253,6 @@ class _MyAppState extends State<HomePage> {
     return AppBar(
         title: const Text('Maps'),
         backgroundColor: Colors.blueGrey,
-
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.apps),
@@ -227,6 +261,12 @@ class _MyAppState extends State<HomePage> {
                 context,
                 MaterialPageRoute(builder: (context) => DashboardPage()),
               );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              this.searchandNavigate();
             },
           ),
         ]

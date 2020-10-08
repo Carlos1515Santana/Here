@@ -29,13 +29,14 @@ dependencies:
   geolocator: ^5.3.1
   location: ^3.0.0
   search_map_place: ^0.3.0
-  flutter_google_places: ^0.1.4
+  flutter_google_places: ^0.2.4
+  google_maps_webservice: ^0.0.16
   shared_preferences:
   provider:
   fl_chart: ^0.9.4
   intl: ^0.16.0
   image_picker: ^0.6.1+4
-
+  url_launcher: ^5.4.0    # Good, any 5.4.x version where x >= 0 works.
   flutter_masked_text: ^0.8.0
 
 
