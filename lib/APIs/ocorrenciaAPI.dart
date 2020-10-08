@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here/model/ocorrencia.dart';
+import 'package:here/pages/graficosdash_page.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -113,6 +115,34 @@ class OcorrenciaAPI {
 //          leading: new Image.memory(bytes),
 //    title: new Text(_base64),
     return ocorrencias;
+  }
+
+  static Future<String> getGeolocalMaps(LatLng localizacao) async {
+    var urlAPI = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=${localizacao.latitude},${localizacao.longitude}&key=AIzaSyBEe-EjMOAIqv28XeyVpzdybTBnNMxvWY4';
+
+    print("GET > $urlAPI");
+
+    var response = await http.get(urlAPI);
+
+    String json = response.body;
+
+    Map<String, dynamic> map = convert.json.decode(response.body);
+
+//    List<Ocorrencia> ocorrencias = list.map<Ocorrencia>((map) => Ocorrencia.fromjson2(map)).toList();
+
+return map["results"][0]["formatted_address"];
+
+//    ocorrencias.forEach((ocorrencia) =>
+//        imageDecoder(ocorrencia)
+//    );
+
+//      João para usaar a imagem você deve fazer da seguinte forma:
+//      return new Scaffold(
+//          appBar: new AppBar(title: new Text('Example App')),
+//          body: new ListTile(
+//          leading: new Image.memory(bytes),
+//    title: new Text(_base64),
+//    return ocorrencias;
   }
 
   static Ocorrencia imageDecoder(Ocorrencia ocorrencia){

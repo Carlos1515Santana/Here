@@ -31,12 +31,17 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   final TextEditingController _controladorData = TextEditingController();
   final TextEditingController _controladorHora = TextEditingController();
   final TextEditingController _controladorDescricao = TextEditingController();
+  final TextEditingController street = TextEditingController();
   final TextEditingController _controladorLocal = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
+
 
   _OcorrenciaPageState(LatLng localizacao) {
     latitude = localizacao.latitude;
     longitude = localizacao.longitude;
+     OcorrenciaAPI.getGeolocalMaps(localizacao).then((value) =>{
+       street.text = value
+     } );
   }
 
   List<String> _ocrcs = <String>[
@@ -241,38 +246,38 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: TextFormField(
-                  inputFormatters: [
-                    WhitelistingTextInputFormatter.digitsOnly,
-                    CepInputFormatter(),
-                  ],
-                  controller: _cepController,
-                  decoration: InputDecoration(
-                    labelText: 'CEP',
-                    hintText: 'Insira o CEP onde ocorreu',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  onSaved: (String value) {
-                    print('CEP: ' + value);
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: _validarEndereco,
-                ),
-              ),
+//              Padding(
+//                padding: const EdgeInsets.only(top: 15.0),
+//                child: TextFormField(
+//                  inputFormatters: [
+//                    WhitelistingTextInputFormatter.digitsOnly,
+//                    CepInputFormatter(),
+//                  ],
+//                  controller: _cepController,
+//                  decoration: InputDecoration(
+//                    labelText: 'CEP',
+//                    hintText: 'Insira o CEP onde ocorreu',
+//                    focusedBorder: OutlineInputBorder(
+//                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+//                    ),
+//                    enabledBorder: OutlineInputBorder(
+//                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+//                    ),
+//                  ),
+//                  onSaved: (String value) {
+//                    print('CEP: ' + value);
+//                  },
+//                  keyboardType: TextInputType.number,
+//                  validator: _validarEndereco,
+//                ),
+//              ),
 
               Container(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: TextField(
                   controller: _controladorLocal,
                   decoration: InputDecoration(
-                    labelText: 'Local do crime',
+                    labelText: 'Descrição do crime',
                     hintText: 'Insira o local que aconteceu',
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
@@ -292,6 +297,23 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   decoration: InputDecoration(
                     labelText: 'Descrição do crime',
                     hintText: 'Insira uma breve descrição',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: TextField(
+                  controller: street,
+                  decoration: InputDecoration(
+                    labelText: 'Endereço',
+                    hintText: 'Endereço',
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
                     ),
@@ -406,7 +428,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   }
 
   void _enviarOcorrencia() {
-    Address endereco = Address(cep: _cepController.text, name_street: 'N/A');
+    Address endereco = Address(cep: _cepController.text, name_street: street.text);
     Customer user;
 
     var data = _controladorData.text.replaceAll(RegExp(r'/'), '-');
