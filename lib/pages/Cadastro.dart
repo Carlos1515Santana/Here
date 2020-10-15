@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:here/APIs/cadastroCustomer.dart';
 import 'package:here/model/usuario.dart';
 import 'package:here/utils/alert.dart';
+import 'package:here/widgets/AppButton.dart';
 import 'package:intl/intl.dart';
 
 void main() => runApp(new Cadastro());
@@ -12,7 +13,7 @@ class Cadastro extends StatefulWidget {
 }
 
 class _MyAppState extends State<Cadastro> {
-  GlobalKey<FormState> _key =  GlobalKey();
+  GlobalKey<FormState> _key = GlobalKey();
   bool _validate = false;
   String nome, userName, email, Data, senha;
   final TextEditingController _controladorData = TextEditingController();
@@ -22,14 +23,14 @@ class _MyAppState extends State<Cadastro> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar:  AppBar(
-          title:  Text('Cadastrar'),
+        appBar: AppBar(
+          title: Text('Cadastrar'),
           backgroundColor: Colors.blueGrey,
         ),
-        body:  SingleChildScrollView(
-          child:  Container(
-            margin:  EdgeInsets.all(15.0),
-            child:  Form(
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(15.0),
+            child: Form(
               key: _key,
               autovalidate: _validate,
               child: _formUI(),
@@ -89,10 +90,8 @@ class _MyAppState extends State<Cadastro> {
                   firstDate: DateTime(1800),
                   lastDate: DateTime.now(),
                 );
-                _controladorData.text =
-                    DateFormat.yMd('pt').format(dateT);
-              }
-          ),
+                _controladorData.text = DateFormat.yMd('pt').format(dateT);
+              }),
         ),
 
         Padding(
@@ -113,8 +112,7 @@ class _MyAppState extends State<Cadastro> {
               validator: _validarEmail,
               onSaved: (String val) {
                 email = val;
-              }
-          ),
+              }),
         ),
 
         Padding(
@@ -157,27 +155,16 @@ class _MyAppState extends State<Cadastro> {
               validator: _validarSenha,
               onSaved: (String val) {
                 senha = val;
-              }
-          ),
+              }),
         ),
 
-        Container(
-          width: 320.0,
-          height: 67.0,
-          padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
-          child: RaisedButton(
-            child: Text(
-              'Registrar-se',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            onPressed: () {
-              _sendForm();
-            },
-            textColor: Colors.white,
-            color: Color(0XFF28b1b3),
-          ),
+        SizedBox(height: 30),
+
+        AppButton(
+          "Registrar",
+          onPressed: () {
+            _sendForm();
+          },
         ),
       ],
     );
@@ -185,7 +172,7 @@ class _MyAppState extends State<Cadastro> {
 
   String _validarNome(String value) {
     var patttern = r'(^[a-zA-Z ]*$)';
-    var regExp =  RegExp(patttern);
+    var regExp = RegExp(patttern);
     if (value.isEmpty) {
       return 'Informe o nome';
     } else if (!regExp.hasMatch(value)) {
@@ -195,20 +182,15 @@ class _MyAppState extends State<Cadastro> {
   }
 
   String _validarEmail(String value) {
-    var pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    var pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     var regExp = RegExp(pattern);
     if (value.isEmpty) {
       return 'Informe o Email';
-    } else if(!regExp.hasMatch(value)){
+    } else if (!regExp.hasMatch(value)) {
       return 'Email inválido';
-    }else {
+    } else {
       return null;
-    }
-  }
-
-  String _validarData(String value) {
-    if(value.length == 0){
-      return 'Insira uma data';
     }
   }
 
@@ -216,7 +198,7 @@ class _MyAppState extends State<Cadastro> {
     if (value.isEmpty) {
       return 'Informe uma senha';
     } //else if(!regExp.hasMatch(value)){
-      //return "Senha inválida";
+    //return "Senha inválida";
     //}
     else {
       return null;
@@ -227,16 +209,16 @@ class _MyAppState extends State<Cadastro> {
     if (_key.currentState.validate()) {
       // Sem erros na validação
       _key.currentState.save();
-      var data = _controladorData.text.replaceAll( RegExp(r'/'), '-');
-      var l =  data.split('-');
-      data = l[2] +'-' + l[1] + '-'+ l[0];
+      var data = _controladorData.text.replaceAll(RegExp(r'/'), '-');
+      var l = data.split('-');
+      data = l[2] + '-' + l[1] + '-' + l[0];
 
-      var customer =  Customer(nome, email, senha, data, userName);
+      var customer = Customer(nome, email, senha, data, userName);
       final resposta = await CadastroCustomer.postCustomer(customer);
       if (resposta.msg != 'error') {
         Navigator.pop(context);
         alert(context, resposta.msg);
-      }else{
+      } else {
         alert(context, "Não foi possivel cadastrar usuario");
       }
     } else {

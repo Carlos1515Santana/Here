@@ -9,6 +9,7 @@ import 'package:here/utils/nav.dart';
 import 'package:here/widgets/AppButton.dart';
 import 'package:here/widgets/app_text.dart';
 import 'package:here/utils/nav.dart';
+import 'package:here/widgets/PageRouteAnimation.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -51,33 +52,55 @@ class _LoginPageState extends State<LoginPage> {
                 validator: _validateLogin,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                nextFocus: _focusSenha),
+                nextFocus: _focusSenha,
+            ),
+
             SizedBox(height: 10),
+
             AppText("Senha", "Digite a senha",
                 controller: _tSenha,
                 password: true,
                 validator: _validateSenha,
                 keyboardType: TextInputType.number,
-                focusNode: _focusSenha),
-            SizedBox(
-              height: 20,
-            ),
-            AppButton("Login", onPressed: _onClickLogin, showProgress: _showProgress),
-
-            Container(
-              height: 20,
+                focusNode: _focusSenha,
             ),
 
-            AppButton("Fazer Cadastro", onPressed: _onClickCadastro,),
+            SizedBox(height: 20),
 
+            AppButton("Login",
+                onPressed: _onClickLogin, showProgress: _showProgress,
+            ),
+
+            SizedBox(height: 20,),
+
+            AppButton("Fazer Cadastro", onPressed: () {
+              Navigator.push(context, PageRouteAnimation(widget: Cadastro()));
+            }),
           ],
         ),
       ),
     );
   }
 
-  Future<void> _onClickCadastro() async {
-      await push(context, Cadastro());
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          Widget OKButton = FlatButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+          return AlertDialog(
+            //title: Text(''),
+            content: Text('Nome de usuário ou senha inválidos!'),
+            actions: [
+              //NaoMostrarMaisButton,
+              OKButton,
+            ],
+          );
+        });
   }
 
   Future<void> _onClickLogin() async {
@@ -93,12 +116,12 @@ class _LoginPageState extends State<LoginPage> {
     print("Login: $login, Senha: $senha");
 
     ApiResponse response = await LoginApi.login(login, senha);
-    if(response.ok) {
+    if (response.ok) {
       Customer user = response.result;
       push(context, HomePage());
-    }
-    else{
-      alert(context, "Login ou senha inválida!");
+    } else {
+      _showDialog();
+      //alert(context, "Login ou senha inválida!");
     }
 
     setState(() {

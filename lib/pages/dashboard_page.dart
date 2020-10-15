@@ -96,16 +96,11 @@ class _DashboardPageState extends State<DashboardPage>
 }
 
 Future<void> _onClickCard(context,title) async {
-  if(title == 'Ocorrências'){
-   await push(context, ListOcorrencia());
+  if (title == 'Ocorrências') {
+    await push(context, ListOcorrencia());
   }
-  else if(title == 'Gráficos'){
+  else if (title == 'Gráficos') {
     await push(context, GraficosDashPage());
-  }
-
-  else if(title == 'Documentos'){
-    //await push(context, OcorrenciaPage());
-    await push(context, Cadastro());
   }
 }
 

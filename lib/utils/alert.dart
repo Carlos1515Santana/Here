@@ -15,7 +15,7 @@ alert(BuildContext context, String msg, {Function callback}) {
               child: Text("OK"),
               onPressed: () {
                 Navigator.pop(context);
-                if(callback != null) {
+                if (callback != null) {
                   callback();
                 }
               },

@@ -10,6 +10,7 @@ class AppText extends StatelessWidget {
   TextInputAction textInputAction;
   FocusNode focusNode;
   FocusNode nextFocus;
+  Function onTap;
 
   AppText(this.label, this.hint,
       {this.password = false,
@@ -18,7 +19,8 @@ class AppText extends StatelessWidget {
       this.keyboardType,
       this.textInputAction,
       this.focusNode,
-      this.nextFocus});
+      this.nextFocus,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class AppText extends StatelessWidget {
       controller: controller,
       obscureText: password,
       validator: validator,
+      onTap: onTap,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       focusNode: focusNode,
@@ -39,9 +42,7 @@ class AppText extends StatelessWidget {
         color: Colors.black,
       ),
       decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12)
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         labelText: label,
         labelStyle: TextStyle(
           fontSize: 25,
