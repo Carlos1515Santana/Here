@@ -13,6 +13,7 @@ import '../model/locations.dart' as locations;
 import '../utils/mapsUtils.dart';
 import 'package:location/location.dart' as loca;
 import 'package:search_map_place/search_map_place.dart';
+import 'package:here/widgets/PageRouteAnimation.dart';
 
 void main() => runApp(HomePage());
 
@@ -177,13 +178,12 @@ class _MyAppState extends State<HomePage> {
 
   void _onTap(LatLng p) async {
     var resposta = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => OcorrenciaPage(p)));
+        //context, MaterialPageRoute(builder: (context) => OcorrenciaPage(p)));
+      context, PageRouteAnimation(widget: OcorrenciaPage(p)));
 //    push(context, HomePage());
     this._onMapUpdate();
     print(resposta);
-
   }
-
 
   // button find my local
   FloatingActionButton _buttonFindMyLocal() {
@@ -223,10 +223,7 @@ class _MyAppState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.apps),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DashboardPage()),
-              );
+              Navigator.push(context, PageRouteAnimation(widget: DashboardPage()));
             },
           ),
         ]

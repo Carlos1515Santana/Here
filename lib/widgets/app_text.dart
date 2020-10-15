@@ -6,6 +6,7 @@ class AppText extends StatelessWidget {
   bool password;
   TextEditingController controller;
   FormFieldValidator<String> validator;
+  Function onTap;
   TextInputType keyboardType;
   TextInputAction textInputAction;
   FocusNode focusNode;
@@ -18,7 +19,8 @@ class AppText extends StatelessWidget {
       this.keyboardType,
       this.textInputAction,
       this.focusNode,
-      this.nextFocus});
+      this.nextFocus,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class AppText extends StatelessWidget {
       controller: controller,
       obscureText: password,
       validator: validator,
+      onTap: onTap,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       focusNode: focusNode,
@@ -40,7 +43,11 @@ class AppText extends StatelessWidget {
       ),
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12)
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey, width: 2.0),
         ),
         labelText: label,
         labelStyle: TextStyle(

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:here/widgets/app_text.dart';
 
 class OcorrenciaPage extends StatefulWidget {
   LatLng localizacao;
@@ -241,9 +241,24 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                 ),
               ),
 
+              AppText('Hora do crime', 'Hora que ocorreu',
+                controller: _controladorHora,
+                validator: _validarHora,
+                onTap: () async {
+                  TimeOfDay hora = TimeOfDay();
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  hora = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  _controladorHora.text = hora.format(context);
+                },
+              ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: TextFormField(
+
                   inputFormatters: [
                     WhitelistingTextInputFormatter.digitsOnly,
                     CepInputFormatter(),
@@ -387,23 +402,18 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
     }
   }
 
-  String _validarData(String value) {
-    if(value.length == 0){
+  String _validarData(String text) {
+    if(text.isEmpty){
       return 'Insira uma data';
     }
   }
 
-  String _validarHora(String value) {
-    if(value.length == 0){
+  String _validarHora(String text) {
+    if(text.isEmpty){
       return 'Insira um hórario';
     }
   }
 
-  String _validarCEP(String value) {
-    if(value.length == 0) {
-      return 'Insira o CEP';
-    }
-  }
 
   void _enviarOcorrencia() {
     Address endereco = Address(cep: _cepController.text, name_street: 'N/A');

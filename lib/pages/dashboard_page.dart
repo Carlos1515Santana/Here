@@ -9,6 +9,7 @@ import 'package:here/utils/nav.dart';
 import 'package:here/pages/Cadastro.dart';
 import 'package:here/pages/login_page.dart';
 import 'package:here/pages/ocorrencia_page.dart';
+import 'package:here/widgets/PageRouteAnimation.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -95,17 +96,12 @@ class _DashboardPageState extends State<DashboardPage>
   }
 }
 
-Future<void> _onClickCard(context,title) async {
+Future<void> _onClickCard(context, title) async {
   if(title == 'Ocorrências'){
    await push(context, ListOcorrencia());
   }
   else if(title == 'Gráficos'){
     await push(context, GraficosDashPage());
-  }
-
-  else if(title == 'Documentos'){
-    //await push(context, OcorrenciaPage());
-    await push(context, Cadastro());
   }
 }
 

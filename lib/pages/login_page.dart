@@ -9,6 +9,7 @@ import 'package:here/utils/nav.dart';
 import 'package:here/widgets/AppButton.dart';
 import 'package:here/widgets/app_text.dart';
 import 'package:here/utils/nav.dart';
+import 'package:here/widgets/PageRouteAnimation.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -68,11 +69,43 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
 
-            AppButton("Fazer Cadastro", onPressed: _onClickCadastro,),
+            AppButton("Fazer Cadastro",
+              onPressed: () {
+                Navigator.push(context, PageRouteAnimation(widget: Cadastro()));
+              }
+            ),
 
           ],
         ),
       ),
+    );
+  }
+
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          /*Widget NaoMostrarMaisButton = FlatButton(
+            child: Text('Não mostrar novamente'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ); */
+          Widget OKButton = FlatButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+          return AlertDialog(
+            //title: Text('Diferença entre furto e roubo'),
+            content: Text('Nome de usuário ou senha inválidos!'),
+            actions: [
+              //NaoMostrarMaisButton,
+              OKButton,
+            ],
+          );
+        }
     );
   }
 
@@ -98,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
       push(context, HomePage());
     }
     else{
-      alert(context, "Login ou senha inválida!");
+      _showDialog();
     }
 
     setState(() {
