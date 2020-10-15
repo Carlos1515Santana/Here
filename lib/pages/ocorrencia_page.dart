@@ -78,11 +78,8 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('pt', 'BR'),
-      ],
+
       home: Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
