@@ -217,7 +217,7 @@ class _MyAppState extends State<HomePage> {
   AppBar _appBar() {
     return AppBar(
         title: const Text('Maps'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0XFF3F51b5),
 
         actions: <Widget>[
           IconButton(

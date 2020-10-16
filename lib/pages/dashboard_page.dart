@@ -37,7 +37,7 @@ class _DashboardPageState extends State<DashboardPage>
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu'),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color(0XFF3F51b5),
       ),
       backgroundColor: Colors.blue[100],
  

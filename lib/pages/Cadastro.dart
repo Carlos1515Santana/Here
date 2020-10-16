@@ -24,7 +24,7 @@ class _MyAppState extends State<Cadastro> {
       home: Scaffold(
         appBar:  AppBar(
           title:  Text('Cadastrar'),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color(0XFF3F51b5),
         ),
         body:  SingleChildScrollView(
           child:  Container(

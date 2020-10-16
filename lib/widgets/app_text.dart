@@ -43,11 +43,12 @@ class AppText extends StatelessWidget {
       ),
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Color(0XFF3F51b5), width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey, width: 2.0),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.grey, width: 2.0),
         ),
         labelText: label,
         labelStyle: TextStyle(

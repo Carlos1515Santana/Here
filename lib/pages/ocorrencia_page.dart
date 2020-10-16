@@ -83,7 +83,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Cadastrar Ocorrências'),
-          backgroundColor: Colors.black12,
+          backgroundColor: Color(0XFF3F51b5),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
@@ -238,47 +238,6 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                       ),
                     ),
                   ],
-                ),
-              ),
-
-              AppText('Hora do crime', 'Hora que ocorreu',
-                controller: _controladorHora,
-                validator: _validarHora,
-                onTap: () async {
-                  TimeOfDay hora = TimeOfDay();
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  hora = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                  );
-                  _controladorHora.text = hora.format(context);
-                },
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: TextFormField(
-
-                  inputFormatters: [
-                    WhitelistingTextInputFormatter.digitsOnly,
-                    CepInputFormatter(),
-                  ],
-                  controller: _cepController,
-                  decoration: InputDecoration(
-                    labelText: 'CEP',
-                    hintText: 'Insira o CEP onde ocorreu',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  onSaved: (String value) {
-                    print('CEP: ' + value);
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: _validarEndereco,
                 ),
               ),
 
