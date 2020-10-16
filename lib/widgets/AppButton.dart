@@ -11,7 +11,7 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
+      width: 360,
       height: 46,
       //padding: const EdgeInsets.only(bottom: 15),
       child: RaisedButton(

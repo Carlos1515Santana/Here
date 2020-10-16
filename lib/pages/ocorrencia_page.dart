@@ -84,7 +84,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Cadastrar Ocorrências'),
-          backgroundColor: Colors.black12,
+          backgroundColor: Color(0XFF3F51b5),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 0),
