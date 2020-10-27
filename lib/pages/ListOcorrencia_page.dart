@@ -3,6 +3,7 @@ import 'package:here/APIs/ocorrenciaAPI.dart';
 import 'package:here/model/oco.dart';
 import 'package:here/model/ocorrencia.dart';
 import 'package:here/model/usuario.dart';
+import 'package:here/widgets/PageRouteAnimation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -113,7 +114,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
               },
             ),
             centerTitle: true,
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Color(0XFF3F51b5),
           ),
           backgroundColor: Colors.blue[100],
           body: TabBarView(
@@ -184,11 +185,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
               elevation: 10.0,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              SecondPage(myAllData[index])));
+                  Navigator.push(context, PageRouteAnimation(widget: SecondPage(myAllDataOC[index])));
                 },
                 child: Container(
                   padding: EdgeInsets.all(12.0),
@@ -260,11 +257,7 @@ class _ListOcorrenciaState extends State<ListOcorrencia> {
               elevation: 10.0,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              SecondPage(myAllDataOC[index])));
+                  Navigator.push(context, PageRouteAnimation(widget: SecondPage(myAllDataOC[index])));
                 },
                 child: Container(
                   padding: EdgeInsets.all(12.0),
@@ -332,7 +325,9 @@ class SecondPage extends StatelessWidget {
   final data;
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(title: Text('Detalhes da Ocorrência')),
+      appBar: AppBar(title: Text('Detalhes da Ocorrência'),
+        backgroundColor: Color(0XFF3F51b5),
+      ),
       body: ListView.builder(
           itemCount: 1,
           itemBuilder: (_, index) {
@@ -393,5 +388,7 @@ class SecondPage extends StatelessWidget {
                 ),
               ),
             );
-          }));
+          }
+      )
+  );
 }

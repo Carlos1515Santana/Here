@@ -368,7 +368,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         length: 4,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Color(0XFF3F51b5),
             //backgroundColor: Color(0xff308e1c),
             bottom: TabBar(
               indicatorColor: Color(0xff9962D0),
@@ -403,9 +403,9 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                                desiredMaxRows: 2,
                                cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
                                entryTextStyle: charts.TextStyleSpec(
-              //color: charts.Color(r: 127, g: 63, b: 191),
-              fontFamily: 'Georgia',
-              fontSize: 14),
+                                //color: charts.Color(r: 127, g: 63, b: 191),
+                                fontFamily: 'Georgia',
+                                fontSize: 14),
                             )],
                             animationDuration: Duration(seconds: 2),
                             domainAxis: charts.OrdinalAxisSpec(

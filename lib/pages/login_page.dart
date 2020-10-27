@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0XFF3F51b5),
-      bottomNavigationBar: _createAccountLink(),
+      bottomNavigationBar: _criarConta(),
       body: _body(),
     );
   }
@@ -41,9 +41,9 @@ class _LoginPageState extends State<LoginPage> {
     return Form(
       key: _formKey,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-          SizedBox(height: 40),
+        SizedBox(height: 40),
         _topheader(),
         Expanded(
           child: Container(
@@ -68,23 +68,19 @@ class _LoginPageState extends State<LoginPage> {
                       validator: _validateLogin,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      nextFocus: _focusSenha
-                  ),
+                      nextFocus: _focusSenha),
                   SizedBox(height: 16),
                   AppText('Senha', "Digite a senha",
                       controller: _tSenha,
                       password: true,
                       validator: _validateSenha,
                       keyboardType: TextInputType.number,
-                      focusNode: _focusSenha
-                  ),
+                      focusNode: _focusSenha),
                   SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerRight,
                     child: InkWell(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Text(
                         'Esqueceu a senha?',
                         style: TextStyle(
@@ -94,17 +90,18 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  AppButton('Entrar',
-                    onPressed: _onClickLogin, showProgress: _showProgress,
+                  AppButton(
+                    'Entrar',
+                    onPressed: _onClickLogin,
+                    showProgress: _showProgress,
                   ),
                   SizedBox(height: 12),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-        ),
-          ]
-      ),
+      ]),
     );
   }
 
@@ -116,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Crie Sua Conta',
+            'Here Ocorrências',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -129,15 +126,13 @@ class _LoginPageState extends State<LoginPage> {
                 'assets/Logo.png',
                 height: 170,
                 fit: BoxFit.fitHeight,
-              )
-          ),
-
+              )),
         ],
       ),
     );
   }
 
-  _createAccountLink() {
+  _criarConta() {
     return Container(
       color: Colors.grey[50],
       padding: EdgeInsets.only(bottom: 16),

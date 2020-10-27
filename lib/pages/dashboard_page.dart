@@ -9,6 +9,7 @@ import 'package:here/utils/nav.dart';
 import 'package:here/pages/Cadastro.dart';
 import 'package:here/pages/login_page.dart';
 import 'package:here/pages/ocorrencia_page.dart';
+import 'package:here/widgets/PageRouteAnimation.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -86,7 +87,7 @@ class _DashboardPageState extends State<DashboardPage>
             MyMenu(title: 'Ocorrências', icon: Icons.insert_drive_file, warna: Colors.blueGrey,),
             //MyMenu(title: 'Informação', icon: Icons.info_outline, warna: Colors.green,),
             //MyMenu(title: 'Educação', icon: Icons.school, warna: Colors.orange,),
-            MyMenu(title: 'Gráficos', icon: Icons.insert_chart, warna: Colors.orange,),
+            MyMenu1(title: 'Gráficos', icon: Icons.insert_chart, warna: Colors.orange,),
             //MyMenu(title: 'Livro', icon: Icons.local_library, warna: Colors.red,),
           ],
         ),
@@ -117,7 +118,7 @@ final MaterialColor warna;
       margin: EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          _onClickCard(context,title);
+          Navigator.push(context, PageRouteAnimation(widget: ListOcorrencia()));
         },
         splashColor: Colors.blue,
         child: Center(
@@ -137,3 +138,38 @@ final MaterialColor warna;
     );
   }
 }
+
+class MyMenu1 extends StatelessWidget {
+  MyMenu1({this.title, this.icon, this.warna});
+
+  final String title;
+  final IconData icon;
+  final MaterialColor warna;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, PageRouteAnimation(widget: GraficosDashPage()));
+        },
+        splashColor: Colors.blue,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                icon,
+                size: 70.0,
+                color: warna,
+              ),
+              Text(title, style: TextStyle(fontSize: 17.0))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

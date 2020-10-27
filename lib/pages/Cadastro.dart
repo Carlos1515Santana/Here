@@ -4,6 +4,7 @@ import 'package:here/model/usuario.dart';
 import 'package:here/utils/alert.dart';
 import 'package:here/widgets/AppButton.dart';
 import 'package:intl/intl.dart';
+import 'package:here/widgets/AppText2.dart';
 
 void main() => runApp(new Cadastro());
 
@@ -15,7 +16,7 @@ class Cadastro extends StatefulWidget {
 class _MyAppState extends State<Cadastro> {
   GlobalKey<FormState> _key = GlobalKey();
   bool _validate = false;
-  String nome, userName, email, Data, senha;
+  String nome, userName, email, data, senha;
   final TextEditingController _controladorData = TextEditingController();
 
   @override
@@ -28,14 +29,12 @@ class _MyAppState extends State<Cadastro> {
           backgroundColor: Color(0XFF3F51b5),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 15),
             child: Form(
               key: _key,
               autovalidate: _validate,
               child: _formUI(),
             ),
-          ),
         ),
       ),
     );
@@ -44,130 +43,74 @@ class _MyAppState extends State<Cadastro> {
   Widget _formUI() {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 10.0),
-          child: TextFormField(
-            decoration: new InputDecoration(
-              labelText: 'Nome',
-              hintText: 'Digite seu nome',
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey, width: 2.0),
-              ),
-            ),
-            maxLength: 40,
-            validator: _validarNome,
-            onSaved: (String val) {
-              nome = val;
-            },
-          ),
+        AppText2("UserName", "Digite um nome de usuário",
+          validator: _validarNome,
+          onSaved: (String val) {
+            userName = val;
+          },
         ),
+        SizedBox(height: 15),
 
-        Padding(
-          padding: EdgeInsets.only(top: 5.0),
-          child: TextFormField(
-              controller: _controladorData,
-              decoration: InputDecoration(
-                labelText: 'Data de nascimento',
-                hintText: 'Insira a data',
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                ),
-              ),
-              maxLength: 10,
-              //validator: _validarData,
-              onTap: () async {
-                DateTime dateT = DateTime(2010);
-                FocusScope.of(context).requestFocus(FocusNode());
-                dateT = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1800),
-                  lastDate: DateTime.now(),
-                );
-                _controladorData.text = DateFormat.yMd('pt').format(dateT);
-              }),
+        AppText2("Nome", "Digite seu nome completo",
+          validator: _validarNome,
+          onSaved: (String val) {
+            nome = val;
+          },
         ),
+        SizedBox(height: 15),
 
-        Padding(
-          padding: EdgeInsets.only(top: 5.0),
-          child: TextFormField(
-              decoration: new InputDecoration(
-                labelText: 'E-mail',
-                hintText: 'Digite seu e-mail',
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                ),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              maxLength: 40,
-              validator: _validarEmail,
-              onSaved: (String val) {
-                email = val;
-              }),
+        AppText2("Data de nascimento", "Insira a data de nascimento",
+          controller: _controladorData,
+          validator: _validarData,
+          onSaved: (String val) {
+            data = val;
+          },
+          onTap: () async {
+            DateTime dateT = DateTime(2010);
+            FocusScope.of(context).requestFocus(FocusNode());
+            dateT = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1800),
+              lastDate: DateTime.now(),
+            );
+            _controladorData.text = DateFormat.yMd('pt').format(dateT);
+          },
         ),
+        SizedBox(height: 15),
 
-        Padding(
-          padding: EdgeInsets.only(top: 10.0),
-          child: TextFormField(
-            decoration: new InputDecoration(
-              labelText: 'UserName',
-              hintText: 'Digite o userName',
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey, width: 2.0),
-              ),
-            ),
-            maxLength: 40,
-            validator: _validarNome,
-            onSaved: (String val) {
-              userName = val;
-            },
-          ),
+        AppText2('E-mail', 'Digite seu e-mail',
+          validator: _validarEmail,
+          onSaved: (String val) {
+            email = val;
+          },
         ),
+        SizedBox(height: 15),
 
-        Padding(
-          padding: EdgeInsets.only(top: 5.0),
-          child: TextFormField(
-              decoration: new InputDecoration(
-                labelText: 'Senha',
-                hintText: 'Digite sua senha',
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                ),
-              ),
-              keyboardType: TextInputType.text,
-              obscureText: true,
-              maxLength: 20,
-              validator: _validarSenha,
-              onSaved: (String val) {
-                senha = val;
-              }),
+        AppText2('Senha', 'Digite uma senha',
+          validator: _validarSenha,
+          password: true,
+          maxLines: 1,
+          onSaved: (String val) {
+            senha = val;
+          },
         ),
-
-        SizedBox(height: 30),
+        SizedBox(height: 20),
 
         AppButton(
-          "Registrar",
+          "Cadastrar",
           onPressed: () {
             _sendForm();
           },
         ),
       ],
     );
+  }
+
+  String _validarData(String value) {
+    if(value.isEmpty) {
+      return 'Insira uma data';
+    }
   }
 
   String _validarNome(String value) {

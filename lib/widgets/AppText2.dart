@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppText extends StatelessWidget {
+class AppText2 extends StatelessWidget {
   String label;
   String hint;
   bool password;
@@ -11,16 +11,25 @@ class AppText extends StatelessWidget {
   FocusNode focusNode;
   FocusNode nextFocus;
   Function onTap;
+  FormFieldSetter<String> onSaved;
+  bool enabled;
+  int maxLines;
 
-  AppText(this.label, this.hint,
-      {this.password = false,
-      this.controller,
-      this.validator,
-      this.keyboardType,
-      this.textInputAction,
-      this.focusNode,
-      this.nextFocus,
-      this.onTap});
+  AppText2(
+    this.label,
+    this.hint, {
+    this.password = false,
+    this.controller,
+    this.validator,
+    this.keyboardType,
+    this.textInputAction,
+    this.focusNode,
+    this.nextFocus,
+    this.onTap,
+    this.onSaved,
+    this.enabled = true,
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +41,25 @@ class AppText extends StatelessWidget {
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       focusNode: focusNode,
+      enabled: enabled,
+      onSaved: onSaved,
+      maxLines: maxLines,
       onFieldSubmitted: (String text) {
         if (nextFocus != null) {
           FocusScope.of(context).requestFocus(nextFocus);
         }
       },
       style: TextStyle(
-        fontSize: 25,
+        fontSize: 18,
         color: Colors.black,
       ),
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Color(0XFF3F51b5)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
         labelText: label,
         labelStyle: TextStyle(
-          fontSize: 25,
+          fontSize: 18,
           color: Colors.grey,
         ),
         hintText: hint,

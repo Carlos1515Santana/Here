@@ -1,17 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here/APIs/ocorrenciaAPI.dart';
 import 'package:here/model/ocorrencia.dart';
 import 'package:here/model/usuario.dart';
 import 'package:here/widgets/AppButton.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:brasil_fields/brasil_fields.dart';
+import 'package:here/widgets/AppText2.dart';
 
 class OcorrenciaPage extends StatefulWidget {
   LatLng localizacao;
@@ -35,8 +32,10 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   final TextEditingController street = TextEditingController();
   final TextEditingController _controladorLocal = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
+  GlobalKey<FormState> _key = GlobalKey();
+  bool _validate = false;
 
-  String local, descricao;
+  String ocorrencia, objeto, data, hora, local, descricao;
 
   _OcorrenciaPageState(LatLng localizacao) {
     latitude = localizacao.latitude;
@@ -45,11 +44,7 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
         .then((value) => {street.text = value});
   }
 
-  List<String> _ocrcs = <String>[
-    '',
-    'Furto',
-    'Roubo'
-  ];
+  List<String> _ocrcs = <String>['', 'Furto', 'Roubo'];
 
   List<String> _objetos = <String>[
     '',
@@ -76,107 +71,113 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-      ],
-
       home: Scaffold(
-        //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Cadastrar Ocorrências'),
           backgroundColor: Color(0XFF3F51b5),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 0),
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 15),
           child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: FormField<String>(
-                  builder: (FormFieldState<String> state) {
-                    return InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Selecione uma ocorrência',
-                        errorText: state.hasError ? state.errorText : null,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 2.0),
-                        ),
+            children: [
+              FormField<String>(
+                builder: (FormFieldState<String> state) {
+                  TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  );
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Selecione uma ocorrência',
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
                       ),
-                      isEmpty: _ocrc == '',
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: _ocrc,
-                          isDense: true,
-                          onChanged: (String newValue) {
-                            setState(() {
-                              _controladorOcr = newValue;
-                              _ocrc = newValue;
-                              state.didChange(newValue);
-                              if (_ocrc != '') {
-                                _showDialog();
-                              }
-                            });
-                          },
-                          items: _ocrcs.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
+                      errorText: state.hasError ? state.errorText : null,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0XFF3F51b5)),
                       ),
-                    );
-                  },
-                ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    isEmpty: _ocrc == '',
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _ocrc,
+                        isDense: true,
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _controladorOcr = newValue;
+                            _ocrc = newValue;
+                            state.didChange(newValue);
+                            if (_ocrc != '') {
+                              _showDialog();
+                            }
+                          });
+                        },
+                        items: _ocrcs.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  );
+                },
+                validator: _validarOcorrencia,
+                onSaved: (String val) {
+                  ocorrencia = val;
+                },
               ),
-
-              Container(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: FormField<String>(
-                  builder: (FormFieldState<String> state) {
-                    return InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: 'Selecione o objeto roubado',
-                        errorText: state.hasError ? state.errorText : null,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 2.0),
-                        ),
+              SizedBox(height: 15),
+              FormField<String>(
+                builder: (FormFieldState<String> state) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Selecione o que foi roubado',
+                      labelStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
                       ),
-                      isEmpty: _objeto == '',
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: _objeto,
-                          isDense: true,
-                          onChanged: (String newValue) {
-                            setState(() {
-                              _controladorObj = newValue;
-                              _objeto = newValue;
-                              state.didChange(newValue);
-                            });
-                          },
-                          items: _objetos.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
+                      errorText: state.hasError ? state.errorText : null,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0XFF28b1b3)),
                       ),
-                    );
-                  },
-                ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    isEmpty: _objeto == '',
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _objeto,
+                        isDense: true,
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _controladorObj = newValue;
+                            _objeto = newValue;
+                            state.didChange(newValue);
+                          });
+                        },
+                        items: _objetos.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  );
+                },
+                validator: _validarObjeto,
+                onSaved: (String val) {
+                  objeto = val;
+                },
               ),
-
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 padding: const EdgeInsets.only(top: 15.0),
@@ -185,21 +186,14 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: TextFormField(
+                      child: AppText2(
+                        "Data do crime",
+                        "Data do crime",
                         controller: _controladorData,
                         validator: _validarData,
-                        decoration: InputDecoration(
-                          labelText: 'Data do crime',
-                          hintText: 'Data que ocorreu',
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0XFF28b1b3), width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 2.0),
-                          ),
-                        ),
+                        onSaved: (String val) {
+                          data = val;
+                        },
                         onTap: () async {
                           DateTime dateT = DateTime(2019);
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -214,27 +208,16 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                         },
                       ),
                     ),
-
-                    SizedBox(
-                      width: 40,
-                    ),
-
+                    SizedBox(width: 40),
                     Expanded(
-                      child: TextFormField(
+                      child: AppText2(
+                        "Hora do crime",
+                        "Hora que ocorreu o crime",
                         controller: _controladorHora,
                         validator: _validarHora,
-                        decoration: InputDecoration(
-                          labelText: 'Hora do crime',
-                          hintText: 'Hora que ocorreu',
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0XFF28b1b3), width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 2.0),
-                          ),
-                        ),
+                        onSaved: (String val) {
+                          hora = val;
+                        },
                         onTap: () async {
                           TimeOfDay hora = TimeOfDay();
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -249,79 +232,40 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   ],
                 ),
               ),
-
+              SizedBox(height: 15),
+              AppText2(
+                "Local do crime",
+                "Insira o local em que ocorreu o crime",
+                controller: _controladorLocal,
+                validator: _validarLocalCrime,
+                onSaved: (String val) {
+                  local = val;
+                },
+              ),
+              SizedBox(height: 15),
+              AppText2(
+                "Descrição do crime",
+                "Insira uma breve descrição do que aconteceu",
+                controller: _controladorDescricao,
+                validator: _validarDescCrime,
+                maxLines: 2,
+                onSaved: (String val) {
+                  descricao = val;
+                },
+              ),
+              SizedBox(height: 15),
+              AppText2(
+                "Endereço",
+                "Endereço",
+                controller: street,
+                enabled: false,
+              ),
               Container(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: TextFormField(
-                  controller: _controladorLocal,
-                  validator: _validarLocalCrime,
-                  onSaved: (String val){
-                    local = val;
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Local do crime',
-                    hintText: 'Insira o local do crime',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: TextFormField(
-                  controller: _controladorDescricao,
-                  validator: _validarDescCrime,
-                  onSaved: (String val){
-                    descricao = val;
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Descrição do crime',
-                    hintText: 'Insira uma breve descrição',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: TextField(
-                  controller: street,
-                  decoration: InputDecoration(
-                    labelText: 'Endereço',
-                    hintText: 'Endereço',
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0XFF28b1b3), width: 2.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-
-              Container(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 12),
                 child: _imagem == null
                     ? Text('Nenhuma imagem selecionada')
                     : Image.file(_imagem),
               ),
-
               Container(
                 child: RaisedButton(
                   onPressed: () {
@@ -335,14 +279,11 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
                   ),
                 ),
               ),
-
               SizedBox(height: 10),
-
-              AppButton("Registrar",
-                onPressed: () {
-                  _enviarOcorrencia();
-                }
-              ),
+              AppButton("Registrar", onPressed: () {
+                _enviarOcorrencia();
+              }),
+              SizedBox(height: 5),
             ],
           ),
         ),
@@ -369,13 +310,26 @@ class _OcorrenciaPageState extends State<OcorrenciaPage> {
           return AlertDialog(
             title: Text('Diferença entre furto e roubo'),
             content: Text(
-                'Quando alguém entra numa casa vazia sem que os donos estejam lá dentro e leva bens de valor, configura-se um furto. O roubo, por sua vez, aconteceria se o ladrão invadisse a casa, encontrasse os moradores e os ameaçasse para levar seus bens.'),
+                'Quando alguém entra numa casa vazia sem que os donos estejam lá dentro e leva bens de valor, configura-se um furto. '
+                'O roubo, por sua vez, aconteceria se o ladrão invadisse a casa, encontrasse os moradores e os ameaçasse para levar seus bens.'),
             actions: [
               //NaoMostrarMaisButton,
               EntendiButton,
             ],
           );
         });
+  }
+
+  String _validarOcorrencia(String value) {
+    if (value.isEmpty) {
+      return 'Insira o local do crime';
+    }
+  }
+
+  String _validarObjeto(String value) {
+    if (value.isEmpty) {
+      return 'Insira o local do crime';
+    }
   }
 
   String _validarData(String value) {
