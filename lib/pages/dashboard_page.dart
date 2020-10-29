@@ -45,7 +45,7 @@ class _DashboardPageState extends State<DashboardPage>
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text('Usuario', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
+              accountName: Text('Shalom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
               accountEmail: Text('admin@admin.com'),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRe-E4rqR6LMzLi2KSkXRGZOUUGhwaY0gXoa_5OibXvVrDvG5C&usqp=CAU'),

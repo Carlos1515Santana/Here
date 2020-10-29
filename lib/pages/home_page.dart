@@ -192,7 +192,7 @@ class _MyAppState extends State<HomePage> {
 
     var camera = CameraPosition(
       target: LatLng(latitude, longitude),
-      zoom: 16.0,
+      zoom: 25.0,
     );
     controller.animateCamera(CameraUpdate.newCameraPosition(camera));
   }
