@@ -63,7 +63,7 @@ class _MyAppState extends State<HomePage> {
         break;
     }
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 10.1), 'assets/' + img + '.png');
+        ImageConfiguration(devicePixelRatio: 0.1), 'assets/' + img + '.png');
   }
 
   void _startTracking() {
