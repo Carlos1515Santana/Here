@@ -19,6 +19,8 @@ class _MyAppState extends State<Cadastro> {
   bool _validate = false;
   String nome, userName, email, data, cpf, rg, senha;
   final TextEditingController _controladorData = TextEditingController();
+  var cpfController = new MaskedTextController(text: '', mask: '000.000.000-00');
+  var rgController = new MaskedTextController(text: '', mask: '00.000.000-@');
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,7 @@ class _MyAppState extends State<Cadastro> {
         AppText2('CPF', 'Digite Seu CPF',
           validator: _validarCPF,
           controller: cpfController,
+          keyboardType: TextInputType.number,
           maxLines: 1,
           onSaved: (String val) {
             cpf = val;
@@ -92,6 +95,7 @@ class _MyAppState extends State<Cadastro> {
 
         AppText2('RG', 'Digite Seu RG',
           validator: _validarRG,
+          keyboardType: TextInputType.number,
           controller: rgController,
           maxLines: 1,
           onSaved: (String val) {
@@ -157,6 +161,7 @@ class _MyAppState extends State<Cadastro> {
       return null;
     }
   }
+
   String _validarCPF(String value) {
     if (value.isEmpty) {
       return 'Informe um CPF valido';
@@ -178,9 +183,6 @@ class _MyAppState extends State<Cadastro> {
       return null;
     }
   }
-  var cpfController = new MaskedTextController(text: '', mask: '000.000.000-00');
-  var rgController = new MaskedTextController(text: '', mask: '00.000.000-@');
-
 
   String _validarSenha(String value) {
     if (value.isEmpty) {

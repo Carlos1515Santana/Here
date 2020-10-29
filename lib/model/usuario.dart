@@ -1,18 +1,4 @@
 class Customer{
-//  int    id;
-//  int    idade;
-//  String usuario;
-//  String email;
-//  String senha;
-//
-//  Usuario.fromJson(Map<String, dynamic> json) {
-//    id      = json['id'     ];
-//    email   = json['email'  ];
-//    senha   = json['senha'  ];
-//    idade   = json['idade'  ];
-//    usuario = json['usuario'];
-//  }
-
   String name;
   String cpf;
   String rg;

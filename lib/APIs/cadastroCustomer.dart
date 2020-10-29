@@ -31,13 +31,13 @@ class CadastroCustomer{
       Map<String, dynamic> map = convert.json.decode(response.body);
 
       if (response.statusCode == 200) {
-        return ApiResponse.ok(msg: map["message"]);
+        return ApiResponse.ok(msg: "Usuario cadastrado");
       }
-      return ApiResponse.error(msg: map["message"]);
+      return ApiResponse.error(msg: "Usuario cadastrado");
     } catch (error, exception) {
       print("Erro no login $error > $exception");
 
-      return ApiResponse.error(msg: "Não foi possível cadastrar a ocorrência.");
+      return ApiResponse.error(msg: "Não foi possível cadastrar o usuário.");
     }
   }
 }
