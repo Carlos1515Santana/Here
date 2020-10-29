@@ -11,7 +11,8 @@ class CadastroCustomer{
 
       var params = {
         "name": customer.name,
-        "cpf": "12345678910",
+        "cpf": customer.cpf,
+        "rg": customer.rg,
         "userName": customer.userName,
         "email": customer.email,
         "password": customer.password,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:here/APIs/cadastroCustomer.dart';
 import 'package:here/model/usuario.dart';
 import 'package:here/utils/alert.dart';
@@ -16,7 +17,7 @@ class Cadastro extends StatefulWidget {
 class _MyAppState extends State<Cadastro> {
   GlobalKey<FormState> _key = GlobalKey();
   bool _validate = false;
-  String nome, userName, email, data, senha;
+  String nome, userName, email, data, cpf, rg, senha;
   final TextEditingController _controladorData = TextEditingController();
 
   @override
@@ -43,7 +44,7 @@ class _MyAppState extends State<Cadastro> {
   Widget _formUI() {
     return Column(
       children: <Widget>[
-        AppText2("UserName", "Digite um nome de usuário",
+        AppText2("Login", "Digite um nome de usuário",
           validator: _validarNome,
           onSaved: (String val) {
             userName = val;
@@ -78,6 +79,26 @@ class _MyAppState extends State<Cadastro> {
           },
         ),
         SizedBox(height: 15),
+
+        AppText2('CPF', 'Digite Seu CPF',
+          validator: _validarCPF,
+          controller: cpfController,
+          maxLines: 1,
+          onSaved: (String val) {
+            cpf = val;
+          },
+        ),
+        SizedBox(height: 12),
+
+        AppText2('RG', 'Digite Seu RG',
+          validator: _validarRG,
+          controller: rgController,
+          maxLines: 1,
+          onSaved: (String val) {
+            rg = val;
+          },
+        ),
+        SizedBox(height: 10),
 
         AppText2('E-mail', 'Digite seu e-mail',
           validator: _validarEmail,
@@ -136,6 +157,30 @@ class _MyAppState extends State<Cadastro> {
       return null;
     }
   }
+  String _validarCPF(String value) {
+    if (value.isEmpty) {
+      return 'Informe um CPF valido';
+    } //else if(!regExp.hasMatch(value)){
+    //return "CPF inválido";
+    //}
+    else {
+      return null;
+    }
+  }
+
+  String _validarRG(String value) {
+    if (value.isEmpty) {
+      return 'Informe um RG valido';
+    } //else if(!regExp.hasMatch(value)){
+    //return "RG inválido";
+    //}
+    else {
+      return null;
+    }
+  }
+  var cpfController = new MaskedTextController(text: '', mask: '000.000.000-00');
+  var rgController = new MaskedTextController(text: '', mask: '00.000.000-@');
+
 
   String _validarSenha(String value) {
     if (value.isEmpty) {
@@ -156,7 +201,7 @@ class _MyAppState extends State<Cadastro> {
       var l = data.split('-');
       data = l[2] + '-' + l[1] + '-' + l[0];
 
-      var customer = Customer(nome, email, senha, data, userName);
+      var customer = Customer(nome, email, senha, data, userName, cpf, rg);
       final resposta = await CadastroCustomer.postCustomer(customer);
       if (resposta.msg != 'error') {
         Navigator.pop(context);
