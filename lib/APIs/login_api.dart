@@ -19,7 +19,7 @@ class LoginApi {
       };
 
       Map params = {
-        "username": login,
+        "email": login,
         "password": senha
       };
 

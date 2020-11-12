@@ -13,8 +13,7 @@ class AppButton extends StatelessWidget {
     return Container(
       width: 360,
       height: 46,
-      //padding: const EdgeInsets.only(bottom: 15),
-      child: RaisedButton(
+       child: RaisedButton(
         color: Color(0XFF3F51b5),
         child: showProgress
             ? Center(
@@ -22,8 +21,7 @@ class AppButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : Text(
-                text,
+            : Text(text,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,

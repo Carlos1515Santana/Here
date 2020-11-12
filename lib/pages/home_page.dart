@@ -29,6 +29,7 @@ class _MyAppState extends State<HomePage> {
   MapType _currentMapType = MapType.normal;
   BitmapDescriptor pinLocationIcon;
   var interador = 0;
+  bool _visible = false;
 
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController controller;
@@ -100,9 +101,110 @@ class _MyAppState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(appBar: _appBar(), body: Container(child:_body())),
-//        home: Scaffold(body: Container(child:_body())),
+        home: Scaffold(
+            appBar: _appBar(),
+            body: Container(
+                child:_body()
+            )
+        ),
       );
+
+  AppBar _appBar() {
+    return AppBar(
+        title: const Text('Maps'),
+        backgroundColor: Color(0XFF3F51b5),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              this.searchandNavigate();
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.wysiwyg),
+            onPressed: () {
+              setState(() {
+                _visible = !_visible;
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.apps),
+            onPressed: () {
+              Navigator.push(context, PageRouteAnimation(widget: DashboardPage()));
+            },
+          ),
+        ]
+    );
+  }
+
+  Stack _body() {
+    return Stack(children: <Widget>[
+      _buildGoogleMaps(),
+      Positioned(
+        top: 80.0 ,
+        right: 15.0,
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Column(children: <Widget>[
+            SizedBox(height: 16.0),
+            _buttonFindMyLocal(),
+            // _buttonSetMap()
+          ]),
+        ),
+      ),
+
+      AnimatedOpacity(
+        opacity: _visible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 400),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: FlatButton.icon(
+                    icon: const Icon(Icons.circle),
+                    label: const Text('3 meses',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    textColor: Colors.red,
+                    onPressed: () {}
+                ),
+              ),
+              Expanded(
+                child: FlatButton.icon(
+                    icon: const Icon(Icons.circle),
+                    label: const Text('Este mês',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    textColor: Colors.blueAccent,
+                    onPressed: () {}
+                ),
+              ),
+              Expanded(
+                child: FlatButton.icon(
+                    icon: const Icon(Icons.circle),
+                    label: const Text('Este ano',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    textColor: Colors.green,
+                    onPressed: () {}
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ]);
+  }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     this.controller = controller;
@@ -116,7 +218,7 @@ class _MyAppState extends State<HomePage> {
         _getOcorrrencia(ocorrenciaList);
       }
     });
-}
+  }
 
   Future<void> _onMapUpdate() async{
   //    _controller.complete(controller);
@@ -146,24 +248,6 @@ class _MyAppState extends State<HomePage> {
       );
       _markers[ocorencia.description] = marker;
     }
-  }
-
-  Stack _body() {
-    return Stack(children: <Widget>[
-      _buildGoogleMaps(),
-//       _searchMapPlaceWidget(),
-      Positioned(
-          top: 80.0 ,
-          right: 15.0,
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: Column(children: <Widget>[
-              SizedBox(height: 16.0),
-              _buttonFindMyLocal(),
-              // _buttonSetMap()
-            ]),
-          ))
-    ]);
   }
 
   Widget _buildGoogleMaps() {
@@ -241,26 +325,5 @@ class _MyAppState extends State<HomePage> {
         zoom: 17.0,
       ),
     ));
-  }
-
-  AppBar _appBar() {
-    return AppBar(
-        title: const Text('Maps'),
-        backgroundColor: Color(0XFF3F51b5),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.apps),
-            onPressed: () {
-              Navigator.push(context, PageRouteAnimation(widget: DashboardPage()));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              this.searchandNavigate();
-            },
-          ),
-        ]
-    );
   }
 }

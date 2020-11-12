@@ -63,14 +63,14 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 40),
-                  AppText('Nome', 'Digite o nome de usuário',
+                  AppText('E-mail', 'Digite seu e-mail ',
                       controller: _tLogin,
                       validator: _validateLogin,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       nextFocus: _focusSenha),
                   SizedBox(height: 16),
-                  AppText('Senha', "Digite a senha",
+                  AppText('Senha', "Digite sua senha",
                       controller: _tSenha,
                       password: true,
                       validator: _validateSenha,
@@ -142,8 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.push(context, PageRouteAnimation(widget: Cadastro()));
         },
         child: Center(
-          child: Text(
-            'Não tem um conta? Crie uma agora',
+          child: Text('Não tem um conta? Crie uma agora',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: Color(0xFF416BC1),
@@ -186,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String login = _tLogin.text;
     String senha = _tSenha.text;
-    print("Login: $login, Senha: $senha");
+    print("E-mail: $login, Senha: $senha");
 
     ApiResponse response = await LoginApi.login(login, senha);
     if (response.ok) {
@@ -194,7 +193,6 @@ class _LoginPageState extends State<LoginPage> {
       push(context, HomePage());
     } else {
       _showDialog();
-      //alert(context, "Login ou senha inválida!");
     }
 
     setState(() {
@@ -204,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _validateLogin(String text) {
     if (text.isEmpty) {
-      return "Digite o login";
+      return "Digite o e-mail";
     }
     return null;
   }
