@@ -211,9 +211,6 @@ class _LoginPageState extends State<LoginPage> {
     if (text.isEmpty) {
       return "Digite a senha";
     }
-    if (text.length < 3) {
-      return "A senha precisa ter pelo menos 3 números";
-    }
     return null;
   }
 

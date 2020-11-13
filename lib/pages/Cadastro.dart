@@ -6,11 +6,7 @@ import 'package:here/utils/alert.dart';
 import 'package:here/widgets/AppButton.dart';
 import 'package:intl/intl.dart';
 import 'package:here/widgets/AppText2.dart';
-import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:here/utils/cpf.dart';
-
-import 'package:here/utils/cpf.dart';
-
 
 void main() => runApp(new Cadastro());
 
@@ -22,9 +18,8 @@ class Cadastro extends StatefulWidget {
 class _MyAppState extends State<Cadastro> {
   GlobalKey<FormState> _key = GlobalKey();
   bool _validate = false;
-  String nome, userName, email, data, cpf, rg, senha;
+  String nome, userName, email, data, cpf, senha;
   final TextEditingController _controladorData = TextEditingController();
-  final TextEditingController _controladorCpf = TextEditingController();
   var cpfController = new MaskedTextController(text: '', mask: '000.000.000-00');
   var rgController = new MaskedTextController(text: '', mask: '00.000.000-@');
 
@@ -99,16 +94,6 @@ class _MyAppState extends State<Cadastro> {
         ),
         SizedBox(height: 15),
 
-        //AppText2('RG', 'Digite Seu RG',
-        //  validator: _validarRG,
-        //  keyboardType: TextInputType.number,
-        //  controller: rgController,
-        //  maxLines: 1,
-        //  onSaved: (String val) {
-        //    rg = val;
-        //  },
-        //),
-
         AppText2('E-mail', 'Digite seu e-mail',
           validator: _validarEmail,
           onSaved: (String val) {
@@ -133,13 +118,14 @@ class _MyAppState extends State<Cadastro> {
             _sendForm();
           },
         ),
+        SizedBox(height: 5),
       ],
     );
   }
 
   String _validarData(String value) {
     if(value.isEmpty) {
-      return 'Insira uma data';
+      return 'Digite uma data';
     }
   }
 
@@ -149,7 +135,7 @@ class _MyAppState extends State<Cadastro> {
     if (value.isEmpty) {
       return 'Informe o nome';
     } else if (!regExp.hasMatch(value)) {
-      return 'O nome deve conter caracteres de a-z ou A-Z';
+      return 'O nome deve ter somente caracteres de a-z ou A-Z';
     }
     return null;
   }
@@ -159,7 +145,7 @@ class _MyAppState extends State<Cadastro> {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     var regExp = RegExp(pattern);
     if (value.isEmpty) {
-      return 'Informe o Email';
+      return 'Digite o Email';
     } else if (!regExp.hasMatch(value)) {
       return 'Email inválido';
     } else {
@@ -167,38 +153,27 @@ class _MyAppState extends State<Cadastro> {
     }
   }
 
-
-
   String _validarCPF(String value) {
     CPF.format(value);
     if(value.isEmpty) {
-      return 'Informe o CPF';
+      return 'Digite o CPF';
     }
     if(CPF.isValid(value)) {
       return null;
     } else {
-      return 'invalido';
-    }
-  }
-
-  String _validarRG(String value) {
-    if (value.isEmpty) {
-      return 'Informe um RG valido';
-    } //else if(!regExp.hasMatch(value)){
-    //return "RG inválido";
-    //}
-    else {
-      return null;
+      return 'O CPF informado não é válido';
     }
   }
 
   String _validarSenha(String value) {
+    var pattern = r'^(?=.*[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    var regExp = RegExp(pattern);
+
     if (value.isEmpty) {
-      return 'Informe uma senha';
-    } //else if(!regExp.hasMatch(value)){
-    //return "Senha inválida";
-    //}
-    else {
+      return 'Digite uma senha';
+    } if(!regExp.hasMatch(value)){
+      return "Deve ter uma letra maiscula \nDeve ter um especial \nDeve ter um número";
+    } else {
       return null;
     }
   }
@@ -220,7 +195,6 @@ class _MyAppState extends State<Cadastro> {
         alert(context, "Não foi possivel cadastrar usuario");
       }
     } else {
-      print(cpf);
       // erro de validação print("Nome $nome");
       //      print("Ceclular $celular");
       //      print("Email $email");
