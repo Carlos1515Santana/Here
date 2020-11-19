@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +10,7 @@ import 'package:here/pages/dashboard_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:here/pages/ocorrencia_page.dart';
 import 'package:here/utils/nav.dart';
+import 'package:intl/intl.dart';
 import '../model/locations.dart' as locations;
 import '../utils/mapsUtils.dart';
 import 'package:location/location.dart' as loca;
@@ -101,12 +103,7 @@ class _MyAppState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            appBar: _appBar(),
-            body: Container(
-                child:_body()
-            )
-        ),
+        home: Scaffold(appBar: _appBar(), body: Container(child: _body())),
       );
 
   AppBar _appBar() {
@@ -125,24 +122,25 @@ class _MyAppState extends State<HomePage> {
             onPressed: () {
               setState(() {
                 _visible = !_visible;
+                _visible ? _onMapUpdate(0) : '';
               });
             },
           ),
           IconButton(
             icon: Icon(Icons.apps),
             onPressed: () {
-              Navigator.push(context, PageRouteAnimation(widget: DashboardPage()));
+              Navigator.push(
+                  context, PageRouteAnimation(widget: DashboardPage()));
             },
           ),
-        ]
-    );
+        ]);
   }
 
   Stack _body() {
     return Stack(children: <Widget>[
       _buildGoogleMaps(),
       Positioned(
-        top: 80.0 ,
+        top: 80.0,
         right: 15.0,
         child: Align(
           alignment: Alignment.bottomRight,
@@ -153,7 +151,6 @@ class _MyAppState extends State<HomePage> {
           ]),
         ),
       ),
-
       AnimatedOpacity(
         opacity: _visible ? 1.0 : 0.0,
         duration: Duration(milliseconds: 400),
@@ -166,38 +163,44 @@ class _MyAppState extends State<HomePage> {
               Expanded(
                 child: FlatButton.icon(
                     icon: const Icon(Icons.circle),
-                    label: const Text('3 meses',
+                    label: const Text(
+                      '3 meses',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     textColor: Colors.red,
-                    onPressed: () {}
-                ),
+                    onPressed: () {
+                      _onMapUpdate(1);
+                    }),
               ),
               Expanded(
                 child: FlatButton.icon(
                     icon: const Icon(Icons.circle),
-                    label: const Text('Este mês',
+                    label: const Text(
+                      'Este mês',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     textColor: Colors.blueAccent,
-                    onPressed: () {}
-                ),
+                    onPressed: () {
+                      _onMapUpdate(2);
+                    }),
               ),
               Expanded(
                 child: FlatButton.icon(
                     icon: const Icon(Icons.circle),
-                    label: const Text('Este ano',
+                    label: const Text(
+                      'Este ano',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     textColor: Colors.green,
-                    onPressed: () {}
-                ),
+                    onPressed: () {
+                      _onMapUpdate(3);
+                    }),
               ),
             ],
           ),
@@ -210,7 +213,8 @@ class _MyAppState extends State<HomePage> {
     this.controller = controller;
     await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
-    final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorenciaMaps();
+    final List<Ocorrencia> ocorrenciaList =
+        await OcorrenciaAPI.getOcorenciaMaps();
 
     setState(() {
       _markers.clear();
@@ -220,22 +224,82 @@ class _MyAppState extends State<HomePage> {
     });
   }
 
-  Future<void> _onMapUpdate() async{
-  //    _controller.complete(controller);
-      final List<Ocorrencia> ocorrenciaList = await OcorrenciaAPI.getOcorenciaMaps();
+  Future<void> _onMapUpdate(int tipo) async {
+    //    _controller.complete(controller);
+    final List<Ocorrencia> ocorrenciaList =
+        await OcorrenciaAPI.getOcorenciaMaps();
 
-      setState(() {
-        _markers.clear();
-        if (ocorrenciaList != null) {
-          _getOcorrrencia(ocorrenciaList);
+    print(tipo);
+    print(tipo);
+
+    List<Ocorrencia> list = new List<Ocorrencia>();
+
+    if (tipo == 1) {
+      var i = 0;
+      list = new List<Ocorrencia>();
+      ocorrenciaList.forEach((element) {
+        if (_validateDataMonth(DateTime.parse(element.date))) {
+          i++;
+          list.add(element);
         }
       });
+    } else if (tipo == 2) {
+      var i = 0;
+      list = new List<Ocorrencia>();
+      ocorrenciaList.forEach((element) {
+        if (_validateData6Month(DateTime.parse(element.date))) {
+          i++;
+          list.add(element);
+        }
+      });
+    } else if (tipo == 3) {
+      var i = 0;
+      list = new List<Ocorrencia>();
+      ocorrenciaList.forEach((element) {
+        if (_validateDataYear(DateTime.parse(element.date))) {
+          i++;
+          list.add(element);
+        }
+      });
+    } else {
+      list = ocorrenciaList;
+    }
+
+    setState(() {
+      _markers.clear();
+      if (list != null) {
+        _getOcorrrencia(list);
+      }
+    });
   }
 
-  Future<void> _getOcorrrencia( List<Ocorrencia> ocorrenciaList) async {
-    for (final ocorencia in ocorrenciaList) {
+  _validateDataYear(DateTime dt) {
+    return dt.year == DateTime.now().year;
+  }
 
-       await setCustomMapPin(ocorencia.occurrence_type == 'Roubo'? 2 : 1 );
+  _validateDataMonth(DateTime dt) {
+    if (dt.year - DateTime.now().year == 1 ||
+        dt.year - DateTime.now().year == 0) {
+      var month = DateTime.now().month - dt.month;
+      return dt.month - 3 >= month;
+    } else {
+      return false;
+    }
+  }
+
+  _validateData6Month(DateTime dt) {
+    if (dt.year - DateTime.now().year == 1 ||
+        dt.year - DateTime.now().year == 0) {
+      var month = DateTime.now().month - dt.month;
+      return dt.month - 6 >= month;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _getOcorrrencia(List<Ocorrencia> ocorrenciaList) async {
+    for (final ocorencia in ocorrenciaList) {
+      await setCustomMapPin(ocorencia.occurrence_type == 'Roubo' ? 2 : 1);
 
       final marker = Marker(
         markerId: MarkerId(ocorencia.description),
@@ -266,10 +330,11 @@ class _MyAppState extends State<HomePage> {
   }
 
   void _getLatLng(Prediction prediction) async {
-    GoogleMapsPlaces _places = new
-    GoogleMapsPlaces(apiKey:"AIzaSyBEe-EjMOAIqv28XeyVpzdybTBnNMxvWY4" );  //Same API_KEY as above
+    GoogleMapsPlaces _places = new GoogleMapsPlaces(
+        apiKey:
+            "AIzaSyBEe-EjMOAIqv28XeyVpzdybTBnNMxvWY4"); //Same API_KEY as above
     PlacesDetailsResponse detail =
-    await _places.getDetailsByPlaceId(prediction.placeId);
+        await _places.getDetailsByPlaceId(prediction.placeId);
     double latitude = detail.result.geometry.location.lat;
     double longitude = detail.result.geometry.location.lng;
     String address = prediction.description;
@@ -293,8 +358,9 @@ class _MyAppState extends State<HomePage> {
   }
 
   void _onTap(LatLng p) async {
-    var resposta = await Navigator.push(context, PageRouteAnimation(widget: OcorrenciaPage(p)));
-    this._onMapUpdate();
+    var resposta = await Navigator.push(
+        context, PageRouteAnimation(widget: OcorrenciaPage(p)));
+    this._onMapUpdate(0);
     print(resposta);
   }
 
