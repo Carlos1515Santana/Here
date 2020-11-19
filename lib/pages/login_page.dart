@@ -40,9 +40,8 @@ class _LoginPageState extends State<LoginPage> {
   _body() {
     return Form(
       key: _formKey,
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         SizedBox(height: 40),
         _topheader(),
         Expanded(
@@ -74,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _tSenha,
                       password: true,
                       validator: _validateSenha,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       focusNode: _focusSenha),
                   SizedBox(height: 12),
                   Align(
@@ -142,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.push(context, PageRouteAnimation(widget: Cadastro()));
         },
         child: Center(
-          child: Text('Não tem um conta? Crie uma agora',
+          child: Text(
+            'Não tem um conta? Crie uma agora',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: Color(0xFF416BC1),
