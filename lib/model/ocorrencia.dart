@@ -15,6 +15,7 @@ class Ocorrencia {
   String crime_scene;
   String crime_time;
   List<int> byteImage;
+  String type;
 
 //  Construtor para post
   Ocorrencia(
@@ -58,6 +59,7 @@ class Ocorrencia {
     stolen_object = json['stolen_object'];
     crime_scene = json['crime_scene'];
     crime_time = json['crime_time'];
+    type = json['type'];
   }
 }
 

@@ -52,21 +52,23 @@ class _MyAppState extends State<HomePage> {
 //    setCustomMapPin(2);
   }
 
-  void setCustomMapPin(valueImg) async {
+  void setCustomMapPin(valueImg, type) async {
     var img = '';
     switch (valueImg) {
       case 0:
-        img = 'blue';
+        img = 'blue' + type;
         break;
       case 1:
-        img = 'thief-old';
+        img = 'thief' + type;
         break;
       case 2:
-        img = 'roubo';
+        img = 'roubo' + type;
         break;
     }
+    print('assets/' + img + '.png');
+    print('assets/' + img + '.png');
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 0.1), 'assets/' + img + '.png');
+        ImageConfiguration(devicePixelRatio: 0.7), 'assets/' + img + '.png');
   }
 
   void _startTracking() {
@@ -122,7 +124,7 @@ class _MyAppState extends State<HomePage> {
             onPressed: () {
               setState(() {
                 _visible = !_visible;
-                _visible ? _onMapUpdate(0) : '';
+                // _visible ? _onMapUpdate(0) : '';
               });
             },
           ),
@@ -192,7 +194,7 @@ class _MyAppState extends State<HomePage> {
                 child: FlatButton.icon(
                     icon: const Icon(Icons.circle),
                     label: const Text(
-                      'Este ano',
+                      '1 ano +',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -214,7 +216,7 @@ class _MyAppState extends State<HomePage> {
     await controller.setMapStyle(jsonEncode(mapStyle));
     _controller.complete(controller);
     final List<Ocorrencia> ocorrenciaList =
-        await OcorrenciaAPI.getOcorenciaMaps();
+        await OcorrenciaAPI.getOcorencia("");
 
     setState(() {
       _markers.clear();
@@ -227,79 +229,53 @@ class _MyAppState extends State<HomePage> {
   Future<void> _onMapUpdate(int tipo) async {
     //    _controller.complete(controller);
     final List<Ocorrencia> ocorrenciaList =
-        await OcorrenciaAPI.getOcorenciaMaps();
+        await OcorrenciaAPI.getOcorencia(tipo == 2
+            ? "este_mes"
+            : tipo == 1
+                ? "3_meses"
+                : tipo == 3
+                    ? ""
+                    : "");
 
     print(tipo);
     print(tipo);
-
-    List<Ocorrencia> list = new List<Ocorrencia>();
-
-    if (tipo == 1) {
-      var i = 0;
-      list = new List<Ocorrencia>();
-      ocorrenciaList.forEach((element) {
-        if (_validateDataMonth(DateTime.parse(element.date))) {
-          i++;
-          list.add(element);
-        }
-      });
-    } else if (tipo == 2) {
-      var i = 0;
-      list = new List<Ocorrencia>();
-      ocorrenciaList.forEach((element) {
-        if (_validateData6Month(DateTime.parse(element.date))) {
-          i++;
-          list.add(element);
-        }
-      });
-    } else if (tipo == 3) {
-      var i = 0;
-      list = new List<Ocorrencia>();
-      ocorrenciaList.forEach((element) {
-        if (_validateDataYear(DateTime.parse(element.date))) {
-          i++;
-          list.add(element);
-        }
-      });
-    } else {
-      list = ocorrenciaList;
-    }
 
     setState(() {
       _markers.clear();
-      if (list != null) {
-        _getOcorrrencia(list);
+      if (ocorrenciaList != null) {
+        _getOcorrrencia(ocorrenciaList);
       }
     });
   }
 
-  _validateDataYear(DateTime dt) {
-    return dt.year == DateTime.now().year;
-  }
+  // _validateDataYear(DateTime dt) {
+  //   return dt.year == DateTime.now().year;
+  // }
 
-  _validateDataMonth(DateTime dt) {
-    if (dt.year - DateTime.now().year == 1 ||
-        dt.year - DateTime.now().year == 0) {
-      var month = DateTime.now().month - dt.month;
-      return dt.month - 3 >= month;
-    } else {
-      return false;
-    }
-  }
+  // _validateDataMonth(DateTime dt) {
+  //   if (dt.year - DateTime.now().year == 1 ||
+  //       dt.year - DateTime.now().year == 0) {
+  //     var month = DateTime.now().month - dt.month;
+  //     return dt.month - 3 >= month;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  _validateData6Month(DateTime dt) {
-    if (dt.year - DateTime.now().year == 1 ||
-        dt.year - DateTime.now().year == 0) {
-      var month = DateTime.now().month - dt.month;
-      return dt.month - 6 >= month;
-    } else {
-      return false;
-    }
-  }
+  // _validateData6Month(DateTime dt) {
+  //   if (dt.year - DateTime.now().year == 1 ||
+  //       dt.year - DateTime.now().year == 0) {
+  //     var month = DateTime.now().month - dt.month;
+  //     return dt.month - 6 >= month;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   Future<void> _getOcorrrencia(List<Ocorrencia> ocorrenciaList) async {
     for (final ocorencia in ocorrenciaList) {
-      await setCustomMapPin(ocorencia.occurrence_type == 'Roubo' ? 2 : 1);
+      await setCustomMapPin(
+          ocorencia.occurrence_type == 'Roubo' ? 2 : 1, ocorencia.type);
 
       final marker = Marker(
         markerId: MarkerId(ocorencia.description),
