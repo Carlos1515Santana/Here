@@ -13,7 +13,7 @@ class OcorrenciaAPI {
   static Future<ApiResponse<Ocorrencia>> postOcorrencia(
       Ocorrencia ocorrencia, File file) async {
     try {
-      var url = 'http://192.168.15.49:8080/api/Occurrence/PostOccurrence';
+      var url = 'https://help-api.herokuapp.com/api/Occurrence/PostOccurrence';
 
       ocorrencia.address.cep =
           ocorrencia.address.cep.replaceAll(RegExp(r'-'), '');
@@ -70,7 +70,7 @@ class OcorrenciaAPI {
 
   static Future<List<Ocorrencia>> getOcorencia(String type) async {
     const urlAPI =
-        'http://192.168.15.49:8080/api/OccurrencePolice/GetOccurrenceType?tipo=';
+        'https://help-api.herokuapp.com/api/OccurrencePolice/GetOccurrenceType?tipo=';
 
     print("GET > $urlAPI");
 
@@ -96,7 +96,7 @@ class OcorrenciaAPI {
 
   static Future<List<Ocorrencia>> getOcorenciaMaps() async {
     const urlAPI =
-        'http://192.168.15.49:8080/api/OccurrencePolice/GetAllOccurrence';
+        'https://help-api.herokuapp.com/api/OccurrencePolice/GetAllOccurrence';
 
     print("GET > $urlAPI");
 
