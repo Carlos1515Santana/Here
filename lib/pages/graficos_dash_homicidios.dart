@@ -4,10 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:here/APIs/dados_api.dart';
 import 'package:here/model/ocorrenciaAgrupadoDTO.dart';
 
-class GraficosDashPage extends StatefulWidget {
+class GraficosDashPageHomicidios extends StatefulWidget {
   final Widget child;
 
-  GraficosDashPage({Key key, this.child}) : super(key: key);
+  GraficosDashPageHomicidios({Key key, this.child}) : super(key: key);
 
   @override
   _GraficosDashPageState createState() => _GraficosDashPageState();
@@ -17,7 +17,7 @@ const String data_cel = 'listarOcorrenciaPorMarcaCelular';
 const String data_mes = 'listarOcorrenciaPorMes';
 const String data_vei = 'listarOcorrenciaPorMarcaCelular';
 
-class _GraficosDashPageState extends State<GraficosDashPage> {
+class _GraficosDashPageState extends State<GraficosDashPageHomicidios> {
   List<charts.Series<Pollution, String>> _seriesData;
   List<charts.Series<Pollution, String>> _seriesData02;
   List<charts.Series<Pollution, String>> _seriesDataAno;
@@ -90,10 +90,10 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
     ];
 
     var piedataTruno = [
-      Task('Manhã', 64090, Color(0xff3366cc)),
-      Task('Madrugada', 44887, Color(0xff302010)),
-      Task('Tarde', 63457, Color(0xfffdbe19)),
-      Task('Noite', 115212, Color(0xff212ad0))
+      Task('Manhã', 801, Color(0xff3366cc)),
+      Task('Madrugada', 998, Color(0xff302010)),
+      Task('Tarde', 854, Color(0xfffdbe19)),
+      Task('Noite', 1723, Color(0xff212ad0))
     ];
 
     var piedata = [
@@ -154,7 +154,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         id: '>60',
         data: [Pollution('>A60', 84)],
         labelAccessorFn: (Pollution pollution, _) =>
-            '${pollution.quantity.toString()}',
+        '${pollution.quantity.toString()}',
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
       ),
@@ -168,7 +168,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         data: [Pollution('50 - 60', 93)],
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         labelAccessorFn: (Pollution pollution, _) =>
-            '${pollution.quantity.toString()}',
+        '${pollution.quantity.toString()}',
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
       ),
     );
@@ -180,7 +180,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         id: '40 - 50',
         data: [Pollution('40 - 50', 299)],
         labelAccessorFn: (Pollution pollution, _) =>
-            '${pollution.quantity.toString()}',
+        '${pollution.quantity.toString()}',
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff76ff03)),
       ),
@@ -193,7 +193,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         id: '30 - 40',
         data: [Pollution('30 - 40', 495)],
         labelAccessorFn: (Pollution pollution, _) =>
-            '${pollution.quantity.toString()}',
+        '${pollution.quantity.toString()}',
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xfffdbe19)),
       ),
@@ -206,7 +206,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         id: '18 - 30',
         data: [Pollution('18- 30', 838)],
         labelAccessorFn: (Pollution pollution, _) =>
-            '${pollution.quantity.toString()}',
+        '${pollution.quantity.toString()}',
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff00e5ff)),
       ),
@@ -219,7 +219,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
         id: 'Menores',
         data: [Pollution('Menores', 250)],
         labelAccessorFn: (Pollution pollution, _) =>
-            '${pollution.quantity.toString()}',
+        '${pollution.quantity.toString()}',
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xfffff900)),
       ),
@@ -500,12 +500,14 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
     _generateData();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 5,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Color(0XFF3F51b5),
@@ -515,59 +517,14 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
               tabs: [
                 Tab(icon: Icon(FontAwesomeIcons.solidChartBar)),
                 Tab(icon: Icon(FontAwesomeIcons.chartPie)),
-                Tab(icon: Icon(FontAwesomeIcons.solidChartBar)),
                 Tab(icon: Icon(FontAwesomeIcons.chartPie)),
-                Tab(icon: Icon(FontAwesomeIcons.chartBar)),
-              ],
+                Tab(icon: Icon(FontAwesomeIcons.solidChartBar)),
+               ],
             ),
             title: Text('São Paulo'),
           ),
           body: TabBarView(
             children: [
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          'Quantidade de roubos em 2019\n',
-                          style: TextStyle(
-                              fontSize: 22.0, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        Expanded(
-                          child: charts.BarChart(
-                            _seriesData,
-                            animate: true,
-                            barGroupingType: charts.BarGroupingType.grouped,
-                            behaviors: [
-                              charts.SeriesLegend(
-                                position: charts.BehaviorPosition.top,
-                                outsideJustification:
-                                    charts.OutsideJustification.endDrawArea,
-                                horizontalFirst: false,
-                                desiredMaxRows: 2,
-                                cellPadding:
-                                    EdgeInsets.only(right: 4.0, bottom: 4.0),
-                                entryTextStyle: charts.TextStyleSpec(
-                                    //color: charts.Color(r: 127, g: 63, b: 191),
-                                    fontFamily: 'Georgia',
-                                    fontSize: 14),
-                              )
-                            ],
-                            animationDuration: Duration(seconds: 2),
-                            domainAxis: charts.OrdinalAxisSpec(
-                              renderSpec: charts.SmallTickRendererSpec(
-                                  labelRotation: 60),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Container(
@@ -575,7 +532,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          'Marcas de celulares mais roubadas',
+                          'Bairros com mais homicídios',
                           style: TextStyle(
                               fontSize: 24.0, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
@@ -584,52 +541,8 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                           height: 10.0,
                         ),
                         Expanded(
-                          child: charts.PieChart(_seriesPieData,
-                              animate: true,
-                              animationDuration: Duration(seconds: 2),
-                              behaviors: [
-                                charts.DatumLegend(
-                                  outsideJustification:
-                                      charts.OutsideJustification.endDrawArea,
-                                  horizontalFirst: true,
-                                  desiredMaxRows: 2,
-                                  cellPadding:
-                                      EdgeInsets.only(right: 4.0, bottom: 4.0),
-                                  entryTextStyle: charts.TextStyleSpec(
-                                      color: charts
-                                          .MaterialPalette.purple.shadeDefault,
-                                      fontFamily: 'Georgia',
-                                      fontSize: 11),
-                                )
-                              ],
-                              defaultRenderer: charts.ArcRendererConfig(
-                                  arcWidth: 100,
-                                  arcRendererDecorators: [
-                                    charts.ArcLabelDecorator(
-                                        labelPosition:
-                                            charts.ArcLabelPosition.inside)
-                                  ])),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          'Bairros com maior Nº de roubos no ano 2019',
-                          style: TextStyle(
-                              fontSize: 22.0, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        Expanded(
                           child: charts.BarChart(
-                            _seriesData02,
+                            _seriesDataAno,
                             animate: true,
                             barGroupingType: charts.BarGroupingType.grouped,
                             behaviors: [charts.SeriesLegend()],
@@ -652,54 +565,7 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          'Marcas de veículos mais roubadas',
-                          style: TextStyle(
-                              fontSize: 24.0, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Expanded(
-                          child: charts.PieChart(_seriesPieData02,
-                              animate: true,
-                              animationDuration: Duration(seconds: 2),
-                              behaviors: [
-                                charts.DatumLegend(
-                                  outsideJustification:
-                                      charts.OutsideJustification.endDrawArea,
-                                  horizontalFirst: true,
-                                  desiredMaxRows: 2,
-                                  cellPadding:
-                                      EdgeInsets.only(right: 4.0, bottom: 4.0),
-                                  entryTextStyle: charts.TextStyleSpec(
-                                      color: charts
-                                          .MaterialPalette.purple.shadeDefault,
-                                      fontFamily: 'Georgia',
-                                      fontSize: 11),
-                                )
-                              ],
-                              defaultRenderer: charts.ArcRendererConfig(
-                                  arcWidth: 100,
-                                  arcRendererDecorators: [
-                                    charts.ArcLabelDecorator(
-                                        labelPosition:
-                                            charts.ArcLabelPosition.inside)
-                                  ])),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          'Número de ocorrências por período do dia',
+                          'Analise por Turno',
                           style: TextStyle(
                               fontSize: 24.0, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
@@ -714,11 +580,11 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                               behaviors: [
                                 charts.DatumLegend(
                                   outsideJustification:
-                                      charts.OutsideJustification.endDrawArea,
+                                  charts.OutsideJustification.endDrawArea,
                                   horizontalFirst: true,
                                   desiredMaxRows: 2,
                                   cellPadding:
-                                      EdgeInsets.only(right: 4.0, bottom: 4.0),
+                                  EdgeInsets.only(right: 4.0, bottom: 4.0),
                                   entryTextStyle: charts.TextStyleSpec(
                                       color: charts
                                           .MaterialPalette.purple.shadeDefault,
@@ -731,8 +597,103 @@ class _GraficosDashPageState extends State<GraficosDashPage> {
                                   arcRendererDecorators: [
                                     charts.ArcLabelDecorator(
                                         labelPosition:
-                                            charts.ArcLabelPosition.inside)
+                                        charts.ArcLabelPosition.inside)
                                   ])),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Container(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Número de homicídios por gênero',
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Expanded(
+                          child: charts.PieChart(_seriesPieGenero,
+                              animate: true,
+                              animationDuration: Duration(seconds: 2),
+                              behaviors: [
+                                charts.DatumLegend(
+                                  outsideJustification:
+                                  charts.OutsideJustification.endDrawArea,
+                                  horizontalFirst: true,
+                                  desiredMaxRows: 2,
+                                  cellPadding:
+                                  EdgeInsets.only(right: 4.0, bottom: 4.0),
+                                  entryTextStyle: charts.TextStyleSpec(
+                                      color: charts
+                                          .MaterialPalette.purple.shadeDefault,
+                                      fontFamily: 'Georgia',
+                                      fontSize: 11),
+                                )
+                              ],
+                              defaultRenderer: charts.ArcRendererConfig(
+                                  arcWidth: 100,
+                                  arcRendererDecorators: [
+                                    charts.ArcLabelDecorator(
+                                        labelPosition:
+                                        charts.ArcLabelPosition.inside)
+                                  ])),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Container(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Número de homicídios por faixa etária',
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Expanded(
+                          child: charts.BarChart(
+                            seriesList, //_seriesData,
+                            animate: true,
+                            vertical: false,
+                            //barGroupingType: charts.BarGroupingType.grouped,
+                            behaviors: [
+                              charts.SeriesLegend(
+                                position: charts.BehaviorPosition.top,
+                                outsideJustification:
+                                charts.OutsideJustification.endDrawArea,
+                                horizontalFirst: false,
+                                desiredMaxRows: 2,
+                                cellPadding:
+                                EdgeInsets.only(right: 4.0, bottom: 4.0),
+                                entryTextStyle: charts.TextStyleSpec(
+                                  //color: charts.Color(r: 127, g: 63, b: 191),
+                                    fontFamily: 'Georgia',
+                                    fontSize: 14),
+                              )
+                            ],
+                            animationDuration: Duration(seconds: 2),
+
+                            barRendererDecorator: new charts.BarLabelDecorator(
+                              labelPosition: charts.BarLabelPosition.outside,
+                            ),
+                          ),
                         ),
                       ],
                     ),

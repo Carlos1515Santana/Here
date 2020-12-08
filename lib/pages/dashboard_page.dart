@@ -5,6 +5,7 @@ import 'package:here/model/ocorrencia.dart';
 import 'package:here/pages/ListOcorrencia_page.dart';
 import 'package:here/pages/graficos_page.dart';
 import 'package:here/pages/graficosdash_page.dart';
+import 'package:here/pages/graficos_dash_homicidios.dart';
 import 'package:here/utils/nav.dart';
 import 'package:here/pages/Cadastro.dart';
 import 'package:here/pages/login_page.dart';
@@ -89,6 +90,8 @@ class _DashboardPageState extends State<DashboardPage>
             //MyMenu(title: 'Educação', icon: Icons.school, warna: Colors.orange,),
             MyMenu1(title: 'Gráficos', icon: Icons.insert_chart, warna: Colors.orange,),
             //MyMenu(title: 'Livro', icon: Icons.local_library, warna: Colors.red,),
+            MyMenu2(title: 'Gráficos Homicídio', icon: Icons.insert_chart, warna: Colors.orange,),
+            //MyMenu(title: 'Livro', icon: Icons.local_library, warna: Colors.red,),
           ],
         ),
       ),
@@ -102,7 +105,10 @@ Future<void> _onClickCard(context,title) async {
   }
   else if (title == 'Gráficos') {
     await push(context, GraficosDashPage());
-  }
+   }
+  else if (title == 'Gráficos Homicídio') {
+    await push(context, GraficosDashPageHomicidios());
+   }
 }
 
 class MyMenu extends StatelessWidget {
@@ -165,6 +171,39 @@ class MyMenu1 extends StatelessWidget {
                 color: warna,
               ),
               Text(title, style: TextStyle(fontSize: 17.0))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+class MyMenu2 extends StatelessWidget {
+  MyMenu2({this.title, this.icon, this.warna});
+
+  final String title;
+  final IconData icon;
+  final MaterialColor warna;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, PageRouteAnimation(widget: GraficosDashPageHomicidios()));
+        },
+        splashColor: Colors.blue,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                icon,
+                size: 70.0,
+                color: Colors.red,
+              ),
+              Center(child: Text(title, style: TextStyle(fontSize: 15.0)))
             ],
           ),
         ),
