@@ -194,7 +194,7 @@ class _MyAppState extends State<HomePage> {
                 child: FlatButton.icon(
                     icon: const Icon(Icons.circle),
                     label: const Text(
-                      '1 ano +',
+                      'Tudo',
                       style: TextStyle(
                         color: Colors.white,
                       ),

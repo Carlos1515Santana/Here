@@ -41,15 +41,18 @@ class _DashboardPageState extends State<DashboardPage>
         backgroundColor: Color(0XFF3F51b5),
       ),
       backgroundColor: Colors.blue[100],
- 
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text('Shalom', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),),
+              accountName: Text(
+                'Usuario',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+              ),
               accountEmail: Text('admin@admin.com'),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRe-E4rqR6LMzLi2KSkXRGZOUUGhwaY0gXoa_5OibXvVrDvG5C&usqp=CAU'),
+                backgroundImage: NetworkImage(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRRe-E4rqR6LMzLi2KSkXRGZOUUGhwaY0gXoa_5OibXvVrDvG5C&usqp=CAU'),
               ),
               decoration: BoxDecoration(color: Colors.black12),
             ),
@@ -69,28 +72,37 @@ class _DashboardPageState extends State<DashboardPage>
               leading: Icon(Icons.exit_to_app),
               title: Text('Sair'),
               onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage())
-                );
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
               },
             ),
           ],
         ),
       ),
-
       body: Container(
         padding: EdgeInsets.all(30.0),
         child: GridView.count(
           crossAxisCount: 2,
           children: <Widget>[
             //MyMenu(title: 'Documentos', icon: Icons.create, warna: Colors.teal,),
-            MyMenu(title: 'Ocorrências', icon: Icons.insert_drive_file, warna: Colors.blueGrey,),
+            MyMenu(
+              title: 'Ocorrências',
+              icon: Icons.insert_drive_file,
+              warna: Colors.blueGrey,
+            ),
             //MyMenu(title: 'Informação', icon: Icons.info_outline, warna: Colors.green,),
             //MyMenu(title: 'Educação', icon: Icons.school, warna: Colors.orange,),
-            MyMenu1(title: 'Gráficos', icon: Icons.insert_chart, warna: Colors.orange,),
+            MyMenu1(
+              title: 'Gráficos',
+              icon: Icons.insert_chart,
+              warna: Colors.orange,
+            ),
             //MyMenu(title: 'Livro', icon: Icons.local_library, warna: Colors.red,),
-            MyMenu2(title: 'Gráficos Homicídio', icon: Icons.insert_chart, warna: Colors.orange,),
+            MyMenu2(
+              title: 'Gráficos Homicídio',
+              icon: Icons.insert_chart,
+              warna: Colors.orange,
+            ),
             //MyMenu(title: 'Livro', icon: Icons.local_library, warna: Colors.red,),
           ],
         ),
@@ -99,24 +111,22 @@ class _DashboardPageState extends State<DashboardPage>
   }
 }
 
-Future<void> _onClickCard(context,title) async {
+Future<void> _onClickCard(context, title) async {
   if (title == 'Ocorrências') {
     await push(context, ListOcorrencia());
-  }
-  else if (title == 'Gráficos') {
+  } else if (title == 'Gráficos') {
     await push(context, GraficosDashPage());
-   }
-  else if (title == 'Gráficos Homicídio') {
+  } else if (title == 'Gráficos Homicídio') {
     await push(context, GraficosDashPageHomicidios());
-   }
+  }
 }
 
 class MyMenu extends StatelessWidget {
   MyMenu({this.title, this.icon, this.warna});
 
-final String title;
-final IconData icon;
-final MaterialColor warna;
+  final String title;
+  final IconData icon;
+  final MaterialColor warna;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +168,8 @@ class MyMenu1 extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(context, PageRouteAnimation(widget: GraficosDashPage()));
+          Navigator.push(
+              context, PageRouteAnimation(widget: GraficosDashPage()));
         },
         splashColor: Colors.blue,
         child: Center(
@@ -178,6 +189,7 @@ class MyMenu1 extends StatelessWidget {
     );
   }
 }
+
 class MyMenu2 extends StatelessWidget {
   MyMenu2({this.title, this.icon, this.warna});
 
@@ -191,7 +203,8 @@ class MyMenu2 extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(context, PageRouteAnimation(widget: GraficosDashPageHomicidios()));
+          Navigator.push(context,
+              PageRouteAnimation(widget: GraficosDashPageHomicidios()));
         },
         splashColor: Colors.blue,
         child: Center(
@@ -211,4 +224,3 @@ class MyMenu2 extends StatelessWidget {
     );
   }
 }
-
